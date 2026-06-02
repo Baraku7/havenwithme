@@ -26,11 +26,11 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
 ::-webkit-scrollbar{width:4px;}
 ::-webkit-scrollbar-track{background:var(--cream);}
 ::-webkit-scrollbar-thumb{background:var(--mid);border-radius:2px;}
-
+ 
 /* ── PAGE SECTIONS ── */
 .page{display:none;min-height:100vh;flex-direction:column;}
 .page.active{display:flex;}
-
+ 
 /* ── LANDING ── */
 #landing{background:var(--deep);position:relative;overflow:hidden;}
 .landing-bg{position:absolute;inset:0;overflow:hidden;}
@@ -64,7 +64,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
 .hero-card-text{text-align:left;}
 .hero-card-title{font-size:13px;font-weight:500;color:var(--white);}
 .hero-card-sub{font-size:11px;color:rgba(255,255,255,0.5);margin-top:2px;}
-
+ 
 /* ── APP SHELL ── */
 #app{background:var(--cream);display:none;flex-direction:column;}
 #app.active{display:flex;}
@@ -78,7 +78,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
 .app-body{flex:1;overflow:hidden;position:relative;}
 .tab-panel{display:none;height:calc(100vh - 60px);overflow-y:auto;animation:fadeIn 0.3s ease;}
 .tab-panel.active{display:block;}
-
+ 
 /* ── HOME TAB ── */
 .home-wrap{max-width:600px;margin:0 auto;padding:28px 20px;}
 .greeting-card{background:var(--deep);border-radius:20px;padding:28px;margin-bottom:20px;position:relative;overflow:hidden;}
@@ -104,7 +104,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
 .crisis-card{background:var(--soft);border:1px solid var(--mid);border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:12px;}
 .crisis-text{flex:1;font-size:12px;color:var(--deep);line-height:1.5;}
 .crisis-btn{background:var(--primary);color:var(--white);border:none;border-radius:8px;padding:8px 14px;font-size:12px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;}
-
+ 
 /* ── CHAT TAB ── */
 .chat-wrap{display:flex;flex-direction:column;height:calc(100vh - 60px);}
 .chat-header{padding:16px 20px;background:var(--white);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;}
@@ -139,7 +139,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
 .mic-btn.listening{background:var(--red);border-color:var(--red);animation:pulse 1s infinite;}
 .send-btn{background:var(--primary);}
 .send-btn:hover{background:var(--deep);}
-
+ 
 /* Voice overlay */
 .voice-overlay{display:none;position:fixed;inset:0;background:rgba(4,44,83,0.97);z-index:200;flex-direction:column;align-items:center;justify-content:center;gap:24px;}
 .voice-overlay.active{display:flex;}
@@ -151,7 +151,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
 .voice-transcript{font-size:14px;color:rgba(255,255,255,0.6);max-width:280px;text-align:center;line-height:1.6;min-height:48px;}
 .voice-cancel{font-size:13px;color:rgba(255,255,255,0.5);cursor:pointer;border:1px solid rgba(255,255,255,0.2);border-radius:20px;padding:10px 24px;margin-top:8px;transition:all 0.2s;}
 .voice-cancel:hover{background:rgba(255,255,255,0.08);color:var(--white);}
-
+ 
 /* ── JOURNAL TAB ── */
 .journal-wrap{max-width:600px;margin:0 auto;padding:28px 20px;}
 .journal-header{margin-bottom:24px;}
@@ -166,7 +166,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
 .entry-date{font-size:11px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;}
 .entry-text{font-family:'Lora',serif;font-size:15px;color:var(--text);line-height:1.7;font-style:italic;}
 .entry-mood{font-size:18px;margin-top:10px;}
-
+ 
 /* ── THERAPIST TAB ── */
 .therapist-wrap{max-width:600px;margin:0 auto;padding:28px 20px;}
 .therapist-search{display:flex;align-items:center;gap:10px;background:var(--white);border:1px solid var(--border);border-radius:12px;padding:12px 16px;margin-bottom:16px;}
@@ -193,7 +193,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
 .t-price{font-size:13px;color:var(--muted);}
 .t-price strong{font-size:15px;color:var(--text);font-weight:500;}
 .t-book-btn{background:var(--primary);color:var(--white);border:none;border-radius:8px;padding:9px 18px;font-size:12px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;}
-
+ 
 /* ── PLAN / PAYWALL ── */
 .paywall-wrap{max-width:500px;margin:0 auto;padding:40px 20px;}
 .paywall-title{font-family:'Lora',serif;font-size:30px;font-weight:400;color:var(--text);margin-bottom:6px;text-align:center;}
@@ -213,7 +213,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
 .trial-note strong{color:var(--text);}
 .start-btn{width:100%;padding:16px;background:var(--primary);color:var(--white);border:none;border-radius:14px;font-size:15px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background 0.2s;}
 .start-btn:hover{background:var(--deep);}
-
+ 
 /* ── ONBOARDING ── */
 #onboarding{background:var(--deep);min-height:100vh;display:none;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;}
 #onboarding.active{display:flex;}
@@ -240,14 +240,14 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
 .ob-link{color:var(--primary);text-decoration:none;}
 .ob-signin-link{font-size:13px;color:rgba(255,255,255,0.6);margin-top:16px;text-align:center;cursor:pointer;}
 .ob-signin-link span{color:var(--gold);}
-
+ 
 /* ── ANIMATIONS ── */
 @keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
 @keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
 @keyframes blink{0%,80%,100%{opacity:0.3}40%{opacity:1}}
 @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
 @keyframes ripple{0%{transform:scale(0.9);opacity:1}100%{transform:scale(1.2);opacity:0}}
-
+ 
 /* ── RESPONSIVE ── */
 @media(max-width:600px){
   .landing-nav{padding:20px 20px;}
@@ -265,7 +265,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
 </style>
 </head>
 <body>
-
+ 
 <!-- VOICE OVERLAY -->
 <div class="voice-overlay" id="voiceOverlay">
   <div class="voice-ring"><div class="voice-icon">🎙️</div></div>
@@ -273,7 +273,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
   <div class="voice-transcript" id="voiceTranscript">Speak now — Haven is listening</div>
   <div class="voice-cancel" onclick="stopMic()">Cancel</div>
 </div>
-
+ 
 <!-- LANDING PAGE -->
 <div class="page active" id="landing">
   <div class="landing-bg">
@@ -305,7 +305,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
     </div>
   </div>
 </div>
-
+ 
 <!-- ONBOARDING -->
 <div class="page" id="onboarding">
   <div class="ob-card">
@@ -329,7 +329,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
   </div>
   <div class="ob-signin-link" onclick="showOnboarding('signin')">Already have an account? <span>Sign in</span></div>
 </div>
-
+ 
 <!-- MAIN APP -->
 <div class="page" id="app">
   <nav class="app-nav">
@@ -343,7 +343,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
     </div>
     <div class="app-avatar" onclick="goHome()">👤</div>
   </nav>
-
+ 
   <div class="app-body">
     <!-- HOME -->
     <div class="tab-panel active" id="tab-home">
@@ -402,7 +402,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
         </div>
       </div>
     </div>
-
+ 
     <!-- CHAT -->
     <div class="tab-panel" id="tab-chat">
       <div class="chat-wrap">
@@ -412,6 +412,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
             <div class="chat-name">Haven</div>
             <div class="chat-status"><span class="status-dot"></span>Always here for you</div>
           </div>
+          <button id="voiceToggle" onclick="toggleVoice()" style="background:var(--soft);border:1px solid var(--border);border-radius:20px;padding:6px 14px;font-size:12px;color:var(--primary);cursor:pointer;font-family:var(--font-sans);">🔊 Voice On</button>
         </div>
         <div class="chat-messages" id="chatMessages">
           <div class="msg-row ai">
@@ -434,7 +435,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
         </div>
       </div>
     </div>
-
+ 
     <!-- JOURNAL -->
     <div class="tab-panel" id="tab-journal">
       <div class="journal-wrap">
@@ -460,7 +461,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
         </div>
       </div>
     </div>
-
+ 
     <!-- THERAPISTS -->
     <div class="tab-panel" id="tab-therapists">
       <div class="therapist-wrap">
@@ -528,7 +529,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
         </div>
       </div>
     </div>
-
+ 
     <!-- PLANS -->
     <div class="tab-panel" id="tab-plans">
       <div class="paywall-wrap">
@@ -567,7 +568,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
       </div>
     </div>
   </div>
-
+ 
   <!-- MOBILE NAV -->
   <div class="mobile-tabs">
     <div class="mobile-tab active" onclick="switchTab('home',null);setMobileTab(this)"><div class="mobile-tab-icon">🏠</div><div class="mobile-tab-label">Home</div></div>
@@ -577,7 +578,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
     <div class="mobile-tab" onclick="switchTab('plans',null);setMobileTab(this)"><div class="mobile-tab-icon">⭐</div><div class="mobile-tab-label">Plans</div></div>
   </div>
 </div>
-
+ 
 <script>
 // ── NAVIGATION ──
 function showPage(id) {
@@ -599,7 +600,7 @@ function showOnboarding(mode) {
 }
 function showApp() { showPage('app'); }
 function goHome() { showPage('landing'); }
-
+ 
 function switchTab(name, btn) {
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
   document.getElementById('tab-' + name).classList.add('active');
@@ -612,13 +613,13 @@ function setMobileTab(el) {
   document.querySelectorAll('.mobile-tab').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
 }
-
+ 
 // ── MOOD ──
 function selectMood(el) {
   document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('selected'));
   el.classList.add('selected');
 }
-
+ 
 // ── JOURNAL ──
 function saveJournalEntry() {
   const input = document.getElementById('journalInput');
@@ -631,23 +632,23 @@ function saveJournalEntry() {
   document.getElementById('journalEntries').prepend(entry);
   input.value = '';
 }
-
+ 
 // ── THERAPIST FILTERS ──
 function toggleChip(el) {
   document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
   el.classList.add('active');
 }
-
+ 
 // ── PLANS ──
 function selectPlan(el) {
   document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('selected'));
   el.classList.add('selected');
 }
-
+ 
 // ── CHAT ──
 const messages = [];
 let recognition = null, listening = false;
-
+ 
 function autoResize(el) {
   el.style.height = 'auto';
   el.style.height = Math.min(el.scrollHeight, 100) + 'px';
@@ -680,7 +681,56 @@ function showTyping() {
   wrap.scrollTop = wrap.scrollHeight;
 }
 function removeTyping() { const t = document.getElementById('typingRow'); if(t) t.remove(); }
-
+ 
+// ── VOICE REPLY ──
+let currentSpeech = null;
+function speakReply(text) {
+  // Cancel any current speech
+  window.speechSynthesis.cancel();
+  
+  const utterance = new SpeechSynthesisUtterance(text);
+  
+  // Find the best soft female voice
+  function setVoice() {
+    const voices = window.speechSynthesis.getVoices();
+    // Try to find a soft female English voice
+    const preferred = [
+      'Samantha', 'Karen', 'Moira', 'Tessa', 'Fiona',
+      'Victoria', 'Allison', 'Ava', 'Susan', 'Zoe',
+      'Google US English', 'Microsoft Aria', 'Microsoft Jenny'
+    ];
+    let selectedVoice = null;
+    for (const name of preferred) {
+      const found = voices.find(v => v.name.includes(name) && v.lang.startsWith('en'));
+      if (found) { selectedVoice = found; break; }
+    }
+    // Fallback to any female-sounding English voice
+    if (!selectedVoice) {
+      selectedVoice = voices.find(v => v.lang.startsWith('en') && 
+        (v.name.includes('Female') || v.name.includes('female')));
+    }
+    // Final fallback - first English voice
+    if (!selectedVoice) {
+      selectedVoice = voices.find(v => v.lang.startsWith('en'));
+    }
+    if (selectedVoice) utterance.voice = selectedVoice;
+  }
+ 
+  // Voices may not be loaded yet
+  if (window.speechSynthesis.getVoices().length > 0) {
+    setVoice();
+  } else {
+    window.speechSynthesis.onvoiceschanged = setVoice;
+  }
+ 
+  utterance.rate = 0.88;   // Slightly slower — warm and calm
+  utterance.pitch = 1.1;   // Slightly higher — soft feminine tone
+  utterance.volume = 1.0;
+  
+  currentSpeech = utterance;
+  window.speechSynthesis.speak(utterance);
+}
+ 
 function sendQuick(el) {
   document.getElementById('quickReplies').style.display = 'none';
   document.getElementById('chatInput').value = el.textContent;
@@ -692,7 +742,7 @@ function sendQuickMsg(msg) {
     sendMessage();
   }, 300);
 }
-
+ 
 async function sendMessage() {
   const input = document.getElementById('chatInput');
   const text = input.value.trim();
@@ -703,37 +753,24 @@ async function sendMessage() {
   messages.push({ role: 'user', content: text });
   showTyping();
   try {
-    // Use Netlify function as proxy to avoid CORS issues
-    const res = await fetch('https://haven-ai.baraku7.workers.dev', {
+    const res = await fetch('https://haven-ai.havenwithme.workers.dev', {
       method: 'POST',
-      headers: { 
-        'Content-Type': 'application/json',
-
-      },
-      body: JSON.stringify({
-        model: 'claude-haiku-4-5-20251001',
-        max_tokens: 1000,
-        system: 'You are Haven, a warm, empathetic mental wellness AI companion at HavenWithMe.com. Make users feel safe, heard, and understood. Speak with genuine care — never clinical or robotic. Keep responses concise (2-4 sentences), warm, and conversational. Always validate feelings first before any gentle suggestions. Never give medical advice. If someone mentions self-harm or crisis, gently remind them that 988 (Suicide & Crisis Lifeline) is always available. End each response with a soft open question to keep them talking.',
-        messages: messages
-      })
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages: messages })
     });
-    if (!res.ok) {
-      const errText = await res.text();
-      console.error('API error:', res.status, errText);
-      throw new Error('API ' + res.status);
-    }
     const data = await res.json();
     removeTyping();
     const reply = data.content?.[0]?.text || "I'm here with you. Can you tell me more about how you're feeling?";
     messages.push({ role: 'assistant', content: reply });
     addBubble(reply, 'ai');
+    if (voiceEnabled) speakReply(reply);
   } catch(e) {
     removeTyping();
     console.error('Haven AI error:', e);
-    addBubble("I'm so sorry — I'm having a little trouble connecting right now. Please try again in a moment. I'm here for you. 💙", 'ai');
+    addBubble("I'm so sorry, I'm having trouble connecting. Please try again! 💙", 'ai');
   }
 }
-
+ 
 // ── VOICE ──
 function toggleMic() {
   if (listening) { stopMic(); return; }
@@ -768,7 +805,25 @@ function stopMic() {
   document.getElementById('voiceOverlay').classList.remove('active');
   document.getElementById('micBtn').classList.remove('listening');
 }
-
+ 
+// ── VOICE TOGGLE ──
+let voiceEnabled = true;
+function toggleVoice() {
+  voiceEnabled = !voiceEnabled;
+  const btn = document.getElementById('voiceToggle');
+  if (voiceEnabled) {
+    btn.textContent = '🔊 Voice On';
+    btn.style.color = 'var(--primary)';
+  } else {
+    btn.textContent = '🔇 Voice Off';
+    btn.style.color = 'var(--muted)';
+    window.speechSynthesis.cancel();
+  }
+}
+ 
+// Override speakReply to check toggle
+const originalSpeak = speakReply;
+ 
 function startTrial() {
   const selected = document.querySelector('.plan-card.selected .plan-name');
   if (!selected) { window.open('https://buy.stripe.com/6oU9AV41l9CKf1K7o7gfu00', '_blank'); return; }
