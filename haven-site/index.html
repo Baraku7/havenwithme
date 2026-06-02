@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Haven — Your Safe Place, Always Here</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --deep: #042C53;
+  --primary: #185FA5;
+  --mid: #378ADD;
+  --soft: #E6F1FB;
+  --cream: #F7F4F0;
+  --white: #FFFFFF;
+  --text: #1A1A2E;
+  --muted: #6B7A99;
+  --border: rgba(24,95,165,0.12);
+  --gold: #C9A84C;
+  --green: #1D9E75;
+  --red: #E24B4A;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);overflow-x:hidden;}
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:var(--cream);}
+::-webkit-scrollbar-thumb{background:var(--mid);border-radius:2px;}
+
+/* ── PAGE SECTIONS ── */
+.page{display:none;min-height:100vh;flex-direction:column;}
+.page.active{display:flex;}
+
+/* ── LANDING ── */
+#landing{background:var(--deep);position:relative;overflow:hidden;}
+.landing-bg{position:absolute;inset:0;overflow:hidden;}
+.orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:0.25;}
+.orb1{width:500px;height:500px;background:#185FA5;top:-100px;right:-100px;}
+.orb2{width:400px;height:400px;background:#1D9E75;bottom:-100px;left:-80px;}
+.orb3{width:300px;height:300px;background:#C9A84C;top:50%;left:40%;}
+.landing-nav{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;padding:28px 48px;}
+.logo{font-family:'Lora',serif;font-size:24px;font-weight:600;color:var(--white);letter-spacing:0.02em;}
+.logo span{color:var(--gold);}
+.nav-signin{font-size:13px;color:rgba(255,255,255,0.7);cursor:pointer;border:1px solid rgba(255,255,255,0.2);padding:9px 20px;border-radius:8px;transition:all 0.2s;}
+.nav-signin:hover{background:rgba(255,255,255,0.1);color:var(--white);}
+.hero{position:relative;z-index:2;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:60px 24px 80px;}
+.hero-eyebrow{font-size:11px;letter-spacing:0.25em;text-transform:uppercase;color:var(--gold);margin-bottom:20px;animation:fadeUp 0.8s ease both;}
+.hero-title{font-family:'Lora',serif;font-size:clamp(42px,7vw,88px);font-weight:400;color:var(--white);line-height:1.05;margin-bottom:24px;animation:fadeUp 0.8s 0.1s ease both;}
+.hero-title em{font-style:italic;color:var(--gold);}
+.hero-sub{font-size:clamp(15px,2vw,18px);color:rgba(255,255,255,0.65);max-width:480px;line-height:1.7;margin-bottom:48px;animation:fadeUp 0.8s 0.2s ease both;}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;animation:fadeUp 0.8s 0.3s ease both;}
+.btn-hero{padding:16px 36px;border-radius:12px;font-size:15px;font-weight:500;cursor:pointer;transition:all 0.25s;border:none;font-family:'DM Sans',sans-serif;}
+.btn-hero-primary{background:var(--white);color:var(--deep);}
+.btn-hero-primary:hover{background:var(--soft);transform:translateY(-2px);}
+.btn-hero-ghost{background:rgba(255,255,255,0.1);color:var(--white);border:1px solid rgba(255,255,255,0.25);}
+.btn-hero-ghost:hover{background:rgba(255,255,255,0.18);}
+.hero-trust{margin-top:48px;display:flex;gap:32px;flex-wrap:wrap;justify-content:center;animation:fadeUp 0.8s 0.4s ease both;}
+.trust-item{display:flex;flex-direction:column;align-items:center;}
+.trust-num{font-family:'Lora',serif;font-size:28px;color:var(--white);}
+.trust-label{font-size:11px;color:rgba(255,255,255,0.5);letter-spacing:0.1em;text-transform:uppercase;margin-top:2px;}
+.hero-cards{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:56px;animation:fadeUp 0.8s 0.5s ease both;}
+.hero-card{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:16px 20px;display:flex;align-items:center;gap:12px;backdrop-filter:blur(8px);}
+.hero-card-icon{font-size:22px;}
+.hero-card-text{text-align:left;}
+.hero-card-title{font-size:13px;font-weight:500;color:var(--white);}
+.hero-card-sub{font-size:11px;color:rgba(255,255,255,0.5);margin-top:2px;}
+
+/* ── APP SHELL ── */
+#app{background:var(--cream);display:none;flex-direction:column;}
+#app.active{display:flex;}
+.app-nav{background:var(--white);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:60px;position:sticky;top:0;z-index:50;}
+.app-logo{font-family:'Lora',serif;font-size:20px;font-weight:600;color:var(--deep);}
+.app-logo span{color:var(--gold);}
+.app-nav-tabs{display:flex;gap:4px;}
+.nav-tab{padding:8px 16px;border-radius:8px;font-size:13px;color:var(--muted);cursor:pointer;border:none;background:transparent;font-family:'DM Sans',sans-serif;transition:all 0.2s;}
+.nav-tab.active,.nav-tab:hover{background:var(--soft);color:var(--primary);}
+.app-avatar{width:34px;height:34px;border-radius:50%;background:var(--soft);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;}
+.app-body{flex:1;overflow:hidden;position:relative;}
+.tab-panel{display:none;height:calc(100vh - 60px);overflow-y:auto;animation:fadeIn 0.3s ease;}
+.tab-panel.active{display:block;}
+
+/* ── HOME TAB ── */
+.home-wrap{max-width:600px;margin:0 auto;padding:28px 20px;}
+.greeting-card{background:var(--deep);border-radius:20px;padding:28px;margin-bottom:20px;position:relative;overflow:hidden;}
+.greeting-orb{position:absolute;width:200px;height:200px;border-radius:50%;background:var(--primary);filter:blur(60px);opacity:0.3;top:-40px;right:-40px;}
+.greeting-top{display:flex;align-items:center;gap:12px;margin-bottom:16px;position:relative;}
+.greeting-avatar{width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;font-size:20px;}
+.greeting-name{font-size:16px;font-weight:500;color:var(--white);}
+.greeting-time{font-size:12px;color:rgba(255,255,255,0.5);margin-top:2px;}
+.greeting-msg{font-family:'Lora',serif;font-size:18px;color:var(--white);line-height:1.6;position:relative;font-style:italic;}
+.mood-card{background:var(--white);border-radius:16px;padding:20px;margin-bottom:16px;border:1px solid var(--border);}
+.card-title{font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;}
+.mood-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+.mood-btn{border:1px solid var(--border);border-radius:12px;padding:12px 8px;text-align:center;cursor:pointer;transition:all 0.2s;background:var(--cream);}
+.mood-btn:hover,.mood-btn.selected{border-color:var(--primary);background:var(--soft);}
+.mood-emoji{font-size:22px;display:block;margin-bottom:4px;}
+.mood-label{font-size:10px;color:var(--muted);}
+.quick-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;}
+.quick-card{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:18px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;gap:8px;}
+.quick-card:hover{border-color:var(--primary);background:var(--soft);transform:translateY(-2px);}
+.quick-icon{font-size:24px;}
+.quick-title{font-size:13px;font-weight:500;color:var(--text);}
+.quick-sub{font-size:11px;color:var(--muted);}
+.crisis-card{background:var(--soft);border:1px solid var(--mid);border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:12px;}
+.crisis-text{flex:1;font-size:12px;color:var(--deep);line-height:1.5;}
+.crisis-btn{background:var(--primary);color:var(--white);border:none;border-radius:8px;padding:8px 14px;font-size:12px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;}
+
+/* ── CHAT TAB ── */
+.chat-wrap{display:flex;flex-direction:column;height:calc(100vh - 60px);}
+.chat-header{padding:16px 20px;background:var(--white);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;}
+.chat-avatar{width:40px;height:40px;border-radius:50%;background:var(--deep);display:flex;align-items:center;justify-content:center;font-size:18px;}
+.chat-info{}
+.chat-name{font-size:15px;font-weight:500;color:var(--text);}
+.chat-status{font-size:11px;color:var(--green);display:flex;align-items:center;gap:5px;}
+.status-dot{width:6px;height:6px;border-radius:50%;background:var(--green);}
+.chat-messages{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:14px;background:var(--cream);}
+.msg-row{display:flex;flex-direction:column;}
+.msg-row.user{align-items:flex-end;}
+.msg-row.ai{align-items:flex-start;}
+.bubble{max-width:78%;padding:12px 16px;font-size:14px;line-height:1.6;}
+.bubble.ai{background:var(--white);color:var(--text);border-radius:18px 18px 18px 4px;border:1px solid var(--border);}
+.bubble.user{background:var(--primary);color:var(--white);border-radius:18px 18px 4px 18px;}
+.msg-time{font-size:10px;color:var(--muted);margin-top:4px;padding:0 4px;}
+.typing-dots{display:flex;gap:4px;align-items:center;padding:4px 0;}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--mid);animation:blink 1.2s infinite;}
+.dot:nth-child(2){animation-delay:0.2s;}
+.dot:nth-child(3){animation-delay:0.4s;}
+.quick-replies{display:flex;gap:6px;flex-wrap:wrap;padding:12px 20px 0;background:var(--cream);}
+.qr{font-size:12px;color:var(--primary);border:1px solid var(--mid);border-radius:20px;padding:7px 14px;cursor:pointer;background:var(--white);transition:all 0.15s;white-space:nowrap;}
+.qr:hover{background:var(--soft);}
+.chat-input-area{padding:12px 16px 20px;background:var(--white);border-top:1px solid var(--border);}
+.chat-input-row{display:flex;gap:8px;align-items:flex-end;}
+.chat-textarea{flex:1;background:var(--cream);border:1px solid var(--border);border-radius:14px;padding:12px 16px;font-size:14px;font-family:'DM Sans',sans-serif;color:var(--text);resize:none;outline:none;max-height:100px;line-height:1.5;transition:border-color 0.2s;}
+.chat-textarea:focus{border-color:var(--mid);}
+.chat-textarea::placeholder{color:var(--muted);}
+.icon-btn{width:40px;height:40px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s;font-size:16px;}
+.mic-btn{background:var(--cream);border:1px solid var(--border);}
+.mic-btn:hover{background:var(--soft);}
+.mic-btn.listening{background:var(--red);border-color:var(--red);animation:pulse 1s infinite;}
+.send-btn{background:var(--primary);}
+.send-btn:hover{background:var(--deep);}
+
+/* Voice overlay */
+.voice-overlay{display:none;position:fixed;inset:0;background:rgba(4,44,83,0.97);z-index:200;flex-direction:column;align-items:center;justify-content:center;gap:24px;}
+.voice-overlay.active{display:flex;}
+.voice-ring{width:110px;height:110px;border-radius:50%;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;position:relative;}
+.voice-ring::before{content:'';position:absolute;inset:-12px;border-radius:50%;border:2px solid rgba(255,255,255,0.15);animation:ripple 1.5s infinite;}
+.voice-ring::after{content:'';position:absolute;inset:-26px;border-radius:50%;border:1.5px solid rgba(255,255,255,0.08);animation:ripple 1.5s 0.5s infinite;}
+.voice-icon{font-size:40px;}
+.voice-label{font-family:'Lora',serif;font-size:22px;color:var(--white);font-style:italic;}
+.voice-transcript{font-size:14px;color:rgba(255,255,255,0.6);max-width:280px;text-align:center;line-height:1.6;min-height:48px;}
+.voice-cancel{font-size:13px;color:rgba(255,255,255,0.5);cursor:pointer;border:1px solid rgba(255,255,255,0.2);border-radius:20px;padding:10px 24px;margin-top:8px;transition:all 0.2s;}
+.voice-cancel:hover{background:rgba(255,255,255,0.08);color:var(--white);}
+
+/* ── JOURNAL TAB ── */
+.journal-wrap{max-width:600px;margin:0 auto;padding:28px 20px;}
+.journal-header{margin-bottom:24px;}
+.journal-title{font-family:'Lora',serif;font-size:28px;font-weight:400;color:var(--text);margin-bottom:4px;}
+.journal-sub{font-size:13px;color:var(--muted);}
+.journal-new{background:var(--deep);border-radius:16px;padding:20px;margin-bottom:20px;}
+.journal-textarea{width:100%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:14px;font-size:14px;font-family:'Lora',serif;color:var(--white);resize:none;outline:none;min-height:100px;line-height:1.7;margin-bottom:12px;}
+.journal-textarea::placeholder{color:rgba(255,255,255,0.3);font-style:italic;}
+.journal-save{background:var(--gold);color:var(--deep);border:none;border-radius:10px;padding:11px 24px;font-size:13px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;}
+.journal-entries{display:flex;flex-direction:column;gap:12px;}
+.journal-entry{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:18px;}
+.entry-date{font-size:11px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;}
+.entry-text{font-family:'Lora',serif;font-size:15px;color:var(--text);line-height:1.7;font-style:italic;}
+.entry-mood{font-size:18px;margin-top:10px;}
+
+/* ── THERAPIST TAB ── */
+.therapist-wrap{max-width:600px;margin:0 auto;padding:28px 20px;}
+.therapist-search{display:flex;align-items:center;gap:10px;background:var(--white);border:1px solid var(--border);border-radius:12px;padding:12px 16px;margin-bottom:16px;}
+.therapist-search input{flex:1;border:none;outline:none;font-size:14px;font-family:'DM Sans',sans-serif;color:var(--text);background:transparent;}
+.therapist-search input::placeholder{color:var(--muted);}
+.filter-chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px;}
+.chip{font-size:11px;padding:6px 14px;border-radius:20px;border:1px solid var(--border);background:var(--white);color:var(--muted);cursor:pointer;transition:all 0.15s;}
+.chip.active{background:var(--primary);color:var(--white);border-color:var(--primary);}
+.therapist-list{display:flex;flex-direction:column;gap:12px;}
+.t-card{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:18px;cursor:pointer;transition:all 0.2s;}
+.t-card:hover{border-color:var(--mid);transform:translateY(-2px);}
+.t-card-top{display:flex;gap:14px;align-items:flex-start;margin-bottom:12px;}
+.t-av{width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:600;flex-shrink:0;}
+.t-card-info{flex:1;}
+.t-card-name{font-size:15px;font-weight:500;color:var(--text);margin-bottom:2px;}
+.t-card-title{font-size:12px;color:var(--muted);margin-bottom:4px;}
+.t-card-rating{font-size:12px;color:var(--muted);}
+.t-avail{font-size:10px;padding:4px 10px;border-radius:8px;font-weight:500;align-self:flex-start;}
+.avail-yes{background:#EAF3DE;color:#3B6D11;}
+.avail-soon{background:#FAEEDA;color:#854F0B;}
+.t-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
+.t-tag{font-size:11px;padding:3px 10px;border-radius:8px;background:var(--soft);color:var(--primary);}
+.t-card-footer{display:flex;align-items:center;justify-content:space-between;padding-top:12px;border-top:1px solid var(--border);}
+.t-price{font-size:13px;color:var(--muted);}
+.t-price strong{font-size:15px;color:var(--text);font-weight:500;}
+.t-book-btn{background:var(--primary);color:var(--white);border:none;border-radius:8px;padding:9px 18px;font-size:12px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;}
+
+/* ── PLAN / PAYWALL ── */
+.paywall-wrap{max-width:500px;margin:0 auto;padding:40px 20px;}
+.paywall-title{font-family:'Lora',serif;font-size:30px;font-weight:400;color:var(--text);margin-bottom:6px;text-align:center;}
+.paywall-sub{font-size:14px;color:var(--muted);text-align:center;margin-bottom:32px;}
+.plan-cards{display:flex;flex-direction:column;gap:12px;margin-bottom:24px;}
+.plan-card{border:1.5px solid var(--border);border-radius:16px;padding:18px 20px;cursor:pointer;transition:all 0.2s;position:relative;background:var(--white);}
+.plan-card.selected{border-color:var(--primary);background:var(--soft);}
+.plan-badge{position:absolute;top:-10px;right:16px;background:var(--primary);color:var(--white);font-size:9px;font-weight:500;padding:4px 12px;border-radius:10px;letter-spacing:0.05em;}
+.plan-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.plan-name{font-size:15px;font-weight:500;color:var(--text);}
+.plan-price{font-size:22px;font-weight:500;color:var(--primary);}
+.plan-price span{font-size:12px;color:var(--muted);font-weight:400;}
+.plan-perks{display:flex;flex-direction:column;gap:5px;}
+.perk{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px;}
+.perk::before{content:'✓';color:var(--green);font-weight:600;}
+.trial-note{font-size:12px;color:var(--muted);text-align:center;margin-bottom:16px;}
+.trial-note strong{color:var(--text);}
+.start-btn{width:100%;padding:16px;background:var(--primary);color:var(--white);border:none;border-radius:14px;font-size:15px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background 0.2s;}
+.start-btn:hover{background:var(--deep);}
+
+/* ── ONBOARDING ── */
+#onboarding{background:var(--deep);min-height:100vh;display:none;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;}
+#onboarding.active{display:flex;}
+.ob-card{background:var(--white);border-radius:24px;width:100%;max-width:420px;overflow:hidden;}
+.ob-header{background:var(--deep);padding:32px 28px 24px;position:relative;overflow:hidden;}
+.ob-orb{position:absolute;width:150px;height:150px;border-radius:50%;background:var(--primary);filter:blur(50px);opacity:0.3;top:-40px;right:-40px;}
+.ob-logo{font-family:'Lora',serif;font-size:26px;font-weight:600;color:var(--white);position:relative;}
+.ob-logo span{color:var(--gold);}
+.ob-tagline{font-size:13px;color:rgba(255,255,255,0.6);margin-top:4px;position:relative;}
+.ob-body{padding:28px;}
+.ob-title{font-family:'Lora',serif;font-size:22px;font-weight:400;color:var(--text);margin-bottom:6px;}
+.ob-sub{font-size:13px;color:var(--muted);margin-bottom:24px;line-height:1.6;}
+.ob-input{width:100%;padding:13px 16px;border:1.5px solid var(--border);border-radius:12px;font-size:14px;font-family:'DM Sans',sans-serif;color:var(--text);outline:none;margin-bottom:10px;transition:border-color 0.2s;background:var(--cream);}
+.ob-input:focus{border-color:var(--mid);background:var(--white);}
+.ob-input::placeholder{color:var(--muted);}
+.ob-btn{width:100%;padding:14px;background:var(--primary);color:var(--white);border:none;border-radius:12px;font-size:14px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;margin-top:6px;transition:background 0.2s;}
+.ob-btn:hover{background:var(--deep);}
+.ob-divider{display:flex;align-items:center;gap:10px;margin:16px 0;}
+.ob-divider-line{flex:1;height:1px;background:var(--border);}
+.ob-divider-text{font-size:11px;color:var(--muted);}
+.ob-social{width:100%;padding:12px;border:1.5px solid var(--border);border-radius:12px;background:var(--white);font-size:13px;font-family:'DM Sans',sans-serif;color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:8px;transition:all 0.2s;}
+.ob-social:hover{border-color:var(--mid);background:var(--cream);}
+.ob-terms{font-size:10px;color:var(--muted);text-align:center;margin-top:16px;line-height:1.6;}
+.ob-link{color:var(--primary);text-decoration:none;}
+.ob-signin-link{font-size:13px;color:rgba(255,255,255,0.6);margin-top:16px;text-align:center;cursor:pointer;}
+.ob-signin-link span{color:var(--gold);}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+@keyframes blink{0%,80%,100%{opacity:0.3}40%{opacity:1}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+@keyframes ripple{0%{transform:scale(0.9);opacity:1}100%{transform:scale(1.2);opacity:0}}
+
+/* ── RESPONSIVE ── */
+@media(max-width:600px){
+  .landing-nav{padding:20px 20px;}
+  .hero{padding:40px 20px 60px;}
+  .hero-cards{flex-direction:column;align-items:center;}
+  .hero-card{width:100%;max-width:280px;}
+  .app-nav-tabs{display:none;}
+  .mobile-tabs{display:flex;}
+}
+.mobile-tabs{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--white);border-top:1px solid var(--border);z-index:100;padding:8px 0 20px;}
+.mobile-tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:4px;}
+.mobile-tab-icon{font-size:22px;}
+.mobile-tab-label{font-size:9px;color:var(--muted);}
+.mobile-tab.active .mobile-tab-label{color:var(--primary);}
+</style>
+</head>
+<body>
+
+<!-- VOICE OVERLAY -->
+<div class="voice-overlay" id="voiceOverlay">
+  <div class="voice-ring"><div class="voice-icon">🎙️</div></div>
+  <div class="voice-label">Listening...</div>
+  <div class="voice-transcript" id="voiceTranscript">Speak now — Haven is listening</div>
+  <div class="voice-cancel" onclick="stopMic()">Cancel</div>
+</div>
+
+<!-- LANDING PAGE -->
+<div class="page active" id="landing">
+  <div class="landing-bg">
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+    <div class="orb orb3"></div>
+  </div>
+  <nav class="landing-nav">
+    <div class="logo">Haven<span>.</span></div>
+    <div class="nav-signin" onclick="showOnboarding('signin')">Sign in</div>
+  </nav>
+  <div class="hero">
+    <div class="hero-eyebrow">Mental Wellness · Available 24/7</div>
+    <h1 class="hero-title">Your safe place,<br/><em>always here.</em></h1>
+    <p class="hero-sub">Haven is your compassionate AI companion for moments when you need to be heard, understood, and supported — day or night.</p>
+    <div class="hero-btns">
+      <button class="btn-hero btn-hero-primary" onclick="showOnboarding('signup')">Get started free</button>
+      <button class="btn-hero btn-hero-ghost" onclick="showApp()">See how it works</button>
+    </div>
+    <div class="hero-trust">
+      <div class="trust-item"><div class="trust-num">24/7</div><div class="trust-label">Always Available</div></div>
+      <div class="trust-item"><div class="trust-num">100%</div><div class="trust-label">Private & Safe</div></div>
+      <div class="trust-item"><div class="trust-num">988</div><div class="trust-label">Crisis Support</div></div>
+    </div>
+    <div class="hero-cards">
+      <div class="hero-card"><div class="hero-card-icon">🧠</div><div class="hero-card-text"><div class="hero-card-title">AI Companion</div><div class="hero-card-sub">Talk or use your voice</div></div></div>
+      <div class="hero-card"><div class="hero-card-icon">📓</div><div class="hero-card-text"><div class="hero-card-title">Private Journal</div><div class="hero-card-sub">Safe & encrypted</div></div></div>
+      <div class="hero-card"><div class="hero-card-icon">🩺</div><div class="hero-card-text"><div class="hero-card-title">Find Therapists</div><div class="hero-card-sub">Affordable, near you</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ONBOARDING -->
+<div class="page" id="onboarding">
+  <div class="ob-card">
+    <div class="ob-header">
+      <div class="ob-orb"></div>
+      <div class="ob-logo">Haven<span>.</span></div>
+      <div class="ob-tagline">Your safe place, always here</div>
+    </div>
+    <div class="ob-body">
+      <div class="ob-title" id="obTitle">Create your account</div>
+      <div class="ob-sub" id="obSub">Free to start — no credit card needed. Join thousands finding peace with Haven.</div>
+      <input class="ob-input" type="text" placeholder="Your first name" id="obName" style="display:block"/>
+      <input class="ob-input" type="email" placeholder="Email address"/>
+      <input class="ob-input" type="password" placeholder="Create a password" id="obPass"/>
+      <button class="ob-btn" onclick="showApp()">Create my Haven</button>
+      <div class="ob-divider"><div class="ob-divider-line"></div><div class="ob-divider-text">or</div><div class="ob-divider-line"></div></div>
+      <button class="ob-social" onclick="showApp()">🌐 &nbsp;Continue with Google</button>
+      <button class="ob-social" onclick="showApp()">🍎 &nbsp;Continue with Apple</button>
+      <div class="ob-terms">By continuing you agree to Haven's <a class="ob-link" href="#">Terms</a> and <a class="ob-link" href="#">Privacy Policy</a>.<br/>Your data is never sold — ever.</div>
+    </div>
+  </div>
+  <div class="ob-signin-link" onclick="showOnboarding('signin')">Already have an account? <span>Sign in</span></div>
+</div>
+
+<!-- MAIN APP -->
+<div class="page" id="app">
+  <nav class="app-nav">
+    <div class="app-logo">Haven<span>.</span></div>
+    <div class="app-nav-tabs">
+      <button class="nav-tab active" onclick="switchTab('home',this)">🏠 Home</button>
+      <button class="nav-tab" onclick="switchTab('chat',this)">💬 Chat</button>
+      <button class="nav-tab" onclick="switchTab('journal',this)">📓 Journal</button>
+      <button class="nav-tab" onclick="switchTab('therapists',this)">🩺 Therapists</button>
+      <button class="nav-tab" onclick="switchTab('plans',this)">⭐ Plans</button>
+    </div>
+    <div class="app-avatar" onclick="goHome()">👤</div>
+  </nav>
+
+  <div class="app-body">
+    <!-- HOME -->
+    <div class="tab-panel active" id="tab-home">
+      <div class="home-wrap">
+        <div class="greeting-card">
+          <div class="greeting-orb"></div>
+          <div class="greeting-top">
+            <div class="greeting-avatar">🏠</div>
+            <div>
+              <div class="greeting-name" id="greetName">Good to have you here</div>
+              <div class="greeting-time">Your Haven companion</div>
+            </div>
+          </div>
+          <div class="greeting-msg">"You are never alone here. Whatever you're carrying today — I'm here to listen, without judgment."</div>
+        </div>
+        <div class="mood-card">
+          <div class="card-title">How are you feeling right now?</div>
+          <div class="mood-grid">
+            <div class="mood-btn" onclick="selectMood(this)"><span class="mood-emoji">😔</span><span class="mood-label">Low</span></div>
+            <div class="mood-btn" onclick="selectMood(this)"><span class="mood-emoji">😐</span><span class="mood-label">Okay</span></div>
+            <div class="mood-btn selected" onclick="selectMood(this)"><span class="mood-emoji">🙂</span><span class="mood-label">Good</span></div>
+            <div class="mood-btn" onclick="selectMood(this)"><span class="mood-emoji">😊</span><span class="mood-label">Great</span></div>
+          </div>
+        </div>
+        <div class="quick-grid">
+          <div class="quick-card" onclick="switchTab('chat',null);sendQuickMsg('I need to talk')">
+            <div class="quick-icon">💬</div>
+            <div class="quick-title">Talk it out</div>
+            <div class="quick-sub">AI chat, anytime</div>
+          </div>
+          <div class="quick-card" onclick="switchTab('journal',null)">
+            <div class="quick-icon">📓</div>
+            <div class="quick-title">Journal</div>
+            <div class="quick-sub">Private & safe</div>
+          </div>
+          <div class="quick-card" onclick="switchTab('therapists',null)">
+            <div class="quick-icon">🩺</div>
+            <div class="quick-title">Find therapist</div>
+            <div class="quick-sub">Near you</div>
+          </div>
+          <div class="quick-card" onclick="switchTab('plans',null)">
+            <div class="quick-icon">⭐</div>
+            <div class="quick-title">Upgrade</div>
+            <div class="quick-sub">Unlock everything</div>
+          </div>
+        </div>
+        <div class="crisis-card">
+          <span style="font-size:20px;">🆘</span>
+          <div class="crisis-text"><strong>In crisis?</strong> Call or text <strong>988</strong> — Suicide & Crisis Lifeline. Free, confidential, 24/7.</div>
+          <button class="crisis-btn" onclick="window.open('tel:988')">Call 988 Now</button>
+        </div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px;">
+          <button onclick="window.open('sms:988')" style="flex:1; padding:10px; background:#E6F1FB; color:#185FA5; border:1px solid #378ADD; border-radius:10px; font-size:12px; font-weight:500; cursor:pointer; font-family:var(--font-sans);">💬 Text 988</button>
+          <button onclick="window.open('https://988lifeline.org/chat/', '_blank')" style="flex:1; padding:10px; background:#E6F1FB; color:#185FA5; border:1px solid #378ADD; border-radius:10px; font-size:12px; font-weight:500; cursor:pointer; font-family:var(--font-sans);">🌐 Chat Online</button>
+          <button onclick="window.open('tel:18002738255')" style="flex:1; padding:10px; background:#E6F1FB; color:#185FA5; border:1px solid #378ADD; border-radius:10px; font-size:12px; font-weight:500; cursor:pointer; font-family:var(--font-sans);">📞 Crisis Line</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CHAT -->
+    <div class="tab-panel" id="tab-chat">
+      <div class="chat-wrap">
+        <div class="chat-header">
+          <div class="chat-avatar">🏠</div>
+          <div class="chat-info">
+            <div class="chat-name">Haven</div>
+            <div class="chat-status"><span class="status-dot"></span>Always here for you</div>
+          </div>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+          <div class="msg-row ai">
+            <div class="bubble ai">Hi, I'm Haven. This is your safe space — you can share anything here, by typing or holding the mic and speaking. What's on your mind today? 💙</div>
+            <div class="msg-time">Just now</div>
+          </div>
+        </div>
+        <div class="quick-replies" id="quickReplies">
+          <div class="qr" onclick="sendQuick(this)">I feel anxious</div>
+          <div class="qr" onclick="sendQuick(this)">I'm overwhelmed</div>
+          <div class="qr" onclick="sendQuick(this)">I need to vent</div>
+          <div class="qr" onclick="sendQuick(this)">I feel lonely</div>
+        </div>
+        <div class="chat-input-area">
+          <div class="chat-input-row">
+            <button class="icon-btn mic-btn" id="micBtn" onclick="toggleMic()">🎙️</button>
+            <textarea class="chat-textarea" id="chatInput" placeholder="Type or tap the mic to speak..." rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+            <button class="icon-btn send-btn" onclick="sendMessage()">➤</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- JOURNAL -->
+    <div class="tab-panel" id="tab-journal">
+      <div class="journal-wrap">
+        <div class="journal-header">
+          <div class="journal-title">Your Journal</div>
+          <div class="journal-sub">Private, safe, just for you</div>
+        </div>
+        <div class="journal-new">
+          <textarea class="journal-textarea" id="journalInput" placeholder="What's on your mind today? Write freely — this is your space..."></textarea>
+          <button class="journal-save" onclick="saveJournalEntry()">Save entry</button>
+        </div>
+        <div class="journal-entries" id="journalEntries">
+          <div class="journal-entry">
+            <div class="entry-date">May 30, 2026 · 9:14 AM</div>
+            <div class="entry-text">Today felt heavy at first, but I reminded myself that it's okay to not be okay. Taking it one step at a time.</div>
+            <div class="entry-mood">🙂</div>
+          </div>
+          <div class="journal-entry">
+            <div class="entry-date">May 28, 2026 · 11:02 PM</div>
+            <div class="entry-text">Couldn't sleep again. Too many thoughts. Opened Haven and just talked it out. Felt better after.</div>
+            <div class="entry-mood">😐</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- THERAPISTS -->
+    <div class="tab-panel" id="tab-therapists">
+      <div class="therapist-wrap">
+        <div class="therapist-search">
+          <span>🔍</span>
+          <input type="text" placeholder="Search by name or specialty..."/>
+        </div>
+        <div class="filter-chips">
+          <div class="chip active">All</div>
+          <div class="chip" onclick="toggleChip(this)">Anxiety</div>
+          <div class="chip" onclick="toggleChip(this)">Depression</div>
+          <div class="chip" onclick="toggleChip(this)">Teens</div>
+          <div class="chip" onclick="toggleChip(this)">Trauma</div>
+          <div class="chip" onclick="toggleChip(this)">Sliding Scale</div>
+        </div>
+        <div class="therapist-list">
+          <div class="t-card">
+            <div class="t-card-top">
+              <div class="t-av" style="background:#E6F1FB;color:#185FA5;">SR</div>
+              <div class="t-card-info">
+                <div class="t-card-name">Dr. Sarah Reynolds</div>
+                <div class="t-card-title">Licensed Psychologist · 12 yrs</div>
+                <div class="t-card-rating">★★★★★ 4.9 · 84 reviews</div>
+              </div>
+              <div class="t-avail avail-yes">Available</div>
+            </div>
+            <div class="t-tags"><div class="t-tag">Anxiety</div><div class="t-tag">Depression</div><div class="t-tag">Stress</div></div>
+            <div class="t-card-footer">
+              <div class="t-price"><strong>$120</strong>/session · Telehealth</div>
+              <button class="t-book-btn">Book Now</button>
+            </div>
+          </div>
+          <div class="t-card">
+            <div class="t-card-top">
+              <div class="t-av" style="background:#EAF3DE;color:#3B6D11;">MC</div>
+              <div class="t-card-info">
+                <div class="t-card-name">Marcus Chen, LCSW</div>
+                <div class="t-card-title">Clinical Social Worker · 8 yrs</div>
+                <div class="t-card-rating">★★★★★ 4.8 · 61 reviews</div>
+              </div>
+              <div class="t-avail avail-yes">Available</div>
+            </div>
+            <div class="t-tags"><div class="t-tag">Teens</div><div class="t-tag">Family</div><div class="t-tag">Trauma</div></div>
+            <div class="t-card-footer">
+              <div class="t-price"><strong>$85</strong>/session · Sliding Scale</div>
+              <button class="t-book-btn">Book Now</button>
+            </div>
+          </div>
+          <div class="t-card">
+            <div class="t-card-top">
+              <div class="t-av" style="background:#FBEAF0;color:#993556;">AM</div>
+              <div class="t-card-info">
+                <div class="t-card-name">Amara Mitchell, LPC</div>
+                <div class="t-card-title">Licensed Counselor · 6 yrs</div>
+                <div class="t-card-rating">★★★★ 4.7 · 42 reviews</div>
+              </div>
+              <div class="t-avail avail-soon">Next: Thu</div>
+            </div>
+            <div class="t-tags"><div class="t-tag">Anxiety</div><div class="t-tag">Grief</div><div class="t-tag">Women</div></div>
+            <div class="t-card-footer">
+              <div class="t-price"><strong>$95</strong>/session · In-person</div>
+              <button class="t-book-btn">Book Now</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PLANS -->
+    <div class="tab-panel" id="tab-plans">
+      <div class="paywall-wrap">
+        <div class="paywall-title">Choose your plan</div>
+        <div class="paywall-sub">Start free. Upgrade when you're ready.</div>
+        <div class="plan-cards">
+          <div class="plan-card" onclick="selectPlan(this)">
+            <div class="plan-top"><div class="plan-name">Free</div><div class="plan-price">$0<span>/mo</span></div></div>
+            <div class="plan-perks">
+              <div class="perk">3 AI chats per day</div>
+              <div class="perk">Mood tracker</div>
+              <div class="perk">Crisis resources</div>
+            </div>
+          </div>
+          <div class="plan-card selected" onclick="selectPlan(this)">
+            <div class="plan-badge">MOST POPULAR</div>
+            <div class="plan-top"><div class="plan-name">Personal</div><div class="plan-price">$12.99<span>/mo</span></div></div>
+            <div class="plan-perks">
+              <div class="perk">Unlimited AI chat + voice</div>
+              <div class="perk">Private journal</div>
+              <div class="perk">Mood trends & insights</div>
+              <div class="perk">Therapist finder</div>
+            </div>
+          </div>
+          <div class="plan-card" onclick="selectPlan(this)">
+            <div class="plan-top"><div class="plan-name">Family</div><div class="plan-price">$29.99<span>/mo</span></div></div>
+            <div class="plan-perks">
+              <div class="perk">Everything in Personal</div>
+              <div class="perk">Up to 5 members</div>
+              <div class="perk">Teen wellness dashboard</div>
+            </div>
+          </div>
+        </div>
+        <div class="trial-note"><strong>7-day free trial</strong> on Personal & Family — cancel anytime</div>
+        <button class="start-btn" onclick="startTrial()">Start my free trial</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MOBILE NAV -->
+  <div class="mobile-tabs">
+    <div class="mobile-tab active" onclick="switchTab('home',null);setMobileTab(this)"><div class="mobile-tab-icon">🏠</div><div class="mobile-tab-label">Home</div></div>
+    <div class="mobile-tab" onclick="switchTab('chat',null);setMobileTab(this)"><div class="mobile-tab-icon">💬</div><div class="mobile-tab-label">Chat</div></div>
+    <div class="mobile-tab" onclick="switchTab('journal',null);setMobileTab(this)"><div class="mobile-tab-icon">📓</div><div class="mobile-tab-label">Journal</div></div>
+    <div class="mobile-tab" onclick="switchTab('therapists',null);setMobileTab(this)"><div class="mobile-tab-icon">🩺</div><div class="mobile-tab-label">Therapists</div></div>
+    <div class="mobile-tab" onclick="switchTab('plans',null);setMobileTab(this)"><div class="mobile-tab-icon">⭐</div><div class="mobile-tab-label">Plans</div></div>
+  </div>
+</div>
+
+<script>
+// ── NAVIGATION ──
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+function showOnboarding(mode) {
+  if (mode === 'signin') {
+    document.getElementById('obTitle').textContent = 'Welcome back';
+    document.getElementById('obSub').textContent = 'Sign in to your Haven account.';
+    document.getElementById('obName').style.display = 'none';
+    document.getElementById('obPass').placeholder = 'Your password';
+  } else {
+    document.getElementById('obTitle').textContent = 'Create your account';
+    document.getElementById('obSub').textContent = 'Free to start — no credit card needed.';
+    document.getElementById('obName').style.display = 'block';
+  }
+  showPage('onboarding');
+}
+function showApp() { showPage('app'); }
+function goHome() { showPage('landing'); }
+
+function switchTab(name, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  if (btn) {
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+  }
+}
+function setMobileTab(el) {
+  document.querySelectorAll('.mobile-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// ── MOOD ──
+function selectMood(el) {
+  document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+// ── JOURNAL ──
+function saveJournalEntry() {
+  const input = document.getElementById('journalInput');
+  const text = input.value.trim();
+  if (!text) return;
+  const entry = document.createElement('div');
+  entry.className = 'journal-entry';
+  const now = new Date();
+  entry.innerHTML = `<div class="entry-date">${now.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})} · ${now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})}</div><div class="entry-text">${text}</div><div class="entry-mood">🙂</div>`;
+  document.getElementById('journalEntries').prepend(entry);
+  input.value = '';
+}
+
+// ── THERAPIST FILTERS ──
+function toggleChip(el) {
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// ── PLANS ──
+function selectPlan(el) {
+  document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+// ── CHAT ──
+const messages = [];
+let recognition = null, listening = false;
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 100) + 'px';
+}
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+}
+function addBubble(text, role) {
+  const wrap = document.getElementById('chatMessages');
+  const row = document.createElement('div');
+  row.className = 'msg-row ' + role;
+  const b = document.createElement('div');
+  b.className = 'bubble ' + role;
+  b.textContent = text;
+  const t = document.createElement('div');
+  t.className = 'msg-time';
+  t.textContent = 'Just now';
+  row.appendChild(b); row.appendChild(t);
+  wrap.appendChild(row);
+  wrap.scrollTop = wrap.scrollHeight;
+}
+function showTyping() {
+  const wrap = document.getElementById('chatMessages');
+  const row = document.createElement('div');
+  row.className = 'msg-row ai'; row.id = 'typingRow';
+  const b = document.createElement('div');
+  b.className = 'bubble ai';
+  b.innerHTML = '<div class="typing-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>';
+  row.appendChild(b); wrap.appendChild(row);
+  wrap.scrollTop = wrap.scrollHeight;
+}
+function removeTyping() { const t = document.getElementById('typingRow'); if(t) t.remove(); }
+
+function sendQuick(el) {
+  document.getElementById('quickReplies').style.display = 'none';
+  document.getElementById('chatInput').value = el.textContent;
+  sendMessage();
+}
+function sendQuickMsg(msg) {
+  setTimeout(() => {
+    document.getElementById('chatInput').value = msg;
+    sendMessage();
+  }, 300);
+}
+
+async function sendMessage() {
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = ''; input.style.height = 'auto';
+  document.getElementById('quickReplies').style.display = 'none';
+  addBubble(text, 'user');
+  messages.push({ role: 'user', content: text });
+  showTyping();
+  try {
+    // Use Netlify function as proxy to avoid CORS issues
+    const res = await fetch('/.netlify/functions/chat', {
+      method: 'POST',
+      headers: { 
+        'Content-Type': 'application/json',
+
+      },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 1000,
+        system: 'You are Haven, a warm, empathetic mental wellness AI companion at HavenWithMe.com. Make users feel safe, heard, and understood. Speak with genuine care — never clinical or robotic. Keep responses concise (2-4 sentences), warm, and conversational. Always validate feelings first before any gentle suggestions. Never give medical advice. If someone mentions self-harm or crisis, gently remind them that 988 (Suicide & Crisis Lifeline) is always available. End each response with a soft open question to keep them talking.',
+        messages: messages
+      })
+    });
+    if (!res.ok) {
+      const errText = await res.text();
+      console.error('API error:', res.status, errText);
+      throw new Error('API ' + res.status);
+    }
+    const data = await res.json();
+    removeTyping();
+    const reply = data.content?.[0]?.text || "I'm here with you. Can you tell me more about how you're feeling?";
+    messages.push({ role: 'assistant', content: reply });
+    addBubble(reply, 'ai');
+  } catch(e) {
+    removeTyping();
+    console.error('Haven AI error:', e);
+    addBubble("I'm so sorry — I'm having a little trouble connecting right now. Please try again in a moment. I'm here for you. 💙", 'ai');
+  }
+}
+
+// ── VOICE ──
+function toggleMic() {
+  if (listening) { stopMic(); return; }
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) { alert('Voice input works best in Chrome. Please try Chrome browser.'); return; }
+  recognition = new SR();
+  recognition.continuous = false;
+  recognition.interimResults = true;
+  recognition.lang = 'en-US';
+  recognition.onstart = () => {
+    listening = true;
+    document.getElementById('voiceOverlay').classList.add('active');
+    document.getElementById('micBtn').classList.add('listening');
+    document.getElementById('voiceTranscript').textContent = 'Speak now — Haven is listening';
+  };
+  recognition.onresult = (e) => {
+    let interim = '', final = '';
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      if (e.results[i].isFinal) final += e.results[i][0].transcript;
+      else interim += e.results[i][0].transcript;
+    }
+    document.getElementById('voiceTranscript').textContent = final || interim || 'Listening...';
+    if (final) { document.getElementById('chatInput').value = final; stopMic(); setTimeout(sendMessage, 400); }
+  };
+  recognition.onerror = () => stopMic();
+  recognition.onend = () => { if (listening) stopMic(); };
+  recognition.start();
+}
+function stopMic() {
+  listening = false;
+  if (recognition) { try { recognition.stop(); } catch(e){} recognition = null; }
+  document.getElementById('voiceOverlay').classList.remove('active');
+  document.getElementById('micBtn').classList.remove('listening');
+}
+
+function startTrial() {
+  const selected = document.querySelector('.plan-card.selected .plan-name');
+  if (!selected) { window.open('https://buy.stripe.com/6oU9AV41l9CKf1K7o7gfu00', '_blank'); return; }
+  const planName = selected.textContent.trim();
+  if (planName === 'Family') {
+    window.open('https://buy.stripe.com/28E14p55p9CKaLubEngfu01', '_blank');
+  } else if (planName === 'Personal') {
+    window.open('https://buy.stripe.com/6oU9AV41l9CKf1K7o7gfu00', '_blank');
+  } else {
+    // Free plan - just enter the app
+    alert('You are on the Free plan! Enjoy Haven.');
+  }
+}
+</script>
+</body>
+</html>
