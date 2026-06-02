@@ -704,7 +704,7 @@ async function sendMessage() {
   showTyping();
   try {
     // Use Netlify function as proxy to avoid CORS issues
-    const res = await fetch('/.netlify/functions/chat', {
+    const res = await fetch('https://haven-ai.baraku7.workers.dev', {
       method: 'POST',
       headers: { 
         'Content-Type': 'application/json',
