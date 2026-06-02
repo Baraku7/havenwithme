@@ -320,10 +320,10 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
       <input class="ob-input" type="text" placeholder="Your first name" id="obName" style="display:block"/>
       <input class="ob-input" type="email" placeholder="Email address"/>
       <input class="ob-input" type="password" placeholder="Create a password" id="obPass"/>
-      <button class="ob-btn" onclick="showApp()">Create my Haven</button>
+      <button class="ob-btn" onclick="createAccount()">Create my Haven</button>
       <div class="ob-divider"><div class="ob-divider-line"></div><div class="ob-divider-text">or</div><div class="ob-divider-line"></div></div>
-      <button class="ob-social" onclick="showApp()">🌐 &nbsp;Continue with Google</button>
-      <button class="ob-social" onclick="showApp()">🍎 &nbsp;Continue with Apple</button>
+      <button class="ob-social" onclick="createAccount()">🌐 &nbsp;Continue with Google</button>
+      <button class="ob-social" onclick="createAccount()">🍎 &nbsp;Continue with Apple</button>
       <div class="ob-terms">By continuing you agree to Haven's <a class="ob-link" href="#">Terms</a> and <a class="ob-link" href="#">Privacy Policy</a>.<br/>Your data is never sold — ever.</div>
     </div>
   </div>
@@ -341,7 +341,14 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
       <button class="nav-tab" onclick="switchTab('therapists',this)">🩺 Therapists</button>
       <button class="nav-tab" onclick="switchTab('plans',this)">⭐ Plans</button>
     </div>
-    <div class="app-avatar" onclick="goHome()">👤</div>
+    <div style="position:relative;cursor:pointer;" onclick="openProfile()" title="View your profile">
+      <div class="app-avatar" id="userAvatar" style="overflow:hidden;background:var(--soft);">
+        <img id="userPhoto" src="" alt="" style="display:none;width:100%;height:100%;object-fit:cover;border-radius:50%;"/>
+        <span id="userInitial">👤</span>
+      </div>
+      <div style="position:absolute;bottom:-2px;right:-2px;width:14px;height:14px;background:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8px;color:white;">+</div>
+    </div>
+    <input type="file" id="photoInput" accept="image/*" style="display:none;" onchange="uploadPhoto(event)"/>
   </nav>
  
   <div class="app-body">
@@ -412,7 +419,12 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
             <div class="chat-name">Haven</div>
             <div class="chat-status"><span class="status-dot"></span>Always here for you</div>
           </div>
-          <button id="voiceToggle" onclick="toggleVoice()" style="background:var(--soft);border:1px solid var(--border);border-radius:20px;padding:6px 14px;font-size:12px;color:var(--primary);cursor:pointer;font-family:var(--font-sans);">🔊 Voice On</button>
+          <div style="display:flex;gap:6px;align-items:center;">
+            <select id="voicePicker" onchange="changeVoice(this)" style="background:var(--soft);border:1px solid var(--border);border-radius:20px;padding:6px 12px;font-size:11px;color:var(--primary);cursor:pointer;font-family:'DM Sans',sans-serif;outline:none;">
+              <option value="">Loading voices...</option>
+            </select>
+            <button id="voiceToggle" onclick="toggleVoice()" style="background:var(--soft);border:1px solid var(--border);border-radius:20px;padding:6px 14px;font-size:12px;color:var(--primary);cursor:pointer;font-family:'DM Sans',sans-serif;">🔊</button>
+          </div>
         </div>
         <div class="chat-messages" id="chatMessages">
           <div class="msg-row ai">
@@ -576,6 +588,33 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
     <div class="mobile-tab" onclick="switchTab('journal',null);setMobileTab(this)"><div class="mobile-tab-icon">📓</div><div class="mobile-tab-label">Journal</div></div>
     <div class="mobile-tab" onclick="switchTab('therapists',null);setMobileTab(this)"><div class="mobile-tab-icon">🩺</div><div class="mobile-tab-label">Therapists</div></div>
     <div class="mobile-tab" onclick="switchTab('plans',null);setMobileTab(this)"><div class="mobile-tab-icon">⭐</div><div class="mobile-tab-label">Plans</div></div>
+  </div>
+</div>
+ 
+<!-- PROFILE MODAL -->
+<div id="profileModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:300;align-items:center;justify-content:center;">
+  <div style="background:var(--white);border-radius:24px;width:90%;max-width:380px;overflow:hidden;">
+    <div style="background:var(--deep);padding:28px;text-align:center;position:relative;">
+      <div style="width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,0.1);margin:0 auto 12px;overflow:hidden;cursor:pointer;display:flex;align-items:center;justify-content:center;" onclick="document.getElementById('photoInput2').click()">
+        <img id="profilePhoto" src="" style="display:none;width:100%;height:100%;object-fit:cover;border-radius:50%;"/>
+        <span id="profileInitial" style="font-size:32px;">👤</span>
+      </div>
+      <input type="file" id="photoInput2" accept="image/*" style="display:none;" onchange="uploadPhoto2(event)"/>
+      <div style="font-family:'Lora',serif;font-size:20px;color:var(--white);" id="profileName">Your Haven</div>
+      <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-top:4px;" id="profileEmail">Click photo to change</div>
+    </div>
+    <div style="padding:24px;display:flex;flex-direction:column;gap:12px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--cream);border-radius:12px;">
+        <span style="font-size:13px;color:var(--text);">Voice replies</span>
+        <button onclick="toggleVoice();updateProfileVoiceBtn()" id="profileVoiceBtn" style="background:var(--primary);color:var(--white);border:none;border-radius:20px;padding:6px 16px;font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;">🔊 On</button>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--cream);border-radius:12px;">
+        <span style="font-size:13px;color:var(--text);">My plan</span>
+        <span style="font-size:12px;color:var(--primary);font-weight:500;" id="profilePlan">Free</span>
+      </div>
+      <button onclick="switchTab('plans',null);closeProfile();setMobileTab(document.querySelector('.mobile-tab:last-child'))" style="width:100%;padding:12px;background:var(--gold);color:var(--deep);border:none;border-radius:12px;font-size:13px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;">⭐ Upgrade to Personal</button>
+      <button onclick="closeProfile()" style="width:100%;padding:12px;background:var(--cream);color:var(--muted);border:none;border-radius:12px;font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif;">Close</button>
+    </div>
   </div>
 </div>
  
@@ -753,7 +792,7 @@ async function sendMessage() {
   messages.push({ role: 'user', content: text });
   showTyping();
   try {
-    const res = await fetch('https://haven-ai.baraku7.workers.dev', {
+    const res = await fetch('https://haven-ai.havenwithme.workers.dev', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ messages: messages })
@@ -812,17 +851,90 @@ function toggleVoice() {
   voiceEnabled = !voiceEnabled;
   const btn = document.getElementById('voiceToggle');
   if (voiceEnabled) {
-    btn.textContent = '🔊 Voice On';
+    btn.textContent = '🔊';
     btn.style.color = 'var(--primary)';
+    btn.title = 'Voice On — click to mute';
   } else {
-    btn.textContent = '🔇 Voice Off';
+    btn.textContent = '🔇';
     btn.style.color = 'var(--muted)';
+    btn.title = 'Voice Off — click to unmute';
     window.speechSynthesis.cancel();
   }
 }
  
 // Override speakReply to check toggle
 const originalSpeak = speakReply;
+ 
+// ── ACCOUNT CREATION ──
+function createAccount() {
+  const nameInput = document.getElementById('obName');
+  const name = nameInput ? nameInput.value.trim() : '';
+  if (name) {
+    // Save name and show initial in avatar
+    localStorage.setItem('havenName', name);
+    document.getElementById('userInitial').textContent = name.charAt(0).toUpperCase();
+    document.getElementById('profileName').textContent = name;
+    document.getElementById('greetName').textContent = 'Hi ' + name + ' 👋';
+  }
+  showApp();
+}
+ 
+// ── PHOTO UPLOAD ──
+function uploadPhoto(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const src = e.target.result;
+    // Update nav avatar
+    document.getElementById('userPhoto').src = src;
+    document.getElementById('userPhoto').style.display = 'block';
+    document.getElementById('userInitial').style.display = 'none';
+    // Update profile modal
+    document.getElementById('profilePhoto').src = src;
+    document.getElementById('profilePhoto').style.display = 'block';
+    document.getElementById('profileInitial').style.display = 'none';
+    // Save to localStorage
+    localStorage.setItem('havenPhoto', src);
+  };
+  reader.readAsDataURL(file);
+}
+ 
+function uploadPhoto2(event) {
+  uploadPhoto(event);
+}
+ 
+// ── PROFILE MODAL ──
+function openProfile() {
+  document.getElementById('profileModal').style.display = 'flex';
+}
+function closeProfile() {
+  document.getElementById('profileModal').style.display = 'none';
+}
+function updateProfileVoiceBtn() {
+  const btn = document.getElementById('profileVoiceBtn');
+  btn.textContent = voiceEnabled ? '🔊 On' : '🔇 Off';
+  btn.style.background = voiceEnabled ? 'var(--primary)' : 'var(--muted)';
+}
+ 
+// Load saved photo and name on startup
+window.addEventListener('load', () => {
+  const savedPhoto = localStorage.getItem('havenPhoto');
+  const savedName = localStorage.getItem('havenName');
+  if (savedPhoto) {
+    document.getElementById('userPhoto').src = savedPhoto;
+    document.getElementById('userPhoto').style.display = 'block';
+    document.getElementById('userInitial').style.display = 'none';
+    document.getElementById('profilePhoto').src = savedPhoto;
+    document.getElementById('profilePhoto').style.display = 'block';
+    document.getElementById('profileInitial').style.display = 'none';
+  }
+  if (savedName) {
+    document.getElementById('userInitial').textContent = savedName.charAt(0).toUpperCase();
+    document.getElementById('profileName').textContent = savedName;
+    document.getElementById('greetName').textContent = 'Hi ' + savedName + ' 👋';
+  }
+});
  
 function startTrial() {
   const selected = document.querySelector('.plan-card.selected .plan-name');
