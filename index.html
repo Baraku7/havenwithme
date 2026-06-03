@@ -538,20 +538,10 @@ async function sendMessage(){
   messages.push({role:'user',content:text});
   showTyping();
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{
+    const res=await fetch('https://haven-ai.baraku7.workers.dev',{
       method:'POST',
-      headers:{
-        'Content-Type':'application/json',
-        'x-api-key':'sk-ant-api03-JPvzcpUWnh8JIW63pIN-gJT3joVp0CyTSs1ccgUyG_xMd5p5f_rrr6iWDr6Y6Bm4AhBcMpZ3cIlb3pF0uR9A-YuuFgAA',
-        'anthropic-version':'2023-06-01',
-        'anthropic-dangerous-direct-browser-access':'true'
-      },
-      body:JSON.stringify({
-        model:'claude-haiku-4-5-20251001',
-        max_tokens:1000,
-        system:'You are Haven, a warm, empathetic mental wellness AI companion at HavenWithMe.com. Make users feel safe, heard, and understood. Speak with genuine care, never clinical or robotic. Keep responses concise 2-4 sentences, warm and conversational. Always validate feelings first before any gentle suggestions. Never give medical advice. If someone mentions self-harm or crisis, gently remind them that 988 is always available. End each response with a soft open question.',
-        messages:messages
-      })
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({messages:messages})
     });
     const data=await res.json();
     removeTyping();
