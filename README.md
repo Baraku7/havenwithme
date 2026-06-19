@@ -1,4 +1,4 @@
-[index (2).html](https://github.com/user-attachments/files/29116423/index.2.html)
+[index (4).html](https://github.com/user-attachments/files/29116680/index.4.html)
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1481,10 +1481,6 @@ body{font-family:'Inter',sans-serif;background:var(--snow);color:var(--ink);over
         <div class="land-stat-num">100%</div>
         <div class="land-stat-label">Private</div>
       </div>
-      <div class="land-stat">
-        <div class="land-stat-num">988</div>
-        <div class="land-stat-label">Crisis line</div>
-      </div>
     </div>
 
     <div class="land-cards">
@@ -1537,15 +1533,7 @@ body{font-family:'Inter',sans-serif;background:var(--snow);color:var(--ink);over
       <button class="ob-btn" onclick="createAccount()">Create my Haven</button>
       <div class="ob-divider"><div class="ob-divider-line"></div><span class="ob-divider-text">or</span><div class="ob-divider-line"></div></div>
       <!-- Google Sign-In Button -->
-      <div class="g_id_signin"
-        data-type="standard"
-        data-shape="rectangular"
-        data-theme="filled_black"
-        data-text="continue_with"
-        data-size="large"
-        data-logo_alignment="left"
-        style="width:100%;display:flex;justify-content:center;margin-bottom:10px;">
-      </div>
+      <div id="googleBtnSignup" class="google-btn-container" style="width:100%;display:flex;justify-content:center;margin-bottom:10px;min-height:44px;"></div>
       <button class="ob-social" onclick="appleSignIn()">🍎 &nbsp;Continue with Apple</button>
     </div>
 
@@ -1579,15 +1567,7 @@ body{font-family:'Inter',sans-serif;background:var(--snow);color:var(--ink);over
       <button class="ob-btn" onclick="signIn()">Sign in to Haven</button>
       <div class="ob-divider"><div class="ob-divider-line"></div><span class="ob-divider-text">or</span><div class="ob-divider-line"></div></div>
       <!-- Google Sign-In Button -->
-      <div class="g_id_signin"
-        data-type="standard"
-        data-shape="rectangular"
-        data-theme="filled_black"
-        data-text="signin_with"
-        data-size="large"
-        data-logo_alignment="left"
-        style="width:100%;display:flex;justify-content:center;margin-bottom:10px;">
-      </div>
+      <div id="googleBtnSignin" class="google-btn-container" style="width:100%;display:flex;justify-content:center;margin-bottom:10px;min-height:44px;"></div>
       <button class="ob-social" onclick="appleSignIn()">🍎 &nbsp;Continue with Apple</button>
     </div>
 
@@ -1731,19 +1711,7 @@ body{font-family:'Inter',sans-serif;background:var(--snow);color:var(--ink);over
           </div>
         </div>
 
-        <div class="crisis-strip">
-          <div style="flex:1;">
-            <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
-              <span style="font-size:20px;">🆘</span>
-              <span style="font-size:14px;font-weight:600;color:var(--white);">In crisis? You are not alone.</span>
-            </div>
-            <div class="crisis-btn-grp">
-              <button class="crisis-pill crisis-pill-primary" onclick="window.open('tel:988')">📞 Call 988</button>
-              <button class="crisis-pill crisis-pill-ghost" onclick="window.open('sms:988')">💬 Text 988</button>
-              <button class="crisis-pill crisis-pill-ghost" onclick="window.open('https://988lifeline.org/chat/','_blank')">🌐 Chat</button>
-            </div>
-          </div>
-        </div>
+
       </div>
     </div>
 
@@ -2199,7 +2167,7 @@ body{font-family:'Inter',sans-serif;background:var(--snow);color:var(--ink);over
             <div class="plan-perks">
               <div class="plan-perk"><div class="perk-check">✓</div>1 chat per day after trial</div>
               <div class="plan-perk"><div class="perk-check">✓</div>Mood tracker</div>
-              <div class="plan-perk"><div class="perk-check">✓</div>Crisis resources</div>
+              <div class="plan-perk"><div class="perk-check">✓</div>24/7 availability</div>
             </div>
           </div>
           <div class="plan-card active-plan" onclick="pickPlan(this)">
@@ -3509,8 +3477,6 @@ function updateStreakDisplay(){
 
 // Record session when breathing starts
 
-
-
 // ── TERMS OF SERVICE ──
 let termsReturnPage = 'app';
 let termsReturnTab = 'profile';
@@ -4783,31 +4749,37 @@ function appleSignIn(){
 
 // Initialize Google Sign-In
 function initGoogleSignIn(){
-  if(typeof google !== 'undefined' && google.accounts){
-    google.accounts.id.initialize({
-      client_id: '990107286412-ovk38f20p5jj302qfq36boglhf4ltb9q.apps.googleusercontent.com',
-      callback: handleGoogleSignIn,
-      auto_select: false,
-      cancel_on_tap_outside: true
-    });
-    // Render all sign-in buttons
-    const btns = document.querySelectorAll('.g_id_signin');
-    btns.forEach(btn => {
-      // Clear any existing button first
-      btn.innerHTML = '';
-      google.accounts.id.renderButton(btn, {
-        type: 'standard',
-        theme: 'filled_black',
-        size: 'large',
-        text: 'continue_with',
-        shape: 'pill',
-        logo_alignment: 'left',
-        width: 280
+  if(typeof google !== 'undefined' && google.accounts && google.accounts.id){
+    try {
+      google.accounts.id.initialize({
+        client_id: '990107286412-ovk38f20p5jj302qfq36boglhf4ltb9q.apps.googleusercontent.com',
+        callback: handleGoogleSignIn,
+        auto_select: false,
+        cancel_on_tap_outside: true,
+        use_fedcm_for_prompt: true
       });
-    });
+
+      // Render into both containers
+      ['googleBtnSignup', 'googleBtnSignin'].forEach(function(id){
+        const container = document.getElementById(id);
+        if(container){
+          container.innerHTML = '';
+          google.accounts.id.renderButton(container, {
+            type: 'standard',
+            theme: 'filled_black',
+            size: 'large',
+            text: id === 'googleBtnSignin' ? 'signin_with' : 'continue_with',
+            shape: 'pill',
+            logo_alignment: 'center',
+            width: 300
+          });
+        }
+      });
+    } catch(e) {
+      console.log('Google init error:', e);
+    }
   } else {
-    // Retry after a moment if Google script not loaded yet
-    setTimeout(initGoogleSignIn, 500);
+    setTimeout(initGoogleSignIn, 600);
   }
 }
 
@@ -5172,7 +5144,7 @@ function loadSavedLanguage(){
           <li>A private, encrypted personal journal</li>
           <li>A directory to help you find licensed therapists in your area</li>
           <li>Mood tracking and wellness progress tools</li>
-          <li>Crisis resources and emergency hotline connections</li>
+          <li>24/7 availability and emergency hotline connections</li>
         </ul>
         <div class="terms-highlight">
           <div class="terms-highlight-text">⚠️ <strong>Important:</strong> Haven's Therapy Chat is powered by Artificial Intelligence (AI). It is not a licensed human therapist, psychologist, psychiatrist, or any other medical or mental health professional. All chat responses are generated by an AI system and should not be treated as professional medical or psychological advice.</div>
@@ -5189,7 +5161,7 @@ function loadSavedLanguage(){
         </div>
         <div class="terms-text">You should always seek the advice of a qualified healthcare provider with any questions you may have regarding a mental health condition or treatment. Never disregard professional medical advice or delay seeking it because of something you read or experienced on Haven.</div>
         <div class="terms-highlight">
-          <div class="terms-highlight-text">If you are experiencing a mental health emergency, suicidal thoughts, or are in immediate danger, please call 988 (Suicide & Crisis Lifeline) or 911 immediately. Haven is not equipped to handle emergencies.</div>
+          <div class="terms-highlight-text">If you are experiencing a mental health emergency, suicidal thoughts, or are in immediate danger, please call 911 or your local emergency services immediately. Haven is not equipped to handle emergencies.</div>
         </div>
         <div class="terms-text">By using Haven, you acknowledge and agree that Haven provides emotional support tools only, and you assume full responsibility for your use of the Service and any decisions you make based on it.</div>
       </div>
@@ -5270,12 +5242,12 @@ function loadSavedLanguage(){
         </div>
         <div class="terms-text">For mental health crises, please use these resources:</div>
         <ul class="terms-list">
-          <li><strong>988 Suicide & Crisis Lifeline:</strong> Call or text 988 (US)</li>
-          <li><strong>Crisis Text Line:</strong> Text HOME to 741741</li>
+          
+          
           <li><strong>Emergency Services:</strong> Call 911</li>
-          <li><strong>988 Online Chat:</strong> 988lifeline.org/chat</li>
+          <li><strong> Online Chat:</strong> lifeline.org/chat</li>
         </ul>
-        <div class="terms-text">Haven's chat companion is programmed to recognize signs of crisis and will always provide emergency resources when needed. However, this is not a substitute for professional crisis intervention.</div>
+        <div class="terms-text">Haven's chat companion is programmed to recognize signs of distress and will always suggest professional support when needed. However, this is not a substitute for professional mental health care.</div>
       </div>
 
       <!-- SECTION 9 -->
@@ -5509,7 +5481,7 @@ function loadSavedLanguage(){
         </div>
         <div class="terms-text"><strong>Conversation Processing:</strong> When you send a message to Haven's chat companion, that message is sent to our secure servers and processed to generate a response. We do not build permanent records of your full conversation history on our servers. Conversations are processed in the moment and are not retained beyond what is necessary to maintain context within your current session.</div>
         <div class="terms-text"><strong>No Conversation Profiling:</strong> We do not analyze your conversations to build a psychological profile of you, target you with advertisements, or sell insights derived from your mental health discussions to any third party.</div>
-        <div class="terms-text"><strong>Crisis Situations:</strong> In very rare circumstances where we have credible reason to believe a user's life is in immediate danger, we may take action to provide emergency resources. We do not proactively monitor conversations but our system is designed to recognize crisis signals and respond with appropriate resources.</div>
+        <div class="terms-text"><strong>Crisis Situations:</strong> In very rare circumstances where we have credible reason to believe a user's life is in immediate danger, we may take action to provide emergency resources. We do not proactively monitor conversations but our system is designed to recognize distress signals and suggest appropriate support.</div>
       </div>
 
       <!-- SECTION 8 -->
@@ -5578,8 +5550,8 @@ function loadSavedLanguage(){
       <div class="terms-section" id="p12">
         <div class="terms-section-num">Section 12</div>
         <div class="terms-section-title">Third-Party Services & Links</div>
-        <div class="terms-text">Haven may contain links to third-party services, including therapist directories and crisis hotlines. This Privacy Policy applies only to Haven. We are not responsible for the privacy practices of third-party websites or services.</div>
-        <div class="terms-text">When you click on a link to a third-party service such as a therapist's website or a crisis hotline, you leave Haven and that service's own privacy policy applies.</div>
+        <div class="terms-text">Haven may contain links to third-party services, including therapist directories. This Privacy Policy applies only to Haven. We are not responsible for the privacy practices of third-party websites or services.</div>
+        <div class="terms-text">When you click on a link to a third-party service such as a therapist's website, you leave Haven and that service's own privacy policy applies.</div>
         <div class="terms-text">We carefully vet our third-party service providers and only work with companies that maintain high standards of privacy and security. However, we encourage you to review the privacy policy of any service you use.</div>
       </div>
 
