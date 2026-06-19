@@ -2492,10 +2492,11 @@ function setMobileActive(i){
 
 // ── ACCOUNT ──
 function createAccount(){
-  const name=document.getElementById('obName');
-  const email=document.getElementById('obEmail');
-  
-  // Only validate on signup, not signin
+  const name = document.getElementById('obName');
+  const email = document.getElementById('obEmail');
+  const password = document.getElementById('obPassword');
+
+  // Validate name
   if(name && name.style.display !== 'none'){
     if(!name.value.trim()){
       name.style.borderColor='var(--rose)';
@@ -2503,6 +2504,7 @@ function createAccount(){
       name.focus();
       return;
     }
+    // Validate email
     if(!email || !email.value.trim() || !email.value.includes('@')){
       if(email){
         email.style.borderColor='var(--rose)';
@@ -2511,36 +2513,53 @@ function createAccount(){
       }
       return;
     }
+    // Validate password (min 4 chars)
+    if(!password || password.value.trim().length < 4){
+      if(password){
+        password.style.borderColor='var(--rose)';
+        password.placeholder='Password must be at least 4 characters';
+        password.value='';
+        password.focus();
+      }
+      return;
+    }
   }
-  
+
   const nameVal = name ? name.value.trim() : '';
   const emailVal = email ? email.value.trim() : '';
-  
+  const passVal = password ? password.value.trim() : '';
+
   if(nameVal){
     localStorage.setItem('havenName', nameVal);
     localStorage.setItem('havenEmail', emailVal);
-    document.getElementById('greetName').textContent='Hi '+nameVal+' 👋';
-    document.getElementById('navAvatar').textContent=nameVal.charAt(0).toUpperCase();
+    // Save password (encoded)
+    if(passVal) localStorage.setItem('havenPass', btoa(passVal));
+    const greetEl = document.getElementById('greetName');
+    const navEl = document.getElementById('navAvatar');
+    if(greetEl) greetEl.textContent='Hi '+nameVal+' 👋';
+    if(navEl) navEl.textContent=nameVal.charAt(0).toUpperCase();
   }
-  
+
   // Set join date if first time
   if(!localStorage.getItem('havenJoinDate')){
     localStorage.setItem('havenJoinDate', new Date().toISOString());
   }
 
-  // Initialize 7-day trial using device time
-  initTrial();
+  // Initialize 7-day trial
+  if(typeof initTrial === 'function') initTrial();
 
-  // Create session token (session-only by default for new accounts)
+  // Clear signed-out flag and set session (persists across refresh)
+  localStorage.removeItem('havenSignedOut');
   const sessionToken = 'haven_' + Date.now();
   sessionStorage.setItem('havenSession', sessionToken);
+  localStorage.setItem('havenSession', sessionToken);
   localStorage.setItem('havenKeepSignedIn', 'false');
 
-  // Notify owner of new signup
-  notifyNewSignup(nameVal, emailVal);
+  // Notify owner
+  if(typeof notifyNewSignup === 'function') notifyNewSignup(nameVal, emailVal);
 
   showApp();
-  loadProfile();
+  if(typeof loadProfile === 'function') loadProfile();
 }
 window.addEventListener('load',()=>{
   // Auto sign-in if user has a session
@@ -2828,32 +2847,52 @@ function loadVoices(){
 }
 
 async function getBestVoice(){
-  if(selectedVoice) return selectedVoice;
   const voices = await loadVoices();
-  
-  // Try preferred voices in order
-  for(const name of PREFERRED_VOICES){
-    const match = voices.find(v => 
-      v.name.toLowerCase().includes(name.toLowerCase()) && 
-      (v.lang.startsWith('en') || v.lang === '')
+  const lang = localStorage.getItem('havenLang') || 'en';
+
+  // Language code mapping to speech synthesis lang prefixes
+  const langPrefixes = {
+    en: 'en', es: 'es', fr: 'fr', de: 'de', he: 'he', zh: 'zh'
+  };
+  const prefix = langPrefixes[lang] || 'en';
+
+  // Preferred female voices per language
+  const langVoices = {
+    en: ['Samantha','Karen','Moira','Google US English','Microsoft Aria','Microsoft Zira','female'],
+    es: ['Monica','Paulina','Google español','Microsoft Helena','Microsoft Sabina','female'],
+    fr: ['Amelie','Audrey','Google français','Microsoft Hortense','Microsoft Julie','female'],
+    de: ['Anna','Petra','Google Deutsch','Microsoft Hedda','Microsoft Katja','female'],
+    he: ['Carmit','Google עברית','Microsoft Asaf','female'],
+    zh: ['Tingting','Sinji','Google 普通话','Microsoft Huihui','Microsoft Yaoyao','female']
+  };
+
+  const preferred = langVoices[lang] || langVoices['en'];
+
+  // 1. Try preferred named voices for this language
+  for(const name of preferred){
+    const match = voices.find(v =>
+      v.name.toLowerCase().includes(name.toLowerCase()) &&
+      v.lang.toLowerCase().startsWith(prefix)
     );
-    if(match){ selectedVoice = match; return match; }
+    if(match) return match;
   }
-  
-  // Fallback: any female-named English voice
-  const femaleKeywords = ['female','woman','girl','lady','zira','aria','jenny','sara','karen','samantha','ava','allison','victoria','susan','emily','emma','olivia','sophia','amy'];
-  for(const kw of femaleKeywords){
-    const match = voices.find(v => 
-      v.name.toLowerCase().includes(kw) && v.lang.startsWith('en')
+
+  // 2. Any voice matching the language
+  const langMatch = voices.find(v => v.lang.toLowerCase().startsWith(prefix));
+  if(langMatch) return langMatch;
+
+  // 3. Fallback to English female
+  for(const name of langVoices['en']){
+    const match = voices.find(v =>
+      v.name.toLowerCase().includes(name.toLowerCase()) &&
+      v.lang.startsWith('en')
     );
-    if(match){ selectedVoice = match; return match; }
+    if(match) return match;
   }
-  
-  // Last resort: first English voice
+
+  // 4. Last resort: any English voice
   const anyEn = voices.find(v => v.lang.startsWith('en'));
-  if(anyEn){ selectedVoice = anyEn; return anyEn; }
-  
-  return null;
+  return anyEn || voices[0] || null;
 }
 
 async function speakReply(text){
@@ -2879,8 +2918,12 @@ async function speakReply(text){
     setTimeout(() => {
       const u = new SpeechSynthesisUtterance(sentence.trim());
       if(voice) u.voice = voice;
-      u.rate = 0.82;      // Slow and warm — not rushed
-      u.pitch = 1.08;     // Slightly feminine but not cartoonish
+      // Set language for correct pronunciation
+      const vLang = localStorage.getItem('havenLang') || 'en';
+      const langCodes = { en:'en-US', es:'es-ES', fr:'fr-FR', de:'de-DE', he:'he-IL', zh:'zh-CN' };
+      u.lang = langCodes[vLang] || 'en-US';
+      u.rate = 0.85;      // Slow and warm — not rushed
+      u.pitch = 1.05;     // Slightly feminine but not cartoonish
       u.volume = 0.95;
       
       // Add a tiny pause between sentences for naturalness
@@ -4653,7 +4696,7 @@ function launchBreathing(idx){
   if(tipEl) tipEl.textContent = tech.phases[0].tip;
   document.getElementById('breathRing').className = 'breath-ring-inner';
 
-  if(panel) panel.scrollIntoView({behavior:'smooth', block:'center'});
+  if(panel && panel.scrollIntoView) panel.scrollIntoView({behavior:'smooth', block:'center'});
 
   // Countdown 3-2-1
   let count = 3;
@@ -4969,6 +5012,8 @@ let currentLang = 'en';
 function setLanguage(lang, el){
   currentLang = lang;
   localStorage.setItem('havenLang', lang);
+  // Reset voice so chat picks a voice for the new language
+  if(typeof selectedVoice !== 'undefined') selectedVoice = null;
 
   // Update active card - find by ID if el not passed
   document.querySelectorAll('.lang-card').forEach(c => c.classList.remove('active-lang'));
