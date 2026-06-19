@@ -1,4 +1,4 @@
-[index (4).html](https://github.com/user-attachments/files/29116680/index.4.html)
+[index (5).html](https://github.com/user-attachments/files/29120523/index.5.html)
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -4106,8 +4106,17 @@ function signIn(){
     return;
   }
 
-  // Password check — support both btoa and plain (legacy accounts)
-  const passMatch = !storedPass ||
+  // Password check — must match stored password (no bypass)
+  if(!storedPass){
+    // Account exists but no password set — require account recreation
+    password.style.borderColor = 'var(--rose)';
+    password.placeholder = 'Please reset your password';
+    password.value = '';
+    password.focus();
+    return;
+  }
+
+  const passMatch =
     btoa(enteredPass) === storedPass ||
     enteredPass === storedPass ||
     btoa(unescape(encodeURIComponent(enteredPass))) === storedPass;
