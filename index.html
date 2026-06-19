@@ -918,6 +918,7 @@ body{font-family:'Inter',sans-serif;background:var(--snow);color:var(--ink);over
 }
 /* Only show mobile nav when app page is active */
 #app.active .mobile-nav{display:flex;}
+body[data-page="app"] .mobile-nav{display:flex;}
 .mobile-tab{
   flex:1;display:flex;flex-direction:column;
   align-items:center;gap:4px;cursor:pointer;padding:6px 4px;
@@ -1002,6 +1003,7 @@ body{font-family:'Inter',sans-serif;background:var(--snow);color:var(--ink);over
 }
 @media(min-width:769px){
   #app.active .mobile-nav{display:none;}
+  body[data-page="app"] .mobile-nav{display:none;}
   .app-nav-tabs{display:flex;}
 }
 
@@ -2463,7 +2465,13 @@ body{font-family:'Inter',sans-serif;background:var(--snow);color:var(--ink);over
 <script>
 
 // ── NAV ──
-function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');}
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  const pg = document.getElementById(id);
+  if(pg) pg.classList.add('active');
+  // Add body class for mobile nav visibility
+  document.body.setAttribute('data-page', id);
+}
 
 function showApp(){showPage('app');}
 function goHome(){showPage('landing');}
@@ -2535,6 +2543,8 @@ function createAccount(){
   loadProfile();
 }
 window.addEventListener('load',()=>{
+  // Auto sign-in if user has a session
+  if(typeof checkAutoSignIn === 'function') checkAutoSignIn();
   const n=localStorage.getItem('havenName');
   if(n){
     const greetEl=document.getElementById('greetName');
@@ -4031,25 +4041,31 @@ setInterval(updateTrialStatus, 60000);
 
 // Check on load if user should be auto-signed in
 function checkAutoSignIn(){
-  const keepSignedIn = localStorage.getItem('havenKeepSignedIn') === 'true';
-  const sessionToken = sessionStorage.getItem('havenSession');
-  const persistToken = localStorage.getItem('havenSession');
   const name = localStorage.getItem('havenName');
+  const email = localStorage.getItem('havenEmail');
 
-  if(!name) return false; // No account yet
+  if(!name || !email) return false; // No account yet
 
-  if(keepSignedIn && persistToken){
-    // User chose "keep me signed in" — auto login
+  // Check if user explicitly signed out
+  const signedOut = localStorage.getItem('havenSignedOut') === 'true';
+  if(signedOut) return false;
+
+  // Check for any valid session (persistent OR session storage)
+  const persistToken = localStorage.getItem('havenSession');
+  const sessionToken = sessionStorage.getItem('havenSession');
+  const keepSignedIn = localStorage.getItem('havenKeepSignedIn') === 'true';
+
+  // Auto-login if: keep-signed-in is on, OR there's any active session
+  if(persistToken || sessionToken || keepSignedIn){
+    // Restore session token if missing (survives refresh)
+    if(!persistToken && !sessionToken){
+      const newToken = 'haven_' + Date.now();
+      sessionStorage.setItem('havenSession', newToken);
+    }
     showApp();
     loadProfile();
     if(typeof initTrial === 'function') initTrial();
     if(typeof updateTrialStatus === 'function') updateTrialStatus();
-    return true;
-  } else if(!keepSignedIn && sessionToken){
-    // User is signed in for this browser session only
-    showApp();
-    loadProfile();
-    if(typeof initTrial === 'function') initTrial();
     return true;
   }
 
@@ -4135,12 +4151,16 @@ function signIn(){
   const keepMe = keepSignedInState || false;
   const sessionToken = 'haven_' + Date.now();
 
+  // Clear signed-out flag
+  localStorage.removeItem('havenSignedOut');
+
   if(keepMe){
     localStorage.setItem('havenKeepSignedIn', 'true');
     localStorage.setItem('havenSession', sessionToken);
   } else {
     localStorage.setItem('havenKeepSignedIn', 'false');
-    localStorage.removeItem('havenSession');
+    // Still store in localStorage so refresh doesn't log out
+    localStorage.setItem('havenSession', sessionToken);
     sessionStorage.setItem('havenSession', sessionToken);
   }
 
@@ -4314,18 +4334,15 @@ function verifyResetCode(){
 
 // Update signOut to handle persistent vs session login
 function signOut(){
-  const keepSignedIn = localStorage.getItem('havenKeepSignedIn') === 'true';
+  const confirmed = window.confirm('Do you want to sign out? You will need to sign in again next time.');
+  if(!confirmed) return;
 
-  if(keepSignedIn){
-    // Ask if they want to fully sign out
-    const confirm = window.confirm('Do you want to sign out? You will need to sign in again next time.');
-    if(!confirm) return;
-  }
-
-  // Clear session
+  // Clear all session data
   sessionStorage.removeItem('havenSession');
   localStorage.removeItem('havenSession');
   localStorage.removeItem('havenKeepSignedIn');
+  // Set signed-out flag so auto-login doesn't trigger
+  localStorage.setItem('havenSignedOut', 'true');
 
   showPage('landing');
 }
