@@ -906,7 +906,7 @@ body{font-family:'Inter',sans-serif;background:var(--snow);color:var(--ink);over
    MOBILE NAV
 ════════════════════════════════ */
 .mobile-nav{
-  display:flex;
+  display:none;
   position:fixed;bottom:0;left:0;right:0;
   background:rgba(245,245,250,0.95);
   backdrop-filter:blur(20px);
@@ -916,6 +916,8 @@ body{font-family:'Inter',sans-serif;background:var(--snow);color:var(--ink);over
   padding:10px 0 24px;
   box-shadow:0 -8px 32px rgba(0,0,0,0.06);
 }
+/* Only show mobile nav when app page is active */
+#app.active .mobile-nav{display:flex;}
 .mobile-tab{
   flex:1;display:flex;flex-direction:column;
   align-items:center;gap:4px;cursor:pointer;padding:6px 4px;
@@ -998,7 +1000,7 @@ body{font-family:'Inter',sans-serif;background:var(--snow);color:var(--ink);over
   .tab-panel{padding-bottom:110px;}
 }
 @media(min-width:769px){
-  .mobile-nav{display:none;}
+  #app.active .mobile-nav{display:none;}
   .app-nav-tabs{display:flex;}
 }
 
