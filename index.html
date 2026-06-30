@@ -1510,9 +1510,100 @@ body[data-page="app"] .mobile-nav{display:flex;}
   }
 }
 
+
+/* ── TEXT SIZE: one step larger across the app + sign-in (landing untouched) ── */
+/* App nav */
+#app .app-nav-logo{font-size:22px;}
+#app .nav-tab{font-size:15px;}
+/* Home */
+#app .home-greeting-name{font-size:18px;}
+#app .home-greeting-time{font-size:13px;}
+#app .home-greeting-msg{font-size:22px;}
+#app .home-section-label{font-size:12px;}
+#app .mood-label{font-size:13px;}
+#app .home-card-title{font-size:16px;}
+#app .home-card-sub{font-size:13px;}
+/* Chat */
+#app .chat-top-name{font-size:17px;}
+#app .chat-top-status{font-size:13px;}
+#app .chat-top-voice{font-size:13px;}
+#app .bubble{font-size:16px;}
+#app .msg-time{font-size:12px;}
+#app .qr{font-size:14px;}
+/* Journal */
+#app .journal-h{font-size:34px;}
+#app .journal-sub{font-size:15px;}
+#app .journal-date{font-size:12px;}
+#app .journal-save-btn{font-size:15px;}
+#app .entry-date{font-size:12px;}
+#app .entry-text{font-size:17px;}
+/* Therapists */
+#app .therapist-h{font-size:34px;}
+#app .therapist-sub{font-size:15px;}
+#app .filter-chip{font-size:14px;}
+#app .t-name,#app .t-card-name{font-size:17px;}
+#app .t-title,#app .t-card-title{font-size:13px;}
+#app .t-rating,#app .t-card-rating{font-size:13px;}
+#app .t-tag{font-size:12px;}
+#app .t-badge{font-size:11px;}
+#app .t-price{font-size:14px;}
+#app .t-price strong{font-size:18px;}
+#app .t-book{font-size:13px;}
+/* Meditate (class-based elements) */
+#app .session-name{font-size:15px;}
+#app .session-dur{font-size:12px;}
+#app .session-title{font-size:12px;}
+#app .sound-name{font-size:15px;}
+#app .sound-btn{font-size:12px;}
+#app .streak-val{font-size:28px;}
+#app .streak-lab{font-size:11px;}
+#app .streak-day-letter{font-size:11px;}
+/* Plans */
+#app .plans-h{font-size:34px;}
+#app .plans-sub{font-size:15px;}
+#app .plan-name{font-size:18px;}
+#app .plan-price{font-size:30px;}
+#app .plan-per{font-size:13px;}
+#app .plan-perk{font-size:15px;}
+#app .trial-note{font-size:13px;}
+#app .plans-cta{font-size:17px;}
+/* Mobile bottom nav */
+#app .mobile-tab-label{font-size:11px;}
+/* Conversation sidebar */
+#app .convo-item-title{font-size:15px;}
+#app .convo-item-preview{font-size:12px;}
+#app .sidebar-title{font-size:13px;}
+#app .new-chat-btn{font-size:12px;}
+/* Profile */
+#app .profile-name{font-size:26px;}
+#app .profile-email{font-size:14px;}
+#app .profile-plan-text{font-size:13px;}
+#app .profile-stat-val{font-size:28px;}
+#app .profile-stat-lab{font-size:12px;}
+#app .profile-section-title{font-size:12px;}
+#app .profile-field-label{font-size:13px;}
+#app .profile-save-btn{font-size:16px;}
+#app .profile-row-title{font-size:16px;}
+#app .profile-row-sub{font-size:13px;}
+#app .profile-danger-btn{font-size:16px;}
+#app .profile-upgrade-btn{font-size:16px;}
+/* Language selector */
+#app .lang-name{font-size:12px;}
+#app .lang-native{font-size:11px;}
+/* Sign in / Sign up screen */
+#onboarding .ob-logo{font-size:30px;}
+#onboarding .ob-tagline{font-size:14px;}
+#onboarding .ob-title{font-size:30px;}
+#onboarding .ob-sub{font-size:15px;}
+#onboarding .ob-btn{font-size:17px;}
+#onboarding .ob-social{font-size:15px;}
+#onboarding .ob-terms{font-size:12px;}
+#onboarding .ob-switch{font-size:14px;}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
+<script type="text/javascript" src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js"></script>
 <script>window.addEventListener("load", function(){ if(typeof emailjs !== "undefined"){ emailjs.init("ocU7GcUyld3K9sYYd"); }});</script>
 </head>
 <body>
@@ -2285,6 +2376,7 @@ body[data-page="app"] .mobile-nav{display:flex;}
         </div>
         <div class="trial-note">✅ <strong>7 days free</strong> on all plans — no credit card needed · cancel anytime</div>
         <button class="plans-cta" onclick="startTrial()">Start my 7-day free trial</button>
+        <div style="text-align:center;margin-top:18px;"><span onclick="promptAccessCode()" style="font-size:12px;color:var(--mist);cursor:pointer;text-decoration:underline;">Have an access code?</span></div>
       </div>
     </div>
 
@@ -2567,7 +2659,7 @@ function switchTab(name, btn){
   if(panel) panel.classList.add('active');
   if(btn){document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));btn.classList.add('active');}
   if(name === 'profile'){ loadProfile(); loadSavedLanguage(); }
-  if(name === 'meditate') updateStreakDisplay();
+  if(name === 'meditate'){ updateStreakDisplay(); if(typeof applyPremiumUI === 'function') applyPremiumUI(); }
 }
 function setMobileActive(i){
   document.querySelectorAll('.mobile-tab').forEach(t=>t.classList.remove('active'));
@@ -2638,6 +2730,8 @@ function createAccount(){
   sessionStorage.setItem('havenSession', sessionToken);
   localStorage.setItem('havenSession', sessionToken);
   localStorage.setItem('havenKeepSignedIn', 'false');
+
+  maybeUnlockForTestEmail(emailVal);
 
   // Notify owner
   if(typeof notifyNewSignup === 'function') notifyNewSignup(nameVal, emailVal);
@@ -2712,6 +2806,82 @@ function startTrial(){
   }
 }
 function goPlans(){switchTab('plans',null);setMobileActive(5);}
+
+// ── SECRET TEST / FULL-ACCESS (no payment) ──
+// Change this code anytime, then redeploy. Share it only with your testers.
+var ACCESS_CODE = 'HAVENVIP';
+// OPTIONAL: emails that unlock automatically on sign up / sign in (no code needed).
+// Example: var TEST_EMAILS = ['friend1@gmail.com','friend2@gmail.com'];
+var TEST_EMAILS = [];
+
+function unlockPremium(){
+  localStorage.setItem('havenPlan','paid');
+  localStorage.setItem('havenTestAccess','1');
+  localStorage.removeItem('havenSignedOut');
+  if(typeof loadProfile === 'function') loadProfile();
+  if(typeof updateTrialStatus === 'function') updateTrialStatus();
+  if(typeof applyPremiumUI === 'function') applyPremiumUI();
+}
+
+function maybeUnlockForTestEmail(email){
+  if(!email || !TEST_EMAILS.length) return false;
+  var e = email.trim().toLowerCase();
+  for(var i=0;i<TEST_EMAILS.length;i++){
+    if(TEST_EMAILS[i].trim().toLowerCase() === e){ unlockPremium(); return true; }
+  }
+  return false;
+}
+
+function promptAccessCode(){
+  var code = prompt('Enter your access code:');
+  if(code === null) return;
+  if(code.trim().toUpperCase() === ACCESS_CODE.toUpperCase()){
+    unlockPremium();
+    alert('\u2728 Full access unlocked! You now have unlimited premium access \u2014 no payment needed.');
+  } else {
+    alert('That code is not valid.');
+  }
+}
+
+// Visually + functionally unlock premium content when paid/test access is on
+function applyPremiumUI(){
+  if(localStorage.getItem('havenPlan') !== 'paid') return;
+  var lockedCards = document.querySelectorAll('#tab-meditate .session-card.locked');
+  lockedCards.forEach(function(card){
+    card.classList.remove('locked');
+    card.style.opacity = '1';
+    card.querySelectorAll('*').forEach(function(el){
+      var t = (el.textContent || '').trim();
+      if(t === '\uD83D\uDD12' || t === '\uD83D\uDD12 Premium'){ el.style.display = 'none'; }
+    });
+    var nameEl = card.querySelector('.session-name');
+    var nm = nameEl ? nameEl.textContent : '';
+    if(card.closest('.session-grid')){
+      card.onclick = (function(c,n){ return function(){ if(typeof pickSession==='function') pickSession(c,n); }; })(card, nm);
+    } else {
+      card.onclick = function(){ if(typeof launchBreathing==='function') launchBreathing(0); };
+    }
+  });
+  var rows = document.querySelectorAll('#tab-meditate .sound-row');
+  rows.forEach(function(row){
+    var span = row.querySelector('span');
+    if(span && (span.textContent || '').indexOf('Premium') > -1){
+      var nameEl = row.querySelector('.sound-name');
+      var nm = nameEl ? nameEl.textContent : '';
+      var type = nm.indexOf('Rain') > -1 ? 'rain' : nm.indexOf('Forest') > -1 ? 'forest' : nm.indexOf('Bowls') > -1 ? 'bowls' : '';
+      if(type){
+        var b = document.createElement('button');
+        b.className = 'sound-btn';
+        b.textContent = 'Play';
+        b.onclick = (function(btn,ty){ return function(){ if(typeof toggleSound==='function') toggleSound(btn,ty); }; })(b, type);
+        span.replaceWith(b);
+      }
+    }
+  });
+}
+
+window.addEventListener('load', function(){ if(typeof applyPremiumUI === 'function') applyPremiumUI(); });
+
 
 // ── CHAT ──
 const messages=[];
@@ -3110,7 +3280,7 @@ function runPhase(){
 function pickSession(el,name){
   document.querySelectorAll('.session-card:not(.locked)').forEach(c=>c.classList.remove('active-sess'));
   el.classList.add('active-sess');
-  document.getElementById('breathPattern').textContent=name+' selected — press Start';
+  var bp=document.getElementById('breathPattern'); if(bp) bp.textContent=name+' selected \u2014 press Start';
 }
 
 // ── SOUNDS ── 5-minute seamless loops ──
@@ -4356,6 +4526,8 @@ function signIn(){
     if(nav) nav.textContent = storedName.charAt(0).toUpperCase();
   }
 
+  maybeUnlockForTestEmail(storedEmail);
+
   showApp();
   loadProfile();
   if(typeof initTrial === 'function') initTrial();
@@ -4921,6 +5093,7 @@ function handleGoogleSignIn(response) {
     localStorage.setItem('havenName', googleName);
     localStorage.setItem('havenLastName', payload.family_name || '');
     localStorage.setItem('havenEmail', googleEmail);
+    maybeUnlockForTestEmail(googleEmail);
     localStorage.setItem('havenGoogleId', payload.sub);
     localStorage.setItem('havenPhoto', googlePicture);
     localStorage.setItem('havenLoginMethod', 'google');
@@ -4956,9 +5129,99 @@ function handleGoogleSignIn(response) {
   }
 }
 
-function appleSignIn(){
-  alert('Apple Sign-In coming soon! Please use email or Google for now.');
+// ── SIGN IN WITH APPLE ──
+var APPLE_SERVICES_ID = 'com.havenwithme.web';
+var appleInited = false;
+
+function decodeJwt(token){
+  var part = token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/');
+  while(part.length % 4) part += '=';
+  var json = decodeURIComponent(atob(part).split('').map(function(c){
+    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+  }).join(''));
+  return JSON.parse(json);
 }
+
+function ensureAppleInit(){
+  if(appleInited) return true;
+  if(typeof AppleID !== 'undefined' && AppleID.auth){
+    try {
+      AppleID.auth.init({
+        clientId: APPLE_SERVICES_ID,
+        scope: 'name email',
+        redirectURI: 'https://havenwithme.com',
+        usePopup: true
+      });
+      appleInited = true;
+      return true;
+    } catch(e){ console.log('Apple init error:', e); return false; }
+  }
+  return false;
+}
+
+function appleSignIn(){
+  if(!ensureAppleInit()){
+    alert('Apple Sign-In is still loading \u2014 please try again in a moment.');
+    return;
+  }
+  AppleID.auth.signIn().then(function(data){
+    try {
+      var idToken = data && data.authorization && data.authorization.id_token;
+      if(!idToken) throw new Error('No identity token returned');
+      var payload = decodeJwt(idToken);
+      var email = payload.email || '';
+      var appleId = payload.sub || '';
+
+      // Apple only returns the name on the FIRST sign-in
+      var firstName = '', lastName = '';
+      if(data.user && data.user.name){
+        firstName = data.user.name.firstName || '';
+        lastName  = data.user.name.lastName  || '';
+      }
+      if(!firstName){
+        firstName = localStorage.getItem('havenName') || (email ? email.split('@')[0] : 'Friend');
+      }
+
+      localStorage.setItem('havenName', firstName);
+      if(lastName) localStorage.setItem('havenLastName', lastName);
+      if(email) localStorage.setItem('havenEmail', email);
+      if(appleId) localStorage.setItem('havenAppleId', appleId);
+      localStorage.setItem('havenLoginMethod', 'apple');
+
+      if(!localStorage.getItem('havenJoinDate')){
+        localStorage.setItem('havenJoinDate', new Date().toISOString());
+        if(typeof notifyNewSignup === 'function') notifyNewSignup(firstName, email);
+      }
+      if(typeof initTrial === 'function') initTrial();
+      if(typeof maybeUnlockForTestEmail === 'function') maybeUnlockForTestEmail(email);
+
+      var sessionToken = 'haven_' + Date.now();
+      sessionStorage.setItem('havenSession', sessionToken);
+      localStorage.setItem('havenSession', sessionToken);
+      localStorage.setItem('havenKeepSignedIn', 'true');
+      localStorage.removeItem('havenSignedOut');
+
+      var greet = document.getElementById('greetName');
+      if(greet) greet.textContent = 'Hi ' + firstName + ' \uD83D\uDC4B';
+      var nav = document.getElementById('navAvatar');
+      if(nav) nav.textContent = firstName.charAt(0).toUpperCase();
+
+      showApp();
+      if(typeof loadProfile === 'function') loadProfile();
+    } catch(e){
+      console.log('Apple sign-in parse error:', e);
+      alert('Apple sign-in had trouble reading your details. Please try again or use email.');
+    }
+  }).catch(function(err){
+    // Silent on user cancel; log anything else
+    var code = err && err.error;
+    if(code && code !== 'popup_closed_by_user' && code !== 'user_cancelled_authorize' && code !== 'user_trigger_new_signin_flow'){
+      console.log('Apple sign-in error:', err);
+    }
+  });
+}
+
+window.addEventListener('load', function(){ setTimeout(ensureAppleInit, 800); });
 
 // Initialize Google Sign-In
 function initGoogleSignIn(){
