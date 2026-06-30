@@ -7,10 +7,12 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="Haven"/>
 <meta name="mobile-web-app-capable" content="yes"/>
-<meta name="theme-color" content="#0a0a0f"/>
-<link rel="manifest" href="data:application/json,%7B%22name%22%3A%22Haven%22%2C%22short_name%22%3A%22Haven%22%2C%22description%22%3A%22Your%20safe%20place%2C%20always%20here%22%2C%22start_url%22%3A%22/%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%230a0a0f%22%2C%22theme_color%22%3A%22%230a0a0f%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage/svg%2Bxml%2C%253Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%20512%20512%27%253E%253Crect%20width%3D%27512%27%20height%3D%27512%27%20rx%3D%27100%27%20fill%3D%27%25230a0a0f%27/%253E%253Ccircle%20cx%3D%27256%27%20cy%3D%27256%27%20r%3D%2790%27%20fill%3D%27%25235b4fe8%27/%253E%253C/svg%253E%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image/svg%2Bxml%22%7D%5D%7D"/>
+<meta name="theme-color" content="#0D0D12"/>
+<link rel="manifest" href="manifest.json"/>
 <meta name="format-detection" content="telephone=no"/>
-<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%230a0a0f'/%3E%3Ccircle cx='90' cy='90' r='30' fill='%235b4fe8'/%3E%3C/svg%3E"/>
+<link rel="apple-touch-icon" href="icon-192.png"/>
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png"/>
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png"/>
 <title>Haven — Your Safe Place, Always Here</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <style>
@@ -6130,5 +6132,12 @@ function loadSavedLanguage(){
   </div>
 </div>
 
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load', function(){
+    navigator.serviceWorker.register('sw.js').catch(function(e){ console.log('SW registration skipped:', e); });
+  });
+}
+</script>
 </body>
 </html>
