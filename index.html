@@ -261,7 +261,7 @@ body{font-family:'Inter',sans-serif;background:var(--snow);color:var(--ink);over
 }
 #onboarding.active{display:flex;}
 .ob-wrap{width:100%;max-width:400px;}
-.ob-logo-wrap{text-align:center;margin-bottom:40px;}
+.ob-logo-wrap{text-align:center;margin-bottom:26px;}
 .ob-logo{
   font-family:'Fraunces',serif;
   font-size:28px;font-weight:400;color:var(--white);
@@ -276,9 +276,9 @@ body{font-family:'Inter',sans-serif;background:var(--snow);color:var(--ink);over
   color:var(--white);letter-spacing:-0.03em;
   margin-bottom:8px;
 }
-.ob-sub{font-size:14px;color:var(--slate);margin-bottom:28px;line-height:1.6;}
+.ob-sub{font-size:14px;color:var(--slate);margin-bottom:22px;line-height:1.6;}
 .ob-field{
-  width:100%;padding:14px 18px;
+  width:100%;padding:15px 18px;
   background:rgba(255,255,255,0.06);
   border:1px solid rgba(255,255,255,0.1);
   border-radius:14px;font-size:14px;
@@ -286,7 +286,7 @@ body{font-family:'Inter',sans-serif;background:var(--snow);color:var(--ink);over
   color:var(--white);outline:none;
   margin-bottom:10px;transition:border-color 0.2s;
 }
-.ob-field:focus{border-color:var(--haven);}
+.ob-field:focus{border-color:var(--haven);box-shadow:0 0 0 3px rgba(91,79,232,0.16);}
 .ob-field::placeholder{color:var(--slate);}
 .ob-btn{
   width:100%;padding:15px;
@@ -295,7 +295,8 @@ body{font-family:'Inter',sans-serif;background:var(--snow);color:var(--ink);over
   font-size:15px;font-weight:600;
   font-family:'Inter',sans-serif;
   cursor:pointer;transition:all 0.2s;
-  letter-spacing:-0.02em;margin-top:4px;
+  letter-spacing:-0.02em;margin-top:6px;
+  box-shadow:0 10px 24px -10px rgba(91,79,232,0.65);
 }
 .ob-btn:hover{background:var(--haven2);transform:translateY(-1px);}
 .ob-divider{
@@ -325,6 +326,48 @@ body{font-family:'Inter',sans-serif;background:var(--snow);color:var(--ink);over
   text-align:center;margin-top:20px;cursor:pointer;
 }
 .ob-switch span{color:var(--haven3);}
+
+/* ── Onboarding redesign (Apple-studio layout) ── */
+#onboarding{
+  background:
+    radial-gradient(72% 55% at 50% -8%, rgba(91,79,232,0.18), transparent 60%),
+    radial-gradient(55% 45% at 50% 112%, rgba(46,196,182,0.07), transparent 60%),
+    var(--ink);
+}
+.ob-card{
+  background:rgba(255,255,255,0.03);
+  border:1px solid rgba(255,255,255,0.07);
+  border-radius:26px;
+  padding:34px 26px 26px;
+  box-shadow:0 32px 80px -30px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.05);
+  -webkit-backdrop-filter:blur(10px);
+  backdrop-filter:blur(10px);
+  animation:obRise 0.6s cubic-bezier(0.22,1,0.36,1) both;
+}
+@keyframes obRise{
+  from{opacity:0;transform:translateY(16px) scale(0.985);}
+  to{opacity:1;transform:translateY(0) scale(1);}
+}
+.ob-social-block{margin-top:2px;}
+.ob-apple{
+  width:100%;
+  height:46px;
+  margin:0 auto 10px;
+  overflow:hidden;
+  border-radius:12px;
+  cursor:pointer;
+}
+.ob-apple iframe, .ob-apple > div{width:100% !important;}
+.ob-google{
+  width:100%;
+  display:flex;
+  justify-content:center;
+  min-height:44px;
+}
+@media(max-width:430px){
+  #onboarding{padding:28px 16px;}
+  .ob-card{padding:28px 18px 22px;border-radius:22px;}
+}
 
 /* ════════════════════════════════
    APP SHELL
@@ -1701,57 +1744,50 @@ body[data-page="app"] .mobile-nav{display:flex;}
       <div class="ob-logo"><div class="ob-logo-dot"></div>Haven</div>
       <div class="ob-tagline">Your safe place, always here</div>
     </div>
-    <div class="ob-title" id="obTitle">Create an Account</div>
-    <div class="ob-sub" id="obSub">7 days free — no credit card needed. Cancel anytime.</div>
+    <div class="ob-card">
+      <div class="ob-title" id="obTitle">Create an Account</div>
+      <div class="ob-sub" id="obSub">7 days free — no credit card needed. Cancel anytime.</div>
 
-    <!-- SIGNUP FIELDS -->
-    <div id="signupFields">
-      <input class="ob-field" type="text" placeholder="Your first name" id="obName"/>
-      <input class="ob-field" type="email" placeholder="Email address (required)" id="obEmail" required/>
-      <input class="ob-field" type="password" placeholder="Create a password" id="obPassword"/>
-      <button class="ob-btn" onclick="createAccount()">Create my Haven</button>
-      <div class="ob-divider"><div class="ob-divider-line"></div><span class="ob-divider-text">or</span><div class="ob-divider-line"></div></div>
-      <!-- Google Sign-In Button -->
-      <div id="googleBtnSignup" class="google-btn-container" style="width:100%;display:flex;justify-content:center;margin-bottom:10px;min-height:44px;"></div>
-    </div>
-
-    <!-- SIGNIN FIELDS -->
-    <div id="signinFields" style="display:none;">
-      <input class="ob-field" type="email" placeholder="Email address" id="obSigninEmail"/>
-      <input class="ob-field" type="password" placeholder="Password" id="obSigninPassword"/>
-
-      <!-- KEEP ME SIGNED IN TOGGLE -->
-      <div style="display:flex;align-items:center;justify-content:space-between;margin:2px 0 16px;">
-        <div style="display:flex;align-items:center;gap:10px;cursor:pointer;" onclick="toggleKeepSignedIn()">
-          <div style="position:relative;width:42px;height:24px;flex-shrink:0;">
-            <div id="keepToggleTrack" style="
-              position:absolute;inset:0;border-radius:12px;
-              background:rgba(255,255,255,0.15);
-              transition:background 0.25s;cursor:pointer;
-            "></div>
-            <div id="keepToggleThumb" style="
-              position:absolute;top:3px;left:3px;
-              width:18px;height:18px;border-radius:50%;
-              background:rgba(255,255,255,0.5);
-              transition:all 0.25s;pointer-events:none;
-              box-shadow:0 1px 4px rgba(0,0,0,0.3);
-            "></div>
-          </div>
-          <span style="font-size:13px;color:rgba(255,255,255,0.7);user-select:none;">Keep me signed in</span>
-        </div>
-        <span style="font-size:12px;color:var(--haven3);cursor:pointer;" onclick="forgotPassword()">Forgot password?</span>
+      <!-- SIGNUP FIELDS -->
+      <div id="signupFields">
+        <input class="ob-field" type="text" placeholder="Your first name" id="obName"/>
+        <input class="ob-field" type="email" placeholder="Email address (required)" id="obEmail" required/>
+        <input class="ob-field" type="password" placeholder="Create a password" id="obPassword"/>
+        <button class="ob-btn" onclick="createAccount()">Create my Haven</button>
       </div>
 
-      <button class="ob-btn" onclick="signIn()">Sign in to Haven</button>
-      <div class="ob-divider"><div class="ob-divider-line"></div><span class="ob-divider-text">or</span><div class="ob-divider-line"></div></div>
-      <!-- Google Sign-In Button -->
-      <div id="googleBtnSignin" class="google-btn-container" style="width:100%;display:flex;justify-content:center;margin-bottom:10px;min-height:44px;"></div>
+      <!-- SIGNIN FIELDS -->
+      <div id="signinFields" style="display:none;">
+        <input class="ob-field" type="email" placeholder="Email address" id="obSigninEmail"/>
+        <input class="ob-field" type="password" placeholder="Password" id="obSigninPassword"/>
+
+        <!-- KEEP ME SIGNED IN TOGGLE -->
+        <div style="display:flex;align-items:center;justify-content:space-between;margin:4px 0 18px;">
+          <div style="display:flex;align-items:center;gap:10px;cursor:pointer;" onclick="toggleKeepSignedIn()">
+            <div style="position:relative;width:42px;height:24px;flex-shrink:0;">
+              <div id="keepToggleTrack" style="position:absolute;inset:0;border-radius:12px;background:rgba(255,255,255,0.15);transition:background 0.25s;cursor:pointer;"></div>
+              <div id="keepToggleThumb" style="position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:rgba(255,255,255,0.5);transition:all 0.25s;pointer-events:none;box-shadow:0 1px 4px rgba(0,0,0,0.3);"></div>
+            </div>
+            <span style="font-size:13px;color:rgba(255,255,255,0.7);user-select:none;">Keep me signed in</span>
+          </div>
+          <span style="font-size:12px;color:var(--haven3);cursor:pointer;" onclick="forgotPassword()">Forgot password?</span>
+        </div>
+
+        <button class="ob-btn" onclick="signIn()">Sign in to Haven</button>
+      </div>
+
+      <!-- SOCIAL LOGINS — Apple on top, Google below -->
+      <div class="ob-social-block">
+        <div class="ob-divider"><div class="ob-divider-line"></div><span class="ob-divider-text">or</span><div class="ob-divider-line"></div></div>
+        <!-- Apple renders its official branded button into this div automatically -->
+        <div id="appleid-signin" class="ob-apple" data-color="white" data-border="false" data-type="continue" data-border-radius="12"></div>
+        <!-- Google renders its button into this div -->
+        <div id="googleBtn" class="ob-google google-btn-container"></div>
+      </div>
+
+      <div class="ob-terms">By continuing you agree to Haven's <a class="ob-link" href="#" onclick="showTerms('onboarding',null)">Terms</a> and <a class="ob-link" href="#" onclick="showPrivacy('onboarding',null)">Privacy Policy</a>. Your data is never sold.</div>
     </div>
 
-    <!-- Apple draws its official button into this div automatically -->
-    <div id="appleid-signin" data-color="white" data-border="false" data-type="continue" data-border-radius="14" data-mode="center-align" style="width:300px;max-width:100%;margin:0 auto 10px;cursor:pointer;min-height:44px;"></div>
-
-    <div class="ob-terms">By continuing you agree to Haven's <a class="ob-link" href="#" onclick="showTerms('onboarding',null)">Terms</a> and <a class="ob-link" href="#" onclick="showPrivacy('onboarding',null)">Privacy Policy</a>. Your data is never sold.</div>
     <div class="ob-switch" onclick="toggleSignIn()" id="obSwitch">Already have an account? <span>Sign in</span></div>
   </div>
 </div>
@@ -4743,8 +4779,11 @@ function showOnboarding(mode){
     document.getElementById('obSwitch').innerHTML = 'Already have an account? <span>Sign in</span>';
   }
   showPage('onboarding');
-  // Re-render Google buttons when onboarding shown
-  setTimeout(function(){ if(typeof initGoogleSignIn === 'function') initGoogleSignIn(); }, 300);
+  // Render social buttons only once the page is visible, so Apple measures its size correctly
+  setTimeout(function(){
+    if(typeof initGoogleSignIn === 'function') initGoogleSignIn();
+    if(typeof ensureAppleInit === 'function') ensureAppleInit();
+  }, 300);
 }
 
 // ── KEEP SIGNED IN TOGGLE ──
@@ -5156,6 +5195,8 @@ function ensureAppleInit(){
       appleInited = true;
       return true;
     } catch(e){ console.log('Apple init error:', e); return false; }
+  } else {
+    setTimeout(ensureAppleInit, 600);
   }
   return false;
 }
@@ -5218,8 +5259,6 @@ document.addEventListener('AppleIDSignInOnFailure', function(event){
   }
 });
 
-// Initializing Apple auto-renders the official branded button into #appleid-signin
-window.addEventListener('load', function(){ setTimeout(ensureAppleInit, 800); });
 
 // Initialize Google Sign-In
 function initGoogleSignIn(){
@@ -5233,22 +5272,22 @@ function initGoogleSignIn(){
         use_fedcm_for_prompt: true
       });
 
-      // Render into both containers
-      ['googleBtnSignup', 'googleBtnSignin'].forEach(function(id){
-        const container = document.getElementById(id);
-        if(container){
-          container.innerHTML = '';
-          google.accounts.id.renderButton(container, {
-            type: 'standard',
-            theme: 'filled_black',
-            size: 'large',
-            text: id === 'googleBtnSignin' ? 'signin_with' : 'continue_with',
-            shape: 'pill',
-            logo_alignment: 'center',
-            width: 300
-          });
-        }
-      });
+      // Render the single shared Google button, width matched to the form
+      var gc = document.getElementById('googleBtn');
+      if(gc){
+        gc.innerHTML = '';
+        var gw = gc.clientWidth || 300;
+        gw = Math.round(Math.min(360, Math.max(220, gw)));
+        google.accounts.id.renderButton(gc, {
+          type: 'standard',
+          theme: 'filled_black',
+          size: 'large',
+          text: 'continue_with',
+          shape: 'pill',
+          logo_alignment: 'center',
+          width: gw
+        });
+      }
     } catch(e) {
       console.log('Google init error:', e);
     }
