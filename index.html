@@ -1713,7 +1713,6 @@ body[data-page="app"] .mobile-nav{display:flex;}
       <div class="ob-divider"><div class="ob-divider-line"></div><span class="ob-divider-text">or</span><div class="ob-divider-line"></div></div>
       <!-- Google Sign-In Button -->
       <div id="googleBtnSignup" class="google-btn-container" style="width:100%;display:flex;justify-content:center;margin-bottom:10px;min-height:44px;"></div>
-      <button class="ob-social" onclick="appleSignIn()">🍎 &nbsp;Continue with Apple</button>
     </div>
 
     <!-- SIGNIN FIELDS -->
@@ -1747,8 +1746,10 @@ body[data-page="app"] .mobile-nav{display:flex;}
       <div class="ob-divider"><div class="ob-divider-line"></div><span class="ob-divider-text">or</span><div class="ob-divider-line"></div></div>
       <!-- Google Sign-In Button -->
       <div id="googleBtnSignin" class="google-btn-container" style="width:100%;display:flex;justify-content:center;margin-bottom:10px;min-height:44px;"></div>
-      <button class="ob-social" onclick="appleSignIn()">🍎 &nbsp;Continue with Apple</button>
     </div>
+
+    <!-- Apple draws its official button into this div automatically -->
+    <div id="appleid-signin" data-color="black" data-border="true" data-type="continue" data-border-radius="14" style="width:300px;max-width:100%;margin:0 auto 10px;cursor:pointer;min-height:44px;"></div>
 
     <div class="ob-terms">By continuing you agree to Haven's <a class="ob-link" href="#" onclick="showTerms('onboarding',null)">Terms</a> and <a class="ob-link" href="#" onclick="showPrivacy('onboarding',null)">Privacy Policy</a>. Your data is never sold.</div>
     <div class="ob-switch" onclick="toggleSignIn()" id="obSwitch">Already have an account? <span>Sign in</span></div>
@@ -5159,68 +5160,65 @@ function ensureAppleInit(){
   return false;
 }
 
-function appleSignIn(){
-  if(!ensureAppleInit()){
-    alert('Apple Sign-In is still loading \u2014 please try again in a moment.');
-    return;
+// Apple reports back via DOM events when usePopup is true.
+// The branded button is auto-rendered into #appleid-signin by AppleID.auth.init().
+function handleAppleAuth(authorization, user){
+  try {
+    var idToken = authorization && authorization.id_token;
+    if(!idToken) throw new Error('No identity token returned');
+    var payload = decodeJwt(idToken);
+    var email = payload.email || '';
+    var appleId = payload.sub || '';
+    // Apple only returns the name on the FIRST sign-in
+    var firstName = '', lastName = '';
+    if(user && user.name){
+      firstName = user.name.firstName || '';
+      lastName  = user.name.lastName  || '';
+    }
+    if(!firstName){
+      firstName = localStorage.getItem('havenName') || (email ? email.split('@')[0] : 'Friend');
+    }
+    localStorage.setItem('havenName', firstName);
+    if(lastName) localStorage.setItem('havenLastName', lastName);
+    if(email) localStorage.setItem('havenEmail', email);
+    if(appleId) localStorage.setItem('havenAppleId', appleId);
+    localStorage.setItem('havenLoginMethod', 'apple');
+    if(!localStorage.getItem('havenJoinDate')){
+      localStorage.setItem('havenJoinDate', new Date().toISOString());
+      if(typeof notifyNewSignup === 'function') notifyNewSignup(firstName, email);
+    }
+    if(typeof initTrial === 'function') initTrial();
+    if(typeof maybeUnlockForTestEmail === 'function') maybeUnlockForTestEmail(email);
+    var sessionToken = 'haven_' + Date.now();
+    sessionStorage.setItem('havenSession', sessionToken);
+    localStorage.setItem('havenSession', sessionToken);
+    localStorage.setItem('havenKeepSignedIn', 'true');
+    localStorage.removeItem('havenSignedOut');
+    var greet = document.getElementById('greetName');
+    if(greet) greet.textContent = 'Hi ' + firstName + ' \uD83D\uDC4B';
+    var nav = document.getElementById('navAvatar');
+    if(nav) nav.textContent = firstName.charAt(0).toUpperCase();
+    showApp();
+    if(typeof loadProfile === 'function') loadProfile();
+  } catch(e){
+    console.log('Apple auth parse error:', e);
+    // Defer the alert so it can never block Apple's popup from closing
+    setTimeout(function(){ alert('Apple sign-in had trouble reading your details. Please try again or use email.'); }, 500);
   }
-  AppleID.auth.signIn().then(function(data){
-    try {
-      var idToken = data && data.authorization && data.authorization.id_token;
-      if(!idToken) throw new Error('No identity token returned');
-      var payload = decodeJwt(idToken);
-      var email = payload.email || '';
-      var appleId = payload.sub || '';
-
-      // Apple only returns the name on the FIRST sign-in
-      var firstName = '', lastName = '';
-      if(data.user && data.user.name){
-        firstName = data.user.name.firstName || '';
-        lastName  = data.user.name.lastName  || '';
-      }
-      if(!firstName){
-        firstName = localStorage.getItem('havenName') || (email ? email.split('@')[0] : 'Friend');
-      }
-
-      localStorage.setItem('havenName', firstName);
-      if(lastName) localStorage.setItem('havenLastName', lastName);
-      if(email) localStorage.setItem('havenEmail', email);
-      if(appleId) localStorage.setItem('havenAppleId', appleId);
-      localStorage.setItem('havenLoginMethod', 'apple');
-
-      if(!localStorage.getItem('havenJoinDate')){
-        localStorage.setItem('havenJoinDate', new Date().toISOString());
-        if(typeof notifyNewSignup === 'function') notifyNewSignup(firstName, email);
-      }
-      if(typeof initTrial === 'function') initTrial();
-      if(typeof maybeUnlockForTestEmail === 'function') maybeUnlockForTestEmail(email);
-
-      var sessionToken = 'haven_' + Date.now();
-      sessionStorage.setItem('havenSession', sessionToken);
-      localStorage.setItem('havenSession', sessionToken);
-      localStorage.setItem('havenKeepSignedIn', 'true');
-      localStorage.removeItem('havenSignedOut');
-
-      var greet = document.getElementById('greetName');
-      if(greet) greet.textContent = 'Hi ' + firstName + ' \uD83D\uDC4B';
-      var nav = document.getElementById('navAvatar');
-      if(nav) nav.textContent = firstName.charAt(0).toUpperCase();
-
-      showApp();
-      if(typeof loadProfile === 'function') loadProfile();
-    } catch(e){
-      console.log('Apple sign-in parse error:', e);
-      alert('Apple sign-in had trouble reading your details. Please try again or use email.');
-    }
-  }).catch(function(err){
-    // Silent on user cancel; log anything else
-    var code = err && err.error;
-    if(code && code !== 'popup_closed_by_user' && code !== 'user_cancelled_authorize' && code !== 'user_trigger_new_signin_flow'){
-      console.log('Apple sign-in error:', err);
-    }
-  });
 }
 
+document.addEventListener('AppleIDSignInOnSuccess', function(event){
+  var d = event.detail || {};
+  handleAppleAuth(d.authorization, d.user);
+});
+document.addEventListener('AppleIDSignInOnFailure', function(event){
+  var code = event.detail && event.detail.error;
+  if(code && code !== 'popup_closed_by_user' && code !== 'user_cancelled_authorize' && code !== 'user_trigger_new_signin_flow'){
+    console.log('Apple sign-in error:', code);
+  }
+});
+
+// Initializing Apple auto-renders the official branded button into #appleid-signin
 window.addEventListener('load', function(){ setTimeout(ensureAppleInit, 800); });
 
 // Initialize Google Sign-In
