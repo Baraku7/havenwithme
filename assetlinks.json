@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "com.havenwithme.app",
+        "sha256_cert_fingerprints": ["8B:AA:4A:03:83:2B:F7:EE:27:9C:53:C4:D3:91:FD:5C:0D:0C:90:AF:41:8B:A1:F7:A5:6A:3B:B9:C6:7D:6E:10"]
+      }
+    }]
