@@ -1645,6 +1645,19 @@ body[data-page="app"] .mobile-nav{display:flex;}
 #onboarding .ob-terms{font-size:12px;}
 #onboarding .ob-switch{font-size:14px;}
 
+.guided-overlay{position:fixed;inset:0;z-index:99999;background:radial-gradient(circle at 50% 32%, #1b1836 0%, #0D0D12 68%);display:none;flex-direction:column;align-items:center;justify-content:center;padding:32px 28px;text-align:center;}
+.guided-overlay.active{display:flex;animation:guidedFade 0.5s ease both;}
+@keyframes guidedFade{from{opacity:0;}to{opacity:1;}}
+.guided-orb{width:150px;height:150px;border-radius:50%;background:radial-gradient(circle at 38% 32%, #8B7FF5, #2EC4B6 78%);box-shadow:0 0 70px rgba(91,79,232,0.55);animation:guidedBreathe 8s ease-in-out infinite;margin-bottom:38px;}
+@keyframes guidedBreathe{0%,100%{transform:scale(0.82);opacity:0.7;}50%{transform:scale(1.08);opacity:1;}}
+.guided-title{font-family:'Fraunces',Georgia,serif;font-size:23px;font-weight:600;color:#fff;margin-bottom:22px;letter-spacing:-0.01em;}
+.guided-line{font-size:18px;line-height:1.7;color:rgba(255,255,255,0.92);max-width:340px;min-height:84px;transition:opacity 0.35s ease;}
+.guided-bar{width:190px;height:4px;background:rgba(255,255,255,0.12);border-radius:3px;margin:30px 0 26px;overflow:hidden;}
+.guided-bar-fill{height:100%;width:0;background:linear-gradient(90deg,#5B4FE8,#2EC4B6);border-radius:3px;transition:width 0.8s ease;}
+.guided-stop{background:rgba(255,255,255,0.1);color:#fff;border:1px solid rgba(255,255,255,0.22);border-radius:100px;padding:13px 30px;font-size:14px;font-weight:600;cursor:pointer;transition:background 0.2s;}
+.guided-stop:active{background:rgba(255,255,255,0.2);}
+.guided-close{position:absolute;top:20px;right:22px;background:none;border:none;color:rgba(255,255,255,0.6);font-size:32px;line-height:1;cursor:pointer;padding:4px 10px;}
+.guided-close:active{color:#fff;}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -3316,10 +3329,121 @@ function runPhase(){
 }
 
 
+var GUIDED_AUDIO = {
+  'Morning Calm': 'morning-calm.mp3',
+  'Stress Relief': 'stress-relief.mp3',
+  'Sleep Well': 'sleep-well.mp3',
+  'Deep Focus': 'deep-focus.mp3'
+};
+
+// Fallback narration text — used ONLY if the audio file fails to load
+var GUIDED_SCRIPTS = {
+  'Morning Calm': ["Welcome. Let's begin your morning gently.","Find a comfortable position, and let your eyes softly close.","Take a slow, deep breath in through your nose.","And release it slowly through your mouth.","Feel your body waking up, calm and unhurried.","Breathe in fresh energy for the day ahead.","And breathe out any tension left from the night.","Set a gentle intention for today. Something kind.","Take one more deep breath, and carry this calm with you.","When you're ready, slowly open your eyes. Good morning."],
+  'Stress Relief': ["Let's take a few minutes to release the stress you're carrying.","Settle into your seat, and let your shoulders drop away from your ears.","Breathe in slowly, filling your lungs completely.","Hold it gently for a moment.","And let it all go. Let the tension melt away.","Notice where you feel tightness, and breathe softly into it.","With each exhale, feel yourself growing a little lighter.","You are safe in this moment. There is nothing to fix right now.","Take one more deep, cleansing breath.","Gently return, feeling calmer and more at ease."],
+  'Sleep Well': ["It's time to let go of the day and prepare for rest.","Lie back, and allow your body to feel heavy and supported.","Close your eyes, and breathe slowly and softly.","Breathe in peace.","And breathe out the day.","Let your thoughts drift by like clouds, without holding on to any of them.","Feel your body sinking a little deeper with every breath.","Your mind is quiet. Your body is calm.","Let each slow breath carry you closer to sleep.","Rest now. You are ready. Sleep well."],
+  'Deep Focus': ["Let's clear your mind and sharpen your focus.","Sit tall, and take one steadying breath.","Breathe in clarity.","And breathe out distraction.","Let go of everything outside of this moment.","Feel your attention gathering, calm and steady.","With each breath, your mind grows clearer and more present.","You are focused. You are ready.","Take one more deep breath, holding this sense of clarity.","When you're ready, begin your work with a clear mind."]
+};
+
+var guidedAudio = null;
+var guidedState = { playing:false, name:'', idx:0, lines:[], timer:null, mode:'' };
+
+function startGuidedSession(name){
+  guidedState.playing = true;
+  guidedState.name = name;
+  var ov = document.getElementById('guidedOverlay');
+  var tt = document.getElementById('guidedTitle');
+  var ln = document.getElementById('guidedLine');
+  var pr = document.getElementById('guidedProgress');
+  if(tt) tt.textContent = name;
+  if(ln){ ln.style.opacity='1'; ln.textContent = 'Close your eyes, and breathe with the voice\u2026'; }
+  if(pr) pr.style.width = '0%';
+  if(ov) ov.classList.add('active');
+  try { if('speechSynthesis' in window) window.speechSynthesis.cancel(); } catch(e){}
+  var src = GUIDED_AUDIO[name];
+  if(src){
+    try {
+      if(guidedAudio){ guidedAudio.pause(); guidedAudio = null; }
+      guidedState.mode = 'audio';
+      guidedAudio = new Audio(src);
+      guidedAudio.preload = 'auto';
+      guidedAudio.addEventListener('timeupdate', guidedProgressTick);
+      guidedAudio.addEventListener('ended', guidedEnded);
+      guidedAudio.addEventListener('error', function(){ guidedFallbackToTTS(name); });
+      var pl = guidedAudio.play();
+      if(pl && pl.catch){ pl.catch(function(){ guidedFallbackToTTS(name); }); }
+      return;
+    } catch(e){}
+  }
+  guidedFallbackToTTS(name);
+}
+
+function guidedProgressTick(){
+  if(!guidedAudio || !guidedState.playing) return;
+  var pr = document.getElementById('guidedProgress');
+  if(pr && guidedAudio.duration){ pr.style.width = (guidedAudio.currentTime / guidedAudio.duration * 100) + '%'; }
+}
+
+function guidedEnded(){
+  if(!guidedState.playing) return;
+  var ln = document.getElementById('guidedLine');
+  var pr = document.getElementById('guidedProgress');
+  if(ln) ln.textContent = 'Your session is complete. Carry this calm with you.';
+  if(pr) pr.style.width = '100%';
+  guidedState.timer = setTimeout(function(){ if(guidedState.playing) stopGuidedSession(); }, 5000);
+}
+
+function guidedFallbackToTTS(name){
+  if(!guidedState.playing) return;
+  if(guidedAudio){ try{ guidedAudio.pause(); }catch(e){} guidedAudio = null; }
+  guidedState.mode = 'tts';
+  guidedState.lines = GUIDED_SCRIPTS[name] || GUIDED_SCRIPTS['Morning Calm'];
+  guidedState.idx = 0;
+  try { if(typeof unlockSpeech === 'function') unlockSpeech(); } catch(e){}
+  if(guidedState.timer) clearTimeout(guidedState.timer);
+  guidedState.timer = setTimeout(guidedStep, 900);
+}
+
+function guidedStep(){
+  if(!guidedState.playing || guidedState.mode !== 'tts') return;
+  var lineEl = document.getElementById('guidedLine');
+  var prog = document.getElementById('guidedProgress');
+  if(guidedState.idx >= guidedState.lines.length){
+    if(lineEl){ lineEl.style.opacity='0'; setTimeout(function(){ lineEl.textContent='Your session is complete. Carry this calm with you.'; lineEl.style.opacity='1'; },250); }
+    if(prog) prog.style.width = '100%';
+    guidedState.timer = setTimeout(function(){ if(guidedState.playing) stopGuidedSession(); }, 6000);
+    return;
+  }
+  var line = guidedState.lines[guidedState.idx];
+  if(lineEl){ lineEl.style.opacity='0'; setTimeout(function(){ lineEl.textContent=line; lineEl.style.opacity='1'; },250); }
+  if(prog) prog.style.width = (guidedState.idx / guidedState.lines.length * 100) + '%';
+  var advanced=false, fb=null;
+  function advance(){ if(advanced||!guidedState.playing) return; advanced=true; if(fb) clearTimeout(fb); guidedState.idx++; guidedState.timer=setTimeout(guidedStep,1900); }
+  var spoke=false;
+  try {
+    if('speechSynthesis' in window){
+      window.speechSynthesis.cancel();
+      var u=new SpeechSynthesisUtterance(line); u.rate=0.8; u.pitch=1.0; u.volume=1.0;
+      try{ var vs=window.speechSynthesis.getVoices(); for(var k=0;k<vs.length;k++){ if(/Samantha|Google US English|Karen|Moira|Serena|female/i.test(vs[k].name)){ u.voice=vs[k]; break; } } }catch(e){}
+      u.onend=advance; u.onerror=advance; window.speechSynthesis.speak(u); spoke=true;
+    }
+  } catch(e){}
+  var dur=Math.max(4800, line.length*95+2600);
+  fb=setTimeout(advance, spoke?dur+4000:dur); guidedState.timer=fb;
+}
+
+function stopGuidedSession(){
+  guidedState.playing = false;
+  if(guidedState.timer){ clearTimeout(guidedState.timer); guidedState.timer=null; }
+  if(guidedAudio){ try{ guidedAudio.pause(); guidedAudio.currentTime=0; }catch(e){} guidedAudio=null; }
+  try { if('speechSynthesis' in window) window.speechSynthesis.cancel(); } catch(e){}
+  var ov=document.getElementById('guidedOverlay');
+  if(ov) ov.classList.remove('active');
+}
+
 function pickSession(el,name){
-  document.querySelectorAll('.session-card:not(.locked)').forEach(c=>c.classList.remove('active-sess'));
-  el.classList.add('active-sess');
-  var bp=document.getElementById('breathPattern'); if(bp) bp.textContent=name+' selected \u2014 press Start';
+  document.querySelectorAll('.session-card:not(.locked)').forEach(function(c){ c.classList.remove('active-sess'); });
+  if(el) el.classList.add('active-sess');
+  startGuidedSession(name);
 }
 
 // ── SOUNDS ── 5-minute seamless loops ──
@@ -6139,5 +6263,14 @@ if('serviceWorker' in navigator){
   });
 }
 </script>
+<!-- GUIDED MEDITATION PLAYER -->
+<div id="guidedOverlay" class="guided-overlay">
+  <button class="guided-close" onclick="stopGuidedSession()" aria-label="Close session">&times;</button>
+  <div class="guided-orb"></div>
+  <div class="guided-title" id="guidedTitle">Morning Calm</div>
+  <div class="guided-line" id="guidedLine">Getting comfortable…</div>
+  <div class="guided-bar"><div class="guided-bar-fill" id="guidedProgress"></div></div>
+  <button class="guided-stop" onclick="stopGuidedSession()">End session</button>
+</div>
 </body>
 </html>
