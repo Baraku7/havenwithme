@@ -1,8 +1,12 @@
-[{
-      "relation": ["delegate_permission/common.handle_all_urls"],
-      "target": {
-        "namespace": "android_app",
-        "package_name": "com.havenwithme.app",
-        "sha256_cert_fingerprints": ["8B:AA:4A:03:83:2B:F7:EE:27:9C:53:C4:D3:91:FD:5C:0D:0C:90:AF:41:8B:A1:F7:A5:6A:3B:B9:C6:7D:6E:10"]
-      }
-    }]
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.havenwithme.app",
+      "sha256_cert_fingerprints": [
+        "D9:42:5F:F4:00:14:4A:83:84:91:66:AF:9B:F1:B4:FD:15:B5:CD:34:A3:AC:2D:E7:57:C0:5B:1E:82:99:E4:E4"
+      ]
+    }
+  }
+]
