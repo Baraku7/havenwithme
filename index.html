@@ -412,7 +412,7 @@ body{font-family:'Inter',sans-serif;background:var(--snow);color:var(--ink);over
 }
 
 .app-body{flex:1;position:relative;}
-.tab-panel{display:none;min-height:calc(100vh - 64px);padding-bottom:100px;animation:fadeIn 0.25s ease;}
+.tab-panel{display:none;min-height:calc(100vh - 64px);padding-bottom:100px;animation:fadeIn 0.25s ease;overflow-x:clip;}
 .tab-panel.active{display:block;}
 
 /* ════════════════════════════════
@@ -2031,8 +2031,8 @@ body[data-page="app"] .mobile-nav{display:flex;}
         <!-- LOCATION SEARCH -->
         <div style="background:var(--white);border-radius:var(--r2);padding:20px;margin-bottom:16px;border:1px solid rgba(0,0,0,0.05);">
           <div style="font-size:11px;font-weight:600;color:var(--mist);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:12px;">Your Location</div>
-          <div style="display:flex;gap:8px;">
-            <div class="search-box" style="flex:1;margin-bottom:0;">
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <div class="search-box" style="flex:1 1 200px;min-width:0;margin-bottom:0;">
               <span class="search-icon">📍</span>
               <input class="search-input" type="text" id="therapistLocation" 
                 placeholder="City, State or ZIP (e.g. Los Angeles CA or 90210)"
