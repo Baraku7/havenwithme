@@ -6201,5 +6201,27 @@ if('serviceWorker' in navigator){
                             window.havenStartNativePurchase(plan);
                       }, true);
                   })();
-                </script>clouds
                 </script>
+<!-- In-app only: Restore Purchases button (required by Apple), injected under the Upgrade button in Profile -->
+<script>
+(function () {
+  'use strict';
+  var mh = window.webkit && window.webkit.messageHandlers;
+  if (!(mh && mh['iap-restore'])) return;
+  function addRestoreBtn() {
+    var anchor = document.querySelector('.profile-upgrade-btn');
+    if (!anchor || document.getElementById('havenRestoreBtn')) return;
+    var btn = document.createElement('button');
+    btn.id = 'havenRestoreBtn';
+    btn.className = anchor.className;
+    btn.textContent = 'Restore Purchases';
+    btn.style.background = 'transparent';
+    btn.style.border = '1px solid rgba(128,128,128,.45)';
+    btn.style.marginTop = '10px';
+    btn.onclick = function () { if (window.havenRestorePurchases) window.havenRestorePurchases(); };
+    anchor.parentNode.insertBefore(btn, anchor.nextSibling);
+  }
+  addRestoreBtn();
+  setInterval(addRestoreBtn, 2000);
+})();
+</script>
