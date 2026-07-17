@@ -3009,9 +3009,11 @@ async function sendMessage(){
     : '';
 
   // Build messages payload with language instruction
+  // Recent history only (last 20) is sent to the AI — full history still stays saved locally
+  const recentMessages = messages.slice(-20);
   const payloadMessages = langInstruction
-    ? [{ role: 'user', content: langInstruction }, { role: 'assistant', content: selectedLang === 'es' ? 'Entendido. Responderé en español.' : selectedLang === 'fr' ? 'Compris. Je répondrai en français.' : selectedLang === 'de' ? 'Verstanden. Ich werde auf Deutsch antworten.' : selectedLang === 'he' ? 'הבנתי. אענה בעברית.' : selectedLang === 'zh' ? '明白了。我会用中文回答。' : 'Understood.' }, ...messages]
-    : messages;
+    ? [{ role: 'user', content: langInstruction }, { role: 'assistant', content: selectedLang === 'es' ? 'Entendido. Responderé en español.' : selectedLang === 'fr' ? 'Compris. Je répondrai en français.' : selectedLang === 'de' ? 'Verstanden. Ich werde auf Deutsch antworten.' : selectedLang === 'he' ? 'הבנתי. אענה בעברית.' : selectedLang === 'zh' ? '明白了。我会用中文回答。' : 'Understood.' }, ...recentMessages]
+    : recentMessages;
 
   try {
     const res = await fetch('https://haven-ai.baraku7.workers.dev', {
@@ -4417,10 +4419,17 @@ function toggleSidebar(forceState){
 
 // Auto-save is handled inside addBubble directly
 
-// Initialize conversation history
+// Initialize conversation history — resume the most recent conversation automatically for continuity
 window.addEventListener('load', () => {
-  if(!currentConvoId) currentConvoId = generateConvoId();
   loadConversations();
+  const convos = Object.values(allConversations)
+    .filter(c => c.messages && c.messages.length > 0)
+    .sort((a,b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+  if(convos.length > 0){
+    loadConvo(convos[0].id);
+  } else if(!currentConvoId){
+    currentConvoId = generateConvoId();
+  }
 });
 
 // Save conversations when switching tabs
