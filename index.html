@@ -2842,18 +2842,100 @@ function filterChip(el){document.querySelectorAll('.filter-chip').forEach(c=>c.c
 
 // ── PLANS ──
 function pickPlan(el){document.querySelectorAll('.plan-card').forEach(c=>c.classList.remove('active-plan'));el.classList.add('active-plan');}
-function startTrial(){
+
+// ── GOOGLE PLAY BILLING (Android app only; web/iOS use Stripe below) ──
+var HAVEN_BILLING_API = 'https://haven-billing-worker.baraku7.workers.dev';
+var GOOGLE_PLAY_PRODUCT_IDS = { Personal: 'haven_personal_monthly', Family: 'haven_family_monthly' };
+
+function havenUserId(){
+  return localStorage.getItem('havenEmail') || localStorage.getItem('havenSession') || '';
+}
+
+async function isGooglePlayBillingAvailable(){
+  try {
+    if(!('getDigitalGoodsService' in window)) return false;
+    var service = await window.getDigitalGoodsService('https://play.google.com/billing');
+    return !!service;
+  } catch(e){ return false; }
+}
+
+async function purchaseViaGooglePlay(planName){
+  var productId = GOOGLE_PLAY_PRODUCT_IDS[planName];
+  if(!productId) return false;
+  try {
+    var request = new PaymentRequest(
+      [{ supportedMethods: 'https://play.google.com/billing', data: { sku: productId } }],
+      { total: { label: 'Total', amount: { currency: 'USD', value: '0' } } }
+    );
+    var response = await request.show();
+    var purchaseToken = response.details.purchaseToken || response.details.token;
+    await response.complete('success');
+
+    var verifyRes = await fetch(HAVEN_BILLING_API + '/verify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        userId: havenUserId(),
+        packageName: 'com.havenwithme.app',
+        productId: productId,
+        purchaseToken: purchaseToken
+      })
+    });
+    var verifyData = await verifyRes.json();
+    if(verifyData && verifyData.premium){
+      localStorage.setItem('havenPlan','paid');
+      if(typeof applyPremiumUI === 'function') applyPremiumUI();
+      alert("You're all set! Premium is now unlocked.");
+      return true;
+    } else {
+      alert("We couldn't verify your purchase yet. Please try again in a moment.");
+      return false;
+    }
+  } catch(e){
+    console.info('Google Play purchase not completed', e);
+    return false;
+  }
+}
+
+// On app load (Android only), sync entitlement from the server in case status changed elsewhere
+window.addEventListener('load', async function(){
+  try {
+    if(await isGooglePlayBillingAvailable()){
+      var uid = havenUserId();
+      if(uid){
+        var res = await fetch(HAVEN_BILLING_API + '/status?userId=' + encodeURIComponent(uid));
+        var data = await res.json();
+        if(data && typeof data.premium === 'boolean'){
+          localStorage.setItem('havenPlan', data.premium ? 'paid' : 'free');
+          if(typeof applyPremiumUI === 'function') applyPremiumUI();
+        }
+      }
+    }
+  } catch(e){ /* silent -- non-Android or offline, no-op */ }
+});
+
+async function startTrial(){
   const sel=document.querySelector('.plan-card.active-plan .plan-name');
-  if(!sel){window.open('https://buy.stripe.com/6oU9AV41l9CKf1K7o7gfu00','_blank');return;}
-  const n=sel.textContent.trim();
+  const n = sel ? sel.textContent.trim() : '';
+
+  if(n !== 'Personal' && n !== 'Family'){
+    alert('You are on the Free plan — 1 chat per day. Upgrade anytime for unlimited access!');
+    return;
+  }
+
+  // On Android (Google Play app), use real Play Billing instead of Stripe
+  if(await isGooglePlayBillingAvailable()){
+    await purchaseViaGooglePlay(n);
+    return; // Google Play policy: don't offer an external payment fallback here
+  }
+
+  // Web / iOS: existing Stripe flow, unchanged
   if(n==='Family'){
     localStorage.setItem('havenPlan','paid');
     window.open('https://buy.stripe.com/28E14p55p9CKaLubEngfu01','_blank');
-  } else if(n==='Personal'){
+  } else {
     localStorage.setItem('havenPlan','paid');
     window.open('https://buy.stripe.com/6oU9AV41l9CKf1K7o7gfu00','_blank');
-  } else {
-    alert('You are on the Free plan — 1 chat per day. Upgrade anytime for unlimited access!');
   }
 }
 function goPlans(){switchTab('plans',null);setMobileActive(5);}
