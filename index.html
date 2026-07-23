@@ -6270,14 +6270,17 @@ if('serviceWorker' in navigator){
                       });
 
                       window.addEventListener('iap-restore', function (e) {
-                            var d = e.detail || {};
-                            if (d.restored && d.restored.length > 0) {
-                                    grantPaid();
-                                    location.reload();
-                            } else {
-                                    alert('No previous purchases found for this Apple ID.');
-                            }
-                      });
+    var d = e.detail || {};
+    if (d.restored && d.restored.length > 0) {
+      grantPaid();
+      alert('Your subscription has been restored.');
+      location.reload();
+    } else if (d.status === 'error') {
+      alert('Restore failed: ' + (d.message || 'please try again.'));
+    } else {
+      alert('No active subscription was found for this Apple Account.');
+    }
+  });
 
                       document.addEventListener('click', function (ev) {
                             var el = ev.target && ev.target.closest && ev.target.closest('a[href*="stripe.com"], [data-stripe], [data-plan]');
