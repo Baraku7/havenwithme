@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+<title>Haven · Home</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ivory:#F4EEE6; --cream:#FCF9F4; --card:#FFFFFF;
+    --ink:#2B2230; --ink-soft:#6C6270; --ink-faint:#A79FAA;
+    --dusk:#6E5FA0; --dusk-soft:#B7A9E0; --dusk-wash:#EFEAF7;
+    --sage:#7E9A7C; --sage-wash:#E7EEE4;
+    --clay:#E0A98A; --clay-wash:#F7E9DF;
+    --violet:#8478A6;
+    --line:rgba(43,34,48,.08);
+    --shadow-soft:0 12px 30px -14px rgba(43,34,48,.28);
+    --sans:'Hanken Grotesk',sans-serif; --serif:'Fraunces',serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%}
+  body{
+    font-family:var(--sans);color:var(--ink);
+    background:radial-gradient(900px 500px at 15% 0%,#F1E4DA,transparent 60%),radial-gradient(700px 600px at 100% 8%,#E9E2F3,transparent 55%),#E7DFD4;
+    display:flex;align-items:center;justify-content:center;min-height:100%;
+    padding:32px 16px;-webkit-font-smoothing:antialiased;
+  }
+  .phone{width:390px;max-width:100%;border-radius:52px;padding:11px;background:linear-gradient(150deg,#3a3140,#241d29);box-shadow:0 40px 80px -30px rgba(43,34,48,.6)}
+  .screen{position:relative;border-radius:42px;overflow:hidden;background:
+      radial-gradient(600px 340px at 20% -5%,#F3E8DE,transparent 60%),
+      radial-gradient(500px 400px at 105% 4%,#ECE6F5,transparent 55%),
+      var(--cream);
+    height:788px;display:flex;flex-direction:column}
+  .island{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:96px;height:28px;background:#181219;border-radius:16px;z-index:30}
+  .status{display:flex;justify-content:space-between;align-items:center;padding:16px 28px 4px;font-size:13px;font-weight:600;flex:none}
+  .status .r{letter-spacing:.06em}
+  .body{flex:1;overflow-y:auto;overflow-x:hidden;padding:4px 24px 14px;scrollbar-width:none}
+  .body::-webkit-scrollbar{display:none}
+
+  .topbar{display:flex;align-items:center;justify-content:space-between;margin-top:8px;animation:rise .6s both}
+  .topbar .day{font-size:12.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint)}
+  .pfp{width:42px;height:42px;border-radius:50%;border:none;background:linear-gradient(145deg,var(--dusk),#463a72);color:#fff;font-family:var(--serif);font-size:19px;font-weight:400;cursor:pointer;position:relative;box-shadow:var(--shadow-soft);transition:transform .25s}
+  .pfp:active{transform:scale(.92)}
+  .pfp::after{content:"";position:absolute;width:11px;height:11px;border-radius:50%;background:var(--sage);border:2.5px solid var(--cream);right:-1px;bottom:-1px}
+
+  .hi{font-family:var(--serif);font-weight:340;font-size:31px;line-height:1.08;letter-spacing:-.015em;margin-top:14px;animation:rise .7s .05s both}
+  .hi em{font-style:italic;color:var(--dusk)}
+  .sub{font-size:14px;color:var(--ink-soft);margin-top:8px;animation:rise .7s .12s both}
+
+  .mood{display:flex;gap:10px;margin-top:20px;animation:rise .7s .18s both}
+  .m{flex:1;padding:14px 0 11px;border-radius:19px;background:var(--card);border:1px solid var(--line);display:flex;flex-direction:column;align-items:center;gap:7px;box-shadow:var(--shadow-soft);cursor:pointer;transition:transform .25s cubic-bezier(.2,.8,.2,1),background .25s,border-color .25s}
+  .m:active{transform:scale(.94)}
+  .m svg{width:24px;height:24px;stroke:var(--ink-soft);fill:none;stroke-width:1.6;transition:stroke .25s}
+  .m span{font-size:11px;color:var(--ink-soft);font-weight:500;transition:color .25s}
+  .m.sel{background:var(--dusk);border-color:var(--dusk);transform:translateY(-2px)}
+  .m.sel svg{stroke:#fff} .m.sel span{color:#fff}
+
+  .primary{margin-top:22px;border-radius:24px;padding:19px 20px;background:linear-gradient(140deg,#7565aa,#4c3f7a);color:#fff;display:flex;align-items:center;gap:15px;position:relative;overflow:hidden;cursor:pointer;box-shadow:0 20px 40px -20px rgba(78,63,122,.9);animation:rise .7s .24s both;transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+  .primary:active{transform:scale(.975)}
+  .primary .pi{width:52px;height:52px;border-radius:16px;background:rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;flex:none}
+  .primary .pi svg{width:26px;height:26px;stroke:#fff;fill:none;stroke-width:1.6}
+  .primary .pl{font-family:var(--serif);font-size:19px;font-weight:400;line-height:1.15}
+  .primary .ps{font-size:12.5px;color:var(--dusk-soft);margin-top:3px}
+  .primary .arrow{margin-left:auto;opacity:.85}
+  .primary .arrow svg{width:22px;height:22px;stroke:#fff;fill:none;stroke-width:1.7}
+  .primary .glow{position:absolute;width:160px;height:160px;border-radius:50%;right:-50px;top:-70px;background:radial-gradient(circle at 40% 40%,rgba(183,169,224,.7),transparent 70%)}
+
+  .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:11px;margin-top:12px;animation:rise .7s .3s both}
+  .c{border-radius:20px;padding:15px 12px 14px;display:flex;flex-direction:column;gap:11px;cursor:pointer;transition:transform .25s cubic-bezier(.2,.8,.2,1)}
+  .c:active{transform:scale(.95)}
+  .c .ci{width:34px;height:34px;border-radius:12px;display:flex;align-items:center;justify-content:center}
+  .c .ci svg{width:19px;height:19px;stroke:#fff;fill:none;stroke-width:1.7}
+  .c .cl{font-size:13px;font-weight:600;line-height:1.2}
+  .c .cs{font-size:10.5px;color:var(--ink-soft);margin-top:2px}
+  .c1{background:var(--sage-wash)} .c1 .ci{background:var(--sage)}
+  .c2{background:var(--clay-wash)} .c2 .ci{background:var(--clay)}
+  .c3{background:#EEE9F1} .c3 .ci{background:var(--violet)}
+
+  .intention{margin-top:16px;padding:20px;border-radius:24px;background:linear-gradient(140deg,#2E2536,#403251);color:#fff;position:relative;overflow:hidden;animation:rise .7s .36s both}
+  .intention .k{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--dusk-soft);font-weight:600}
+  .intention p{font-family:var(--serif);font-style:italic;font-weight:340;font-size:18px;line-height:1.42;margin-top:11px;position:relative}
+  .intention .orb{position:absolute;width:150px;height:150px;border-radius:50%;right:-40px;bottom:-56px;background:radial-gradient(circle at 35% 35%,var(--dusk-soft),transparent 68%);opacity:.55;animation:breathe 8s ease-in-out infinite}
+
+  .tabbar{display:flex;justify-content:space-around;align-items:center;padding:12px 12px 26px;background:rgba(252,249,244,.9);backdrop-filter:blur(16px);border-top:1px solid var(--line);flex:none}
+  .tab{display:flex;flex-direction:column;align-items:center;gap:5px;font-size:10px;color:var(--ink-faint);font-weight:500;cursor:pointer;padding:2px 10px;transition:color .2s}
+  .tab svg{width:23px;height:23px;stroke:var(--ink-faint);fill:none;stroke-width:1.6;transition:stroke .2s,transform .3s cubic-bezier(.2,.8,.2,1)}
+  .tab.on{color:var(--dusk)} .tab.on svg{stroke:var(--dusk);transform:translateY(-1px)}
+  .tab:active svg{transform:scale(.85)}
+
+  .scrim{position:absolute;inset:0;background:rgba(30,24,34,.42);opacity:0;pointer-events:none;transition:opacity .35s;z-index:40;backdrop-filter:blur(2px)}
+  .scrim.open{opacity:1;pointer-events:auto}
+  .sheet{position:absolute;left:0;right:0;bottom:0;background:var(--cream);border-radius:30px 30px 42px 42px;padding:14px 24px 32px;transform:translateY(103%);transition:transform .42s cubic-bezier(.2,.8,.2,1);z-index:41;box-shadow:0 -20px 50px -20px rgba(43,34,48,.4);max-height:88%;overflow-y:auto;scrollbar-width:none}
+  .sheet::-webkit-scrollbar{display:none}
+  .sheet.open{transform:none}
+  .grab{width:40px;height:5px;border-radius:3px;background:var(--ink-faint);opacity:.4;margin:0 auto 18px}
+  .sIco{width:58px;height:58px;border-radius:18px;display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+  .sIco svg{width:28px;height:28px;stroke:#fff;fill:none;stroke-width:1.6}
+  .sheet h3{font-family:var(--serif);font-weight:400;font-size:23px;letter-spacing:-.01em}
+  .sheet .sd{font-size:14px;color:var(--ink-soft);line-height:1.55;margin-top:8px}
+  .go{margin-top:22px;width:100%;border:none;border-radius:18px;padding:16px;background:var(--dusk);color:#fff;font-family:var(--sans);font-size:15px;font-weight:600;cursor:pointer;transition:transform .2s}
+  .go:active{transform:scale(.98)}
+  .dismiss{margin-top:10px;width:100%;background:none;border:none;color:var(--ink-soft);font-family:var(--sans);font-size:14px;font-weight:500;padding:12px;cursor:pointer}
+
+  /* profile sheet */
+  .pf-head{display:flex;align-items:center;gap:14px}
+  .pf-av{width:56px;height:56px;border-radius:50%;background:linear-gradient(145deg,var(--dusk),#463a72);color:#fff;font-family:var(--serif);font-size:24px;display:flex;align-items:center;justify-content:center;flex:none}
+  .pf-head .nm{font-family:var(--serif);font-size:21px;font-weight:400}
+  .pf-head .em{font-size:13px;color:var(--ink-soft);margin-top:2px}
+  .pill{display:inline-flex;align-items:center;gap:6px;margin-top:9px;font-size:11.5px;font-weight:600;color:var(--dusk);background:var(--dusk-wash);padding:5px 11px;border-radius:20px}
+  .pill .dot{width:6px;height:6px;border-radius:50%;background:var(--sage)}
+  .upgrade{margin-top:18px;width:100%;border:none;border-radius:20px;padding:17px 18px;background:linear-gradient(140deg,#7565aa,#4c3f7a);color:#fff;display:flex;align-items:center;gap:13px;cursor:pointer;text-align:left;box-shadow:0 18px 36px -20px rgba(78,63,122,.9);transition:transform .2s}
+  .upgrade:active{transform:scale(.98)}
+  .upgrade .ug{width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;flex:none}
+  .upgrade .ug svg{width:21px;height:21px;stroke:#fff;fill:none;stroke-width:1.7}
+  .upgrade .ut{font-size:15px;font-weight:600}
+  .upgrade .us{font-size:11.5px;color:var(--dusk-soft);margin-top:2px}
+  .upgrade .uc{margin-left:auto}
+  .upgrade .uc svg{width:20px;height:20px;stroke:#fff;fill:none;stroke-width:1.7}
+  .rows{margin-top:16px;background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+  .pr{display:flex;align-items:center;gap:13px;padding:14px 15px;cursor:pointer}
+  .pr+.pr{border-top:1px solid var(--line)}
+  .pr .pri{width:32px;height:32px;border-radius:10px;background:var(--dusk-wash);display:flex;align-items:center;justify-content:center;flex:none}
+  .pr .pri svg{width:17px;height:17px;stroke:var(--dusk);fill:none;stroke-width:1.7}
+  .pr .prl{font-size:14px;font-weight:500}
+  .pr .prc{margin-left:auto;color:var(--ink-faint)}
+  .pr .prc svg{width:17px;height:17px;stroke:var(--ink-faint);fill:none;stroke-width:1.8}
+
+  /* plans sheet */
+  .plan{border:1px solid var(--line);border-radius:20px;padding:16px 17px;margin-top:12px;cursor:pointer;background:var(--card);transition:transform .2s,border-color .2s}
+  .plan:active{transform:scale(.985)}
+  .plan.feat{border:2px solid var(--dusk)}
+  .plan .ph{display:flex;align-items:baseline;justify-content:space-between}
+  .plan .pn{font-family:var(--serif);font-size:19px;font-weight:400}
+  .plan .pp{font-size:15px;font-weight:600}
+  .plan .pp small{font-size:11px;color:var(--ink-soft);font-weight:500}
+  .plan .badge{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--dusk);background:var(--dusk-wash);padding:3px 9px;border-radius:10px;margin-left:8px}
+  .plan ul{list-style:none;margin-top:11px;display:flex;flex-direction:column;gap:7px}
+  .plan li{font-size:12.5px;color:var(--ink-soft);display:flex;align-items:center;gap:8px}
+  .plan li svg{width:15px;height:15px;stroke:var(--sage);fill:none;stroke-width:2.2;flex:none}
+  .trialnote{text-align:center;font-size:12px;color:var(--ink-soft);margin-top:14px}
+  .trialnote b{color:var(--ink)}
+
+  @keyframes rise{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+  @keyframes breathe{0%,100%{transform:scale(.85);opacity:.45}50%{transform:scale(1.12);opacity:.62}}
+
+  @media (max-width:440px){
+    body{padding:0;background:var(--cream)}
+    .phone{width:100%;height:100dvh;border-radius:0;padding:0;box-shadow:none}
+    .screen{height:100dvh;border-radius:0}
+    .island{width:110px}
+  }
+</style>
+</head>
+<body>
+<div class="phone"><div class="screen">
+  <div class="island"></div>
+  <div class="status"><span id="clock">9:41</span><span class="r">✦ &nbsp;Haven</span></div>
+
+  <div class="body">
+    <div class="topbar"><span class="day" id="today">Tuesday</span><button class="pfp" id="pfp">B</button></div>
+    <h1 class="hi" id="greet">Good evening,<br>Barak. <em>Breathe.</em></h1>
+    <p class="sub">How are you arriving today?</p>
+
+    <div class="mood" id="mood">
+      <div class="m" data-mood="Low"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 16c1-1.4 2.4-1.6 4-1.6s3 .2 4 1.6"/><path d="M9 9h.01M15 9h.01"/></svg><span>Low</span></div>
+      <div class="m" data-mood="Okay"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8.5 15h7"/><path d="M9 9h.01M15 9h.01"/></svg><span>Okay</span></div>
+      <div class="m sel" data-mood="Good"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 14c1 1.2 2.4 1.6 4 1.6s3-.4 4-1.6"/><path d="M9 9h.01M15 9h.01"/></svg><span>Good</span></div>
+      <div class="m" data-mood="Great"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M7.5 13.5c1.2 2 2.8 2.8 4.5 2.8s3.3-.8 4.5-2.8"/><path d="M9 9h.01M15 9h.01"/></svg><span>Great</span></div>
+    </div>
+
+    <div class="primary" data-sheet="chat">
+      <div class="glow"></div>
+      <div class="pi"><svg viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-8 8H5l-2 2V12a8 8 0 0 1 8-8h1a8 8 0 0 1 8 8Z"/><path d="M9 12h.01M13 12h.01"/></svg></div>
+      <div><div class="pl">Therapy Chat Companion</div><div class="ps">Chat or voice · always here</div></div>
+      <span class="arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+    </div>
+
+    <div class="row3">
+      <div class="c c1" data-sheet="journal"><div class="ci"><svg viewBox="0 0 24 24"><path d="M5 4h11l3 3v13H5z"/><path d="M9 10h6M9 14h4"/></svg></div><div><div class="cl">Journal</div><div class="cs">One line</div></div></div>
+      <div class="c c2" data-sheet="breathe"><div class="ci"><svg viewBox="0 0 24 24"><path d="M12 3c3 3 5 5.5 5 9a5 5 0 0 1-10 0c0-3.5 2-6 5-9Z"/></svg></div><div><div class="cl">Breathe</div><div class="cs">4 min</div></div></div>
+      <div class="c c3" data-sheet="therapist"><div class="ci"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.5-7 10-7 10Z"/></svg></div><div><div class="cl">Therapists</div><div class="cs">Near you</div></div></div>
+    </div>
+
+    <div class="intention">
+      <div class="orb"></div>
+      <div class="k">Tonight's intention</div>
+      <p id="quote">"You don't have to carry it all at once."</p>
+    </div>
+  </div>
+
+  <div class="tabbar" id="tabs">
+    <div class="tab on"><svg viewBox="0 0 24 24"><path d="M4 11l8-7 8 7"/><path d="M6 10v9h12v-9"/></svg>Home</div>
+    <div class="tab"><svg viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-8 8H5l-2 2V12a8 8 0 0 1 8-8h1a8 8 0 0 1 8 8Z"/></svg>Chat</div>
+    <div class="tab"><svg viewBox="0 0 24 24"><path d="M5 4h11l3 3v13H5z"/><path d="M9 10h6M9 14h4"/></svg>Journal</div>
+    <div class="tab"><svg viewBox="0 0 24 24"><path d="M12 3c3 3 5 5.5 5 9a5 5 0 0 1-10 0c0-3.5 2-6 5-9Z"/></svg>Meditate</div>
+  </div>
+
+  <div class="scrim" id="scrim"></div>
+
+  <div class="sheet" id="sheet">
+    <div class="grab"></div>
+    <div class="sIco" id="sIco"></div>
+    <h3 id="sTitle"></h3>
+    <p class="sd" id="sDesc"></p>
+    <button class="go" id="sGo"></button>
+    <button class="dismiss data-close">Not now</button>
+  </div>
+
+  <div class="sheet" id="profileSheet">
+    <div class="grab"></div>
+    <div class="pf-head">
+      <div class="pf-av">B</div>
+      <div>
+        <div class="nm">Barak</div>
+        <div class="em">barak@havenwithme.com</div>
+        <span class="pill"><span class="dot"></span>Free plan · trial active</span>
+      </div>
+    </div>
+    <button class="upgrade" id="toPlans">
+      <div class="ug"><svg viewBox="0 0 24 24"><path d="M5 16l-2-9 6 4 3-7 3 7 6-4-2 9z"/></svg></div>
+      <div><div class="ut">Upgrade to Unlimited</div><div class="us">Unlock chat, journal, meditation, therapists</div></div>
+      <span class="uc"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span>
+    </button>
+    <div class="rows">
+      <div class="pr"><span class="pri"><svg viewBox="0 0 24 24"><path d="M12 3a4 4 0 0 1 4 4v3a4 4 0 0 1-8 0V7a4 4 0 0 1 4-4Z"/><path d="M6 11a6 6 0 0 0 12 0M12 17v3"/></svg></span><span class="prl">Voice replies</span><span class="prc"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span></div>
+      <div class="pr"><span class="pri"><svg viewBox="0 0 24 24"><path d="M6 9a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6Z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg></span><span class="prl">Daily check-in reminder</span><span class="prc"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span></div>
+      <div class="pr"><span class="pri"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span><span class="prl">Privacy &amp; data</span><span class="prc"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span></div>
+    </div>
+    <button class="dismiss data-close">Sign out</button>
+  </div>
+
+  <div class="sheet" id="plansSheet">
+    <div class="grab"></div>
+    <h3>Choose your plan</h3>
+    <p class="sd">Try free for 7 days. Unlimited everything. Cancel anytime.</p>
+    <div class="plan feat" data-close>
+      <div class="ph"><span class="pn">Personal<span class="badge">Most popular</span></span><span class="pp">$12.99<small>/mo</small></span></div>
+      <ul>
+        <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Unlimited AI chat + voice</li>
+        <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Private journal</li>
+        <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>All meditation sessions</li>
+        <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Therapist finder</li>
+      </ul>
+    </div>
+    <div class="plan" data-close>
+      <div class="ph"><span class="pn">Family</span><span class="pp">$29.99<small>/mo</small></span></div>
+      <ul>
+        <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Everything in Personal</li>
+        <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Up to 5 members</li>
+        <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Teen wellness dashboard</li>
+      </ul>
+    </div>
+    <p class="trialnote"><b>7 days free</b> · billed through your App Store account</p>
+    <button class="dismiss data-close">Maybe later</button>
+  </div>
+
+</div></div>
+<script>
+  (function(){
+    var h=new Date().getHours();
+    var part = h<5?'Late night':h<12?'Good morning':h<17?'Good afternoon':h<22?'Good evening':'Winding down';
+    document.getElementById('greet').innerHTML = part+',<br>Barak. <em>Breathe.</em>';
+    var days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    document.getElementById('today').textContent=days[new Date().getDay()];
+    var m=new Date(); document.getElementById('clock').textContent=((m.getHours()%12)||12)+':'+String(m.getMinutes()).padStart(2,'0');
+
+    var quotes=['"You don’t have to carry it all at once."','"Whatever you’re feeling is allowed to be here."','"Rest is not something you earn. It’s something you need."','"One breath. Then the next. That’s enough."'];
+    document.getElementById('quote').textContent=quotes[Math.floor(Math.random()*quotes.length)];
+
+    document.getElementById('mood').addEventListener('click',function(e){
+      var t=e.target.closest('.m'); if(!t)return;
+      this.querySelectorAll('.m').forEach(function(x){x.classList.remove('sel')});
+      t.classList.add('sel');
+    });
+    document.getElementById('tabs').addEventListener('click',function(e){
+      var t=e.target.closest('.tab'); if(!t)return;
+      this.querySelectorAll('.tab').forEach(function(x){x.classList.remove('on')});
+      t.classList.add('on');
+    });
+
+    var scrim=document.getElementById('scrim');
+    var sheets={
+      chat:{c:'#6E5FA0',t:'Therapy Chat Companion',d:'A private space to be heard — type or speak, any hour. Haven listens without judgment and never leaves this room.',go:'Start talking',ic:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6"><path d="M21 12a8 8 0 0 1-8 8H5l-2 2V12a8 8 0 0 1 8-8h1a8 8 0 0 1 8 8Z"/><path d="M9 12h.01M13 12h.01"/></svg>'},
+      journal:{c:'#7E9A7C',t:'Your journal',d:'One honest sentence is enough. Private and encrypted — only you can read it.',go:'Write tonight',ic:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6"><path d="M5 4h11l3 3v13H5z"/><path d="M9 10h6M9 14h4"/></svg>'},
+      breathe:{c:'#E0A98A',t:'4-7-8 breathing',d:'A four-minute reset for an anxious mind. Inhale four, hold seven, exhale eight.',go:'Begin session',ic:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6"><path d="M12 3c3 3 5 5.5 5 9a5 5 0 0 1-10 0c0-3.5 2-6 5-9Z"/></svg>'},
+      therapist:{c:'#8478A6',t:'Find a therapist',d:'Browse licensed therapists near you — by specialty, price, and availability.',go:'Search nearby',ic:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6"><path d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.5-7 10-7 10Z"/></svg>'}
+    };
+    function openGeneric(key){
+      var s=sheets[key]; if(!s)return;
+      document.getElementById('sIco').style.background=s.c;
+      document.getElementById('sIco').innerHTML=s.ic;
+      document.getElementById('sTitle').textContent=s.t;
+      document.getElementById('sDesc').textContent=s.d;
+      var go=document.getElementById('sGo'); go.textContent=s.go; go.style.background=s.c;
+      show(document.getElementById('sheet'));
+    }
+    var current=null;
+    function show(el){ if(current)current.classList.remove('open'); current=el; el.classList.add('open'); scrim.classList.add('open'); }
+    function closeAll(){ if(current)current.classList.remove('open'); current=null; scrim.classList.remove('open'); }
+
+    document.querySelectorAll('[data-sheet]').forEach(function(el){
+      el.addEventListener('click',function(){openGeneric(this.getAttribute('data-sheet'))});
+    });
+    document.getElementById('pfp').addEventListener('click',function(){show(document.getElementById('profileSheet'))});
+    document.getElementById('toPlans').addEventListener('click',function(){show(document.getElementById('plansSheet'))});
+
+    scrim.addEventListener('click',closeAll);
+    document.getElementById('sGo').addEventListener('click',closeAll);
+    document.querySelectorAll('.data-close, [data-close]').forEach(function(el){
+      el.addEventListener('click',function(e){e.stopPropagation();closeAll();});
+    });
+  })();
+</script>
+</body>
+</html>
