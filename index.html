@@ -6316,3 +6316,32 @@ if('serviceWorker' in navigator){
   setInterval(addRestoreBtn, 2000);
 })();
 </script>
+
+                <!-- iOS only: route the "Start my 7-day free trial" CTA (startTrial) to Apple IAP instead of Stripe/Google -->
+                <script>
+                  (function () {
+                      'use strict';
+                      var mh = window.webkit && window.webkit.messageHandlers;
+                      if (!(mh && mh['iap-purchase'])) return;
+                      function planFromSelection() {
+                            var card = document.querySelector('.plan-card.active-plan') || document.querySelector('.plan-card.selected');
+                            var t = (card ? card.textContent : '').toLowerCase();
+                            if (t.indexOf('$0') !== -1 && t.indexOf('free') !== -1) return 'free';
+                            return (t.indexOf('family') !== -1 || t.indexOf('29.99') !== -1) ? 'family' : 'personal';
+                      }
+                      function install() {
+                            if (typeof window.startTrial !== 'function' || window.__havenTrialPatched) return;
+                            window.__havenTrialPatched = true;
+                            var orig = window.startTrial;
+                            window.startTrial = function () {
+                                    var plan = planFromSelection();
+                                    if (plan === 'free') return orig.apply(this, arguments);
+                                    if (window.havenStartNativePurchase) window.havenStartNativePurchase(plan);
+                            };
+                      }
+                      install();
+                      var tries = 0;
+                      var iv = setInterval(function () { install(); if (window.__havenTrialPatched || ++tries > 20) clearInterval(iv); }, 500);
+                  })();
+                </script>
+                </script>
