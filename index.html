@@ -847,7 +847,94 @@ body{font-family:'Inter',sans-serif;background:var(--snow);color:var(--ink);over
   cursor:pointer;transition:all 0.2s;position:relative;
 }
 .breath-start:hover{background:rgba(91,79,232,0.6);}
-.breath-start.active-breath{background:rgba(232,79,79,0.3);border-color:rgba(232,79,79,0.5);}
+/* ── MEDITATION PAGE REDESIGN ── */
+.med-hero{
+  background:radial-gradient(120% 140% at 50% -10%, #1b1440 0%, #0a0a16 55%, #07070f 100%);
+  border-radius:0 0 32px 32px;
+  padding:44px 20px 34px;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+  margin-bottom:20px;
+}
+.med-orb-field{position:relative;width:132px;height:132px;margin:0 auto 24px;}
+.med-orb-halo{
+  position:absolute;inset:-46px;border-radius:50%;
+  background:radial-gradient(circle, rgba(123,111,240,0.35) 0%, rgba(46,196,182,0.12) 45%, transparent 72%);
+  filter:blur(2px);
+  animation:medHaloBreathe 8s ease-in-out infinite;
+}
+.med-orb{
+  position:absolute;inset:0;border-radius:50%;
+  background:radial-gradient(circle at 34% 30%, #a89cf7 0%, #5B4FE8 42%, #2EC4B6 100%);
+  box-shadow:0 0 60px rgba(91,79,232,0.45), inset 0 0 30px rgba(255,255,255,0.15);
+  animation:medOrbBreathe 8s ease-in-out infinite;
+}
+.med-orb::after{
+  content:'';position:absolute;inset:14%;border-radius:50%;
+  background:radial-gradient(circle at 38% 32%, rgba(255,255,255,0.5), transparent 60%);
+}
+@keyframes medOrbBreathe{
+  0%,100%{transform:scale(0.86);}
+  35%,50%{transform:scale(1.06);}
+  85%{transform:scale(0.86);}
+}
+@keyframes medHaloBreathe{
+  0%,100%{transform:scale(0.8);opacity:0.55;}
+  35%,50%{transform:scale(1.15);opacity:0.9;}
+  85%{transform:scale(0.8);opacity:0.55;}
+}
+@media (prefers-reduced-motion: reduce){
+  .med-orb, .med-orb-halo{animation:none;}
+}
+.med-eyebrow{font-size:11px;font-weight:600;color:#8a7cf0;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:16px;position:relative;}
+.med-headline{font-family:'Fraunces',serif;font-size:29px;font-weight:340;color:rgba(255,255,255,0.95);line-height:1.24;letter-spacing:-0.02em;margin-bottom:12px;position:relative;}
+.med-headline em{color:#b8acf5;font-style:italic;}
+.med-sub{font-size:13px;color:rgba(255,255,255,0.42);line-height:1.7;font-weight:300;max-width:300px;margin:0 auto;position:relative;}
+
+.med-editorial{background:var(--white);border-radius:var(--r2);padding:26px 22px;margin-bottom:14px;border:1px solid rgba(0,0,0,0.05);}
+.med-stat-row{display:flex;margin-bottom:22px;}
+.med-stat{text-align:center;flex:1;}
+.med-stat-num{font-family:'Fraunces',serif;font-size:25px;font-weight:400;color:var(--haven);letter-spacing:-0.02em;display:block;}
+.med-stat-lab{font-size:10px;color:var(--mist);line-height:1.5;margin-top:5px;display:block;padding:0 6px;}
+.med-stat-div{width:1px;background:var(--fog);margin:2px 0;}
+.med-body{font-size:14px;color:var(--slate);line-height:1.85;font-weight:300;}
+.med-pull{font-family:'Fraunces',serif;font-size:17px;font-style:italic;color:var(--ink);line-height:1.6;display:block;margin:18px 0;}
+.med-attrib{font-size:11px;color:var(--haven);letter-spacing:0.03em;}
+
+.med-benefits{background:var(--white);border-radius:var(--r2);padding:6px 22px;margin-bottom:16px;border:1px solid rgba(0,0,0,0.05);}
+.med-benefit{display:flex;align-items:flex-start;gap:14px;padding:16px 0;border-bottom:1px solid var(--fog);}
+.med-benefit:last-child{border-bottom:none;}
+.med-benefit-icon{font-size:19px;flex-shrink:0;width:34px;height:34px;border-radius:11px;background:var(--snow);display:flex;align-items:center;justify-content:center;}
+.med-benefit-title{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:3px;letter-spacing:-0.01em;}
+.med-benefit-desc{font-size:12px;color:var(--mist);line-height:1.6;}
+
+.med-section-label{font-size:11px;font-weight:600;color:var(--mist);letter-spacing:0.1em;text-transform:uppercase;margin:26px 2px 12px;}
+
+.med-upgrade{
+  background:linear-gradient(135deg, var(--haven) 0%, #4a3fd0 45%, var(--teal) 100%);
+  border-radius:var(--r2);
+  padding:20px;
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+  cursor:pointer;margin-bottom:16px;
+  position:relative;overflow:hidden;
+  box-shadow:0 14px 30px rgba(91,79,232,0.28);
+  transition:transform 0.2s;
+}
+.med-upgrade:active{transform:scale(0.98);}
+.med-upgrade-glow{
+  position:absolute;width:140px;height:140px;border-radius:50%;
+  background:radial-gradient(circle, rgba(255,255,255,0.25) 0%, transparent 70%);
+  top:-50px;right:-30px;pointer-events:none;
+}
+.med-upgrade-text{position:relative;}
+.med-upgrade-title{font-family:'Fraunces',serif;font-size:16px;font-weight:500;color:#fff;margin-bottom:4px;letter-spacing:-0.01em;}
+.med-upgrade-sub{font-size:11px;color:rgba(255,255,255,0.75);line-height:1.6;position:relative;}
+.med-upgrade-cta{
+  background:rgba(255,255,255,0.22);color:#fff;border:1px solid rgba(255,255,255,0.3);
+  border-radius:100px;padding:9px 18px;font-size:12px;font-weight:600;
+  white-space:nowrap;flex-shrink:0;position:relative;
+}
 
 .session-title{
   font-size:11px;font-weight:600;color:var(--mist);
@@ -1724,8 +1811,8 @@ body[data-page="app"] .mobile-nav{display:flex;}
       <div class="land-card">
         <div class="land-card-icon" style="background:rgba(91,79,232,0.15);">🧠</div>
         <div>
-          <div class="land-card-title">Therapy Chat</div>
-          <div class="land-card-sub">Talk or use your voice</div>
+          <div class="land-card-title">Haven Chat</div>
+          <div class="land-card-sub">Your Therapy-Inspired Companion</div>
         </div>
       </div>
       <div class="land-card">
@@ -1853,8 +1940,8 @@ body[data-page="app"] .mobile-nav{display:flex;}
         <div class="home-grid">
           <div class="home-card" onclick="switchTab('chat',null);setMobileActive(1)">
             <div class="home-card-icon" style="background:var(--haven4);">💬</div>
-            <div class="home-card-title">Therapy Chat</div>
-            <div class="home-card-sub">Available 24/7</div>
+            <div class="home-card-title">Haven Chat</div>
+            <div class="home-card-sub">Your Therapy-Inspired Companion</div>
           </div>
           <div class="home-card" onclick="switchTab('journal',null);setMobileActive(2)">
             <div class="home-card-icon" style="background:var(--teal2);">📓</div>
@@ -2140,68 +2227,58 @@ body[data-page="app"] .mobile-nav{display:flex;}
     <div class="tab-panel" id="tab-meditate">
       <div class="meditate-wrap">
 
-        <!-- INTRO HERO -->
-        <div style="background:linear-gradient(160deg,#0a0a18 0%,#0f0f20 60%,#0a0a18 100%);border-radius:0 0 24px 24px;padding:28px 20px 24px;text-align:center;margin-bottom:16px;position:relative;overflow:hidden;">
-          <div style="position:absolute;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,rgba(91,79,232,0.2) 0%,transparent 70%);top:-80px;left:50%;transform:translateX(-50%);pointer-events:none;"></div>
-          <div style="font-size:9px;font-weight:600;color:rgba(120,100,220,0.6);letter-spacing:0.16em;text-transform:uppercase;margin-bottom:10px;position:relative;">Haven · Mindfulness</div>
-          <div style="font-family:'Fraunces',serif;font-size:26px;font-weight:300;font-style:italic;color:rgba(255,255,255,0.9);line-height:1.25;margin-bottom:10px;position:relative;letter-spacing:-0.02em;">Still your mind.<br><span style="color:#b8acf5;">Find your breath.</span></div>
-          <div style="font-size:12px;color:rgba(255,255,255,0.3);line-height:1.8;position:relative;font-weight:300;">In a world that never slows down, your breath is the most powerful tool you have to calm your mind, heal your body, and restore your peace.</div>
+        <!-- HERO — signature living breathing orb -->
+        <div class="med-hero">
+          <div class="med-eyebrow">Haven · Mindfulness</div>
+          <div class="med-orb-field">
+            <div class="med-orb-halo"></div>
+            <div class="med-orb"></div>
+          </div>
+          <div class="med-headline">Still your mind.<br><em>Find your breath.</em></div>
+          <div class="med-sub">In a world that never slows down, your breath is the most powerful tool you have to calm your mind, heal your body, and restore your peace.</div>
         </div>
 
-        <!-- STATS -->
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px;">
-          <div style="background:var(--white);border:1px solid rgba(0,0,0,0.05);border-radius:12px;padding:12px 8px;text-align:center;">
-            <span style="font-family:'Fraunces',serif;font-size:20px;font-weight:400;color:var(--haven);display:block;margin-bottom:3px;">8wks</span>
-            <span style="font-size:9px;color:var(--mist);line-height:1.5;display:block;">to measurably reduce anxiety with daily breathwork</span>
+        <!-- EDITORIAL: stats woven into the argument, one quote, one voice -->
+        <div class="med-editorial">
+          <div class="med-stat-row">
+            <div class="med-stat"><span class="med-stat-num">8wks</span><span class="med-stat-lab">to measurably reduce anxiety with daily breathwork</span></div>
+            <div class="med-stat-div"></div>
+            <div class="med-stat"><span class="med-stat-num">62%</span><span class="med-stat-lab">reduction in cortisol after regular meditation</span></div>
+            <div class="med-stat-div"></div>
+            <div class="med-stat"><span class="med-stat-num">4min</span><span class="med-stat-lab">shifts your nervous system from stress to calm</span></div>
           </div>
-          <div style="background:var(--white);border:1px solid rgba(0,0,0,0.05);border-radius:12px;padding:12px 8px;text-align:center;">
-            <span style="font-family:'Fraunces',serif;font-size:20px;font-weight:400;color:var(--haven);display:block;margin-bottom:3px;">62%</span>
-            <span style="font-size:9px;color:var(--mist);line-height:1.5;display:block;">reduction in cortisol after regular meditation</span>
-          </div>
-          <div style="background:var(--white);border:1px solid rgba(0,0,0,0.05);border-radius:12px;padding:12px 8px;text-align:center;">
-            <span style="font-family:'Fraunces',serif;font-size:20px;font-weight:400;color:var(--haven);display:block;margin-bottom:3px;">4min</span>
-            <span style="font-size:9px;color:var(--mist);line-height:1.5;display:block;">shifts your nervous system from stress to calm</span>
-          </div>
-        </div>
-
-        <!-- WHY IT MATTERS -->
-        <div style="background:var(--white);border:1px solid rgba(0,0,0,0.05);border-radius:var(--r2);padding:20px;margin-bottom:12px;">
-          <div style="font-size:9px;font-weight:600;color:var(--mist);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:10px;">Why it matters</div>
-          <div style="font-size:13px;color:var(--slate);line-height:1.8;font-weight:300;">Every day your nervous system absorbs stress — from work, relationships, and the relentless pace of modern life. Over time this keeps your body locked in fight-or-flight, flooding you with cortisol and stealing your sleep.<br><br><span style="font-family:'Fraunces',serif;font-style:italic;color:var(--ink);font-size:15px;">Meditation and breathwork are not luxuries. They are medicine.</span><br><br>Just a few minutes of intentional breathing each day can physically rewire your nervous system — shifting you from anxiety into calm, from scattered into focused.</div>
+          <div class="med-body">Every day your nervous system absorbs stress — from work, relationships, and the relentless pace of modern life. Over time this keeps your body locked in fight-or-flight, flooding you with cortisol and stealing your sleep.
+            <span class="med-pull">"Feelings come and go like clouds in a windy sky. Conscious breathing is my anchor."</span>
+            <span class="med-attrib">— Thich Nhat Hanh</span><br><br>
+            Just a few minutes of intentional breathing each day can physically rewire your nervous system — shifting you from anxiety into calm, from scattered into focused.</div>
         </div>
 
         <!-- BENEFITS -->
-        <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px;">
-          <div style="display:flex;align-items:flex-start;gap:12px;padding:12px 14px;background:var(--white);border:1px solid rgba(0,0,0,0.05);border-radius:12px;">
-            <span style="font-size:18px;flex-shrink:0;">🧠</span>
-            <div><div style="font-size:12px;font-weight:600;color:var(--ink);margin-bottom:2px;">Reduces anxiety & depression</div><div style="font-size:11px;color:var(--mist);line-height:1.55;">Lowers activity in the amygdala — the brain's fear centre — reducing worry and overwhelm.</div></div>
+        <div class="med-benefits">
+          <div class="med-benefit">
+            <span class="med-benefit-icon">🧠</span>
+            <div><div class="med-benefit-title">Reduces anxiety &amp; depression</div><div class="med-benefit-desc">Lowers activity in the amygdala — the brain's fear centre — reducing worry and overwhelm.</div></div>
           </div>
-          <div style="display:flex;align-items:flex-start;gap:12px;padding:12px 14px;background:var(--white);border:1px solid rgba(0,0,0,0.05);border-radius:12px;">
-            <span style="font-size:18px;flex-shrink:0;">😴</span>
-            <div><div style="font-size:12px;font-weight:600;color:var(--ink);margin-bottom:2px;">Improves sleep quality</div><div style="font-size:11px;color:var(--mist);line-height:1.55;">4-7-8 breathing slows your heart rate and prepares your nervous system for deep sleep.</div></div>
+          <div class="med-benefit">
+            <span class="med-benefit-icon">😴</span>
+            <div><div class="med-benefit-title">Improves sleep quality</div><div class="med-benefit-desc">4-7-8 breathing slows your heart rate and prepares your nervous system for deep sleep.</div></div>
           </div>
-          <div style="display:flex;align-items:flex-start;gap:12px;padding:12px 14px;background:var(--white);border:1px solid rgba(0,0,0,0.05);border-radius:12px;">
-            <span style="font-size:18px;flex-shrink:0;">🎯</span>
-            <div><div style="font-size:12px;font-weight:600;color:var(--ink);margin-bottom:2px;">Sharpens focus & clarity</div><div style="font-size:11px;color:var(--mist);line-height:1.55;">Breathwork increases oxygen to the prefrontal cortex, sharpening decisions and concentration.</div></div>
+          <div class="med-benefit">
+            <span class="med-benefit-icon">🎯</span>
+            <div><div class="med-benefit-title">Sharpens focus &amp; clarity</div><div class="med-benefit-desc">Breathwork increases oxygen to the prefrontal cortex, sharpening decisions and concentration.</div></div>
           </div>
-          <div style="display:flex;align-items:flex-start;gap:12px;padding:12px 14px;background:var(--white);border:1px solid rgba(0,0,0,0.05);border-radius:12px;">
-            <span style="font-size:18px;flex-shrink:0;">💪</span>
-            <div><div style="font-size:12px;font-weight:600;color:var(--ink);margin-bottom:2px;">Builds emotional resilience</div><div style="font-size:11px;color:var(--mist);line-height:1.55;">Regular practice rewires neural pathways, making it easier to return to calm after stress.</div></div>
+          <div class="med-benefit">
+            <span class="med-benefit-icon">💪</span>
+            <div><div class="med-benefit-title">Builds emotional resilience</div><div class="med-benefit-desc">Regular practice rewires neural pathways, making it easier to return to calm after stress.</div></div>
           </div>
-        </div>
-
-        <!-- QUOTE -->
-        <div style="background:var(--haven4);border-left:2px solid var(--haven);border-radius:0 12px 12px 0;padding:14px 16px;margin-bottom:16px;">
-          <div style="font-family:'Fraunces',serif;font-size:15px;font-weight:300;font-style:italic;color:var(--ink);line-height:1.65;margin-bottom:6px;">"Feelings come and go like clouds in a windy sky. Conscious breathing is my anchor."</div>
-          <div style="font-size:9px;color:var(--haven);letter-spacing:0.05em;">— Thich Nhat Hanh</div>
         </div>
 
         <!-- BREATHING EXERCISES -->
-        <div style="font-size:9px;font-weight:600;color:var(--mist);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:10px;">Breathing Exercises</div>
+        <div class="med-section-label">Breathing Exercises</div>
         <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px;">
 
           <!-- FREE: 4-7-8 only -->
-          <div class="session-card active-sess" onclick="launchBreathing(0)" style="border-color:var(--haven);background:var(--haven4);">
+          <div class="session-card active-sess" onclick="launchBreathing(0)">
             <div style="display:flex;align-items:center;justify-content:space-between;">
               <div style="display:flex;align-items:center;gap:12px;">
                 <span style="font-size:28px;">😮‍💨</span>
@@ -2216,7 +2293,7 @@ body[data-page="app"] .mobile-nav{display:flex;}
           </div>
 
           <!-- PREMIUM: Box -->
-          <div class="session-card locked" onclick="goPlans()" style="opacity:0.65;">
+          <div class="session-card locked" onclick="goPlans()">
             <div style="display:flex;align-items:center;justify-content:space-between;">
               <div style="display:flex;align-items:center;gap:12px;">
                 <span style="font-size:28px;">🔲</span>
@@ -2231,7 +2308,7 @@ body[data-page="app"] .mobile-nav{display:flex;}
           </div>
 
           <!-- PREMIUM: Belly -->
-          <div class="session-card locked" onclick="goPlans()" style="opacity:0.65;">
+          <div class="session-card locked" onclick="goPlans()">
             <div style="display:flex;align-items:center;justify-content:space-between;">
               <div style="display:flex;align-items:center;gap:12px;">
                 <span style="font-size:28px;">🫁</span>
@@ -2246,7 +2323,7 @@ body[data-page="app"] .mobile-nav{display:flex;}
           </div>
 
           <!-- PREMIUM: Alternate Nostril -->
-          <div class="session-card locked" onclick="goPlans()" style="opacity:0.65;">
+          <div class="session-card locked" onclick="goPlans()">
             <div style="display:flex;align-items:center;justify-content:space-between;">
               <div style="display:flex;align-items:center;gap:12px;">
                 <span style="font-size:28px;">🌬️</span>
@@ -2261,7 +2338,7 @@ body[data-page="app"] .mobile-nav{display:flex;}
           </div>
 
           <!-- PREMIUM: Wim Hof -->
-          <div class="session-card locked" onclick="goPlans()" style="opacity:0.65;">
+          <div class="session-card locked" onclick="goPlans()">
             <div style="display:flex;align-items:center;justify-content:space-between;">
               <div style="display:flex;align-items:center;gap:12px;">
                 <span style="font-size:28px;">❄️</span>
@@ -2299,12 +2376,13 @@ body[data-page="app"] .mobile-nav{display:flex;}
         </div>
 
         <!-- UPGRADE BANNER -->
-        <div onclick="switchTab('plans',null);setMobileActive(5);" style="background:linear-gradient(135deg,var(--haven),var(--teal));border-radius:var(--r2);padding:16px;display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;margin-bottom:16px;">
-          <div>
-            <div style="font-size:13px;font-weight:600;color:#fff;margin-bottom:3px;">✨ Unlock all premium content</div>
-            <div style="font-size:10px;color:rgba(255,255,255,0.7);line-height:1.5;">Box · Belly · Alternate Nostril · Wim Hof<br>Stress Relief · Sleep Well · Deep Focus · All sounds</div>
+        <div class="med-upgrade" id="medUpgradeBanner" onclick="switchTab('plans',null);setMobileActive(5);">
+          <div class="med-upgrade-glow"></div>
+          <div class="med-upgrade-text">
+            <div class="med-upgrade-title">Unlock everything</div>
+            <div class="med-upgrade-sub">Box · Belly · Alternate Nostril · Wim Hof<br>Stress Relief · Sleep Well · Deep Focus · All sounds</div>
           </div>
-          <div style="background:rgba(255,255,255,0.2);color:#fff;border:none;border-radius:100px;padding:8px 16px;font-size:11px;font-weight:600;white-space:nowrap;flex-shrink:0;">Upgrade →</div>
+          <div class="med-upgrade-cta">Upgrade →</div>
         </div>
 
         <!-- GUIDED SESSIONS -->
@@ -2657,7 +2735,7 @@ body[data-page="app"] .mobile-nav{display:flex;}
   </div><!-- app-body -->
 
   <!-- MOBILE NAV -->
-  <div class="mobile-nav" id="mobileNav">
+  <div class="mobile-nav" id="mobileNav" style="display:none;">
     <div class="mobile-tab active" id="mt0" onclick="switchTab('home',null);setMobileActive(0)">
       <div class="mobile-tab-icon">🏠</div>
       <div class="mobile-tab-label">Home</div>
@@ -2711,6 +2789,9 @@ function switchTab(name, btn){
   if(btn){document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));btn.classList.add('active');}
   if(name === 'profile'){ loadProfile(); loadSavedLanguage(); }
   if(name === 'meditate'){ updateStreakDisplay(); if(typeof applyPremiumUI === 'function') applyPremiumUI(); }
+  // Home page already has cards for every section, so the bottom nav is redundant there
+  const mobileNav = document.getElementById('mobileNav');
+  if(mobileNav) mobileNav.style.display = (name === 'home') ? 'none' : '';
 }
 function setMobileActive(i){
   document.querySelectorAll('.mobile-tab').forEach(t=>t.classList.remove('active'));
@@ -2979,6 +3060,8 @@ function promptAccessCode(){
 // Visually + functionally unlock premium content when paid/test access is on
 function applyPremiumUI(){
   if(localStorage.getItem('havenPlan') !== 'paid') return;
+  var upgradeBanner = document.getElementById('medUpgradeBanner');
+  if(upgradeBanner) upgradeBanner.style.display = 'none';
   var lockedCards = document.querySelectorAll('#tab-meditate .session-card.locked');
   lockedCards.forEach(function(card){
     card.classList.remove('locked');
@@ -5370,7 +5453,7 @@ const TRANSLATIONS = {
     createAccount:"Create an Account",signIn:"Sign in",alwaysOn:"ALWAYS ON",private:"PRIVATE",
     navHome:"Home",navChat:"Chat",navJournal:"Journal",navTherapists:"Therapists",navMeditate:"Meditate",navPlans:"Plans",navProfile:"Profile",
     howFeeling:"How are you feeling?",low:"Low",okay:"Okay",good:"Good",great:"Great",
-    havenChat:"Haven Chat",havenChatSub:"Talk it out · 24/7 clear head space",
+    havenChat:"Haven Chat",havenChatSub:"Your Therapy-Inspired Companion",
     meditateCard:"Meditate",meditateSub:"Calm your mind",
     journalTitle:"Journal",journalSub:"Private & safe",
     findTherapist:"Find a Therapist",findTherapistSub:"Find help near you",
@@ -5394,7 +5477,7 @@ const TRANSLATIONS = {
     createAccount:"Crear una Cuenta",signIn:"Iniciar Sesión",alwaysOn:"SIEMPRE ACTIVO",private:"PRIVADO",
     navHome:"Inicio",navChat:"Chat",navJournal:"Diario",navTherapists:"Terapeutas",navMeditate:"Meditar",navPlans:"Planes",navProfile:"Perfil",
     howFeeling:"¿Cómo te sientes?",low:"Bajo",okay:"Bien",good:"Bueno",great:"Genial",
-    havenChat:"Haven Chat",havenChatSub:"Habla · Espacio mental claro 24/7",
+    havenChat:"Haven Chat",havenChatSub:"Tu compañero inspirado en terapia",
     meditateCard:"Meditar",meditateSub:"Calma tu mente",
     journalTitle:"Diario",journalSub:"Privado y seguro",
     findTherapist:"Encontrar Terapeuta",findTherapistSub:"Buscar ayuda cerca",
@@ -5418,7 +5501,7 @@ const TRANSLATIONS = {
     createAccount:"Créer un Compte",signIn:"Se Connecter",alwaysOn:"TOUJOURS ACTIF",private:"PRIVÉ",
     navHome:"Accueil",navChat:"Chat",navJournal:"Journal",navTherapists:"Thérapeutes",navMeditate:"Méditer",navPlans:"Forfaits",navProfile:"Profil",
     howFeeling:"Comment vous sentez-vous?",low:"Bas",okay:"Correct",good:"Bien",great:"Excellent",
-    havenChat:"Haven Chat",havenChatSub:"Parlez · Espace mental clair 24/7",
+    havenChat:"Haven Chat",havenChatSub:"Votre compagnon inspiré par la thérapie",
     meditateCard:"Méditer",meditateSub:"Calmez votre esprit",
     journalTitle:"Journal",journalSub:"Privé et sécurisé",
     findTherapist:"Trouver un Thérapeute",findTherapistSub:"Trouver de l'aide",
@@ -5442,7 +5525,7 @@ const TRANSLATIONS = {
     createAccount:"Konto Erstellen",signIn:"Anmelden",alwaysOn:"IMMER AKTIV",private:"PRIVAT",
     navHome:"Startseite",navChat:"Chat",navJournal:"Tagebuch",navTherapists:"Therapeuten",navMeditate:"Meditieren",navPlans:"Pläne",navProfile:"Profil",
     howFeeling:"Wie fühlst du dich?",low:"Niedrig",okay:"Okay",good:"Gut",great:"Super",
-    havenChat:"Haven Chat",havenChatSub:"Reden · 24/7 klarer Gedankenraum",
+    havenChat:"Haven Chat",havenChatSub:"Dein therapieinspirierter Begleiter",
     meditateCard:"Meditieren",meditateSub:"Beruhige deinen Geist",
     journalTitle:"Tagebuch",journalSub:"Privat und sicher",
     findTherapist:"Therapeuten Finden",findTherapistSub:"Hilfe in der Nähe",
@@ -5466,7 +5549,7 @@ const TRANSLATIONS = {
     createAccount:"יצירת חשבון",signIn:"כניסה",alwaysOn:"תמיד פעיל",private:"פרטי",
     navHome:"בית",navChat:"צ'אט",navJournal:"יומן",navTherapists:"מטפלים",navMeditate:"מדיטציה",navPlans:"תוכניות",navProfile:"פרופיל",
     howFeeling:"איך אתה מרגיש?",low:"נמוך",okay:"בסדר",good:"טוב",great:"מצוין",
-    havenChat:"Haven Chat",havenChatSub:"דבר · מרחב נפשי ברור 24/7",
+    havenChat:"Haven Chat",havenChatSub:"המלווה שלך, בהשראת טיפול",
     meditateCard:"מדיטציה",meditateSub:"הרגע את מוחך",
     journalTitle:"יומן",journalSub:"פרטי ובטוח",
     findTherapist:"מצא מטפל",findTherapistSub:"מצא עזרה בקרבתך",
@@ -5490,7 +5573,7 @@ const TRANSLATIONS = {
     createAccount:"创建账户",signIn:"登录",alwaysOn:"全天候",private:"私密",
     navHome:"首页",navChat:"聊天",navJournal:"日记",navTherapists:"治疗师",navMeditate:"冥想",navPlans:"计划",navProfile:"个人资料",
     howFeeling:"您感觉如何？",low:"低落",okay:"还好",good:"良好",great:"很好",
-    havenChat:"Haven 聊天",havenChatSub:"倾诉 · 24/7 清晰心灵空间",
+    havenChat:"Haven 聊天",havenChatSub:"治疗启发式陪伴",
     meditateCard:"冥想",meditateSub:"平静您的心灵",
     journalTitle:"日记",journalSub:"私密且安全",
     findTherapist:"寻找治疗师",findTherapistSub:"在附近找到帮助",
@@ -6207,147 +6290,6 @@ if('serviceWorker' in navigator){
   <div class="guided-bar"><div class="guided-bar-fill" id="guidedProgress"></div></div>
   <button class="guided-stop" onclick="stopGuidedSession()">End session</button>
 </div>
-
-<link id="hv-fonts" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&family=Hanken+Grotesk:wght@400;500;600&display=swap">
-<style id="hv-home2">
-#tab-home{background:radial-gradient(700px 380px at 18% -4%,#F3E8DE,transparent 58%),radial-gradient(560px 440px at 104% 2%,#ECE6F5,transparent 55%),#FCF9F4 !important;font-family:'Hanken Grotesk',sans-serif !important;border-radius:22px}
-#tab-home .home-greeting{background:none !important;background-image:none !important;box-shadow:none !important;border:none !important;padding:6px 0 0 !important;min-height:0 !important;color:#2B2230 !important}
-.hv-greet{font-family:'Fraunces',serif;font-weight:360;font-size:30px;line-height:1.1;letter-spacing:-.01em;color:#2B2230}
-.hv-greet em{font-style:italic;color:#6E5FA0}
-.hv-gsub{font-size:14px;color:#6C6270;margin-top:7px}
-#tab-home .home-mood{background:transparent !important;border:none !important;box-shadow:none !important;padding:0 !important;margin-top:20px !important}
-#tab-home .home-section-label{display:none !important}
-#tab-home .mood-row{display:flex !important;gap:10px !important}
-#tab-home .mood-btn{flex:1;aspect-ratio:1;border-radius:18px !important;background:#fff !important;border:1px solid rgba(43,34,48,.08) !important;box-shadow:0 12px 30px -14px rgba(43,34,48,.28) !important;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;transition:.2s}
-#tab-home .mood-emoji{font-size:25px}
-#tab-home .mood-label{font-size:10.5px;color:#6C6270;font-weight:500}
-#tab-home .mood-btn.active{background:#6E5FA0 !important;border-color:#6E5FA0 !important;transform:translateY(-2px)}
-#tab-home .mood-btn.active .mood-label{color:#fff !important}
-#tab-home .home-grid{display:grid !important;grid-template-columns:1fr 1fr !important;gap:11px !important;margin-top:18px !important}
-#tab-home .home-card{grid-column:auto !important;border-radius:20px !important;border:none !important;box-shadow:none !important;min-height:106px;padding:16px 15px 18px !important;display:flex;flex-direction:column;justify-content:space-between}
-#tab-home .home-card-icon{width:32px !important;height:32px !important;border-radius:11px !important}
-#tab-home .home-card-title{font-size:14.5px !important;font-weight:600 !important;color:#2B2230 !important;font-family:'Hanken Grotesk',sans-serif !important}
-#tab-home .home-card-sub{font-size:11px !important;color:#6C6270 !important}
-#tab-home .home-card:nth-child(1){background:#EFEAF7 !important}#tab-home .home-card:nth-child(1) .home-card-icon{background:#6E5FA0 !important}
-#tab-home .home-card:nth-child(2){background:#E7EEE4 !important}#tab-home .home-card:nth-child(2) .home-card-icon{background:#7E9A7C !important}
-#tab-home .home-card:nth-child(3){background:#F7E9DF !important}#tab-home .home-card:nth-child(3) .home-card-icon{background:#E0A98A !important}
-#tab-home .home-card:nth-child(4){background:#EDE9F0 !important}#tab-home .home-card:nth-child(4) .home-card-icon{background:#8478A6 !important}
-.hv-intention{margin-top:18px;padding:19px 20px;border-radius:22px;background:linear-gradient(135deg,#2E2536,#413352);color:#fff;position:relative;overflow:hidden}
-.hv-intention .hv-k{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:#B7A9E0;font-weight:600}
-.hv-intention p{font-family:'Fraunces',serif;font-style:italic;font-weight:340;font-size:17px;line-height:1.42;margin-top:9px;position:relative}
-.hv-orb{position:absolute;width:140px;height:140px;border-radius:50%;right:-38px;bottom:-50px;background:radial-gradient(circle at 35% 35%,#B7A9E0,transparent 68%);opacity:.5}
-</style>
-<script id="hv-home-js">(function(){function T(){var root=document.getElementById('tab-home');if(!root||root.dataset.hvDone)return;var wrap=root.querySelector('.home-wrap');if(!wrap)return;var g=wrap.querySelector('.home-greeting');if(!g)return;root.dataset.hvDone='1';try{var gn=document.getElementById('greetName');var raw=((gn&&gn.textContent)||localStorage.getItem('havenName')||'').toString();var mm=raw.replace(/^\s*hi[,\s]+/i,'').match(/[A-Za-z]{2,}/);var nm=mm?mm[0]:'there';nm=nm.charAt(0).toUpperCase()+nm.slice(1);var h=new Date().getHours();var part=h<5?'Late night':h<12?'Good morning':h<17?'Good afternoon':h<22?'Good evening':'Winding down';g.innerHTML='<div class="hv-greet">'+part+',<br><span id="greetName">'+nm+'</span>. <em>Breathe.</em></div><div class="hv-gsub">How are you arriving today?</div>';var labels=[['Talk it out','Chat or voice'],['Journal','One line today'],['Breathe','4 min reset'],['Therapists','Near you']];wrap.querySelectorAll('.home-card').forEach(function(c,i){if(!labels[i])return;var t=c.querySelector('.home-card-title'),su=c.querySelector('.home-card-sub');if(t)t.textContent=labels[i][0];if(su)su.textContent=labels[i][1];});var up=wrap.querySelector('[onclick*="plans"]');var it=document.createElement('div');it.className='hv-intention';var qs=['\u201cYou don\u2019t have to carry it all at once.\u201d','\u201cWhatever you\u2019re feeling is allowed to be here.\u201d','\u201cRest is not something you earn. It\u2019s something you need.\u201d'];it.innerHTML='<div class="hv-orb"></div><div class="hv-k">Tonight\u2019s intention</div><p>'+qs[Math.floor(Math.random()*qs.length)]+'</p>';if(up)wrap.insertBefore(it,up);else wrap.appendChild(it);}catch(e){}}function boot(n){T();var r=document.getElementById('tab-home');if((!r||!r.dataset.hvDone)&&n>0)setTimeout(function(){boot(n-1)},250);}if(document.readyState==='complete')boot(24);else window.addEventListener('load',function(){boot(24)});})();</script>
-<style id="hv-tabs">
-#tab-chat,#tab-journal,#tab-meditate{background:radial-gradient(700px 380px at 18% -4%,#F3E8DE,transparent 58%),radial-gradient(560px 440px at 104% 2%,#ECE6F5,transparent 55%),#FCF9F4 !important;font-family:'Hanken Grotesk',sans-serif !important;border-radius:22px}
-#tab-chat .chat-top{border-bottom:1px solid rgba(43,34,48,.08) !important}
-#tab-chat .chat-top-avatar{background:linear-gradient(145deg,#6E5FA0,#4a3d78) !important}
-#tab-chat .chat-top-online{background:#7E9A7C !important}
-#tab-chat .chat-top-name{color:#2B2230 !important;font-weight:600}
-#tab-chat .chat-top-status{color:#7E9A7C !important}
-#tab-chat .chat-top-voice{background:#EFEAF7 !important;color:#6E5FA0 !important;border:none !important}
-#tab-chat .bubble.ai{background:#fff !important;border:1px solid rgba(43,34,48,.08) !important;color:#2B2230 !important;border-radius:20px 20px 20px 7px !important;box-shadow:0 12px 30px -14px rgba(43,34,48,.22) !important}
-#tab-chat .bubble.user,#tab-chat .bubble.me,#tab-chat .bubble.you{background:#6E5FA0 !important;color:#fff !important;border-radius:20px 20px 7px 20px !important}
-#tab-chat .qr{background:#EFEAF7 !important;color:#6E5FA0 !important;border:none !important;border-radius:14px !important;font-weight:500}
-#tab-chat .chat-input-row{background:#fff !important;border:1px solid rgba(43,34,48,.08) !important;border-radius:22px !important;box-shadow:0 12px 30px -14px rgba(43,34,48,.22) !important}
-#tab-chat .send-btn{background:#6E5FA0 !important;border:none !important}
-#tab-journal .journal-h{font-family:'Fraunces',serif !important;font-weight:360 !important;font-size:26px !important;color:#2B2230 !important}
-#tab-journal .journal-sub{color:#6C6270 !important}
-#tab-journal .journal-composer{background:linear-gradient(135deg,#E7EEE4,#DBE7D6) !important;border:none !important;border-radius:20px !important}
-#tab-journal .journal-date{color:#5c7359 !important;font-weight:600}
-#tab-journal .journal-ta{background:rgba(255,255,255,.65) !important;border:1px solid rgba(43,34,48,.06) !important;border-radius:14px !important;color:#2B2230 !important}
-#tab-journal .journal-save-btn{background:#7E9A7C !important;border:none !important;border-radius:14px !important;color:#fff !important}
-#tab-journal .journal-entry{background:#fff !important;border:1px solid rgba(43,34,48,.08) !important;border-radius:18px !important;box-shadow:0 12px 30px -14px rgba(43,34,48,.22) !important}
-#tab-journal .entry-meta{color:#A79FAA !important;font-weight:600;letter-spacing:.04em;text-transform:uppercase;font-size:10.5px}
-#tab-journal .entry-text{font-family:'Fraunces',serif !important;color:#413849 !important;line-height:1.45}
-#tab-meditate .session-card{background:#fff !important;border:1px solid rgba(43,34,48,.08) !important;border-radius:16px !important;box-shadow:0 12px 30px -14px rgba(43,34,48,.22) !important}
-#tab-meditate .session-card.active-sess{background:linear-gradient(160deg,#34294a,#241d33) !important;border:none !important;color:#fff !important}
-#tab-meditate .breath-glow{background:radial-gradient(circle at 40% 38%,rgba(183,169,224,.9),transparent 70%) !important}
-#tab-meditate .breath-ring-outer{border-color:rgba(183,169,224,.4) !important}
-#tab-meditate .breath-ring-inner{border-color:rgba(183,169,224,.7) !important}
-#tab-meditate .session-name{color:#2B2230 !important;font-weight:600}
-#tab-meditate .session-card.active-sess .session-name{color:#fff !important}
-#tab-meditate .session-tag.premium{background:#F7E9DF !important;color:#B0662f !important}
-#tab-meditate .sounds-card,#tab-meditate .streak-card{background:#fff !important;border:1px solid rgba(43,34,48,.08) !important;border-radius:18px !important;box-shadow:0 12px 30px -14px rgba(43,34,48,.18) !important}
-#tab-meditate .sound-btn{background:#6E5FA0 !important;color:#fff !important;border:none !important}
-#tab-meditate .streak-day.today{background:#6E5FA0 !important;color:#fff !important}
-</style>
-<style id="hv-nav">
-.mobile-nav{background:rgba(252,249,244,.94) !important;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid rgba(43,34,48,.08) !important}
-.mobile-tab{color:#A79FAA !important}
-.mobile-tab .mobile-tab-label{color:#A79FAA !important;font-weight:500}
-.mobile-tab.active{color:#6E5FA0 !important}
-.mobile-tab.active .mobile-tab-label{color:#6E5FA0 !important;font-weight:600}
-.app-nav-tabs .nav-tab.active{color:#6E5FA0 !important;background:#EFEAF7 !important}
-</style>
-<style id="hv-sheets-css">
-#hv-scrim{position:fixed;inset:0;background:rgba(30,24,34,.45);display:none;z-index:9998}
-#hv-scrim.on{display:block}
-.hv-sheet{position:fixed;left:50%;transform:translateX(-50%) translateY(103%);bottom:0;width:min(430px,100%);background:#FCF9F4;border-radius:30px 30px 0 0;padding:14px 24px 32px;transition:transform .42s cubic-bezier(.2,.8,.2,1);z-index:9999;box-shadow:0 -20px 50px -20px rgba(43,34,48,.4);max-height:86vh;overflow-y:auto}
-.hv-sheet.on{transform:translateX(-50%) translateY(0)}
-.hv-grab{width:40px;height:5px;border-radius:3px;background:#A79FAA;opacity:.4;margin:0 auto 18px}
-.hv-sic{width:58px;height:58px;border-radius:18px;display:flex;align-items:center;justify-content:center;margin-bottom:16px}
-.hv-sic svg{width:28px;height:28px}
-.hv-sheet h3{font-family:'Fraunces',serif;font-weight:400;font-size:23px;color:#2B2230}
-.hv-sd{font-size:14px;color:#6C6270;line-height:1.55;margin-top:8px}
-.hv-go{margin-top:22px;width:100%;border:none;border-radius:18px;padding:16px;color:#fff;font-family:'Hanken Grotesk',sans-serif;font-size:15px;font-weight:600;cursor:pointer}
-.hv-dismiss{margin-top:10px;width:100%;background:none;border:none;color:#6C6270;font-family:'Hanken Grotesk',sans-serif;font-size:14px;font-weight:500;padding:12px;cursor:pointer}
-</style>
-<script id="hv-sheets">
-(function(){
-function M(){
- var root=document.getElementById('tab-home');if(!root)return false;
- var cards=root.querySelectorAll('.home-card');if(!cards.length)return false;
- var app=document.getElementById('app')||document.body;
- if(!document.getElementById('hv-scrim')){var sc=document.createElement('div');sc.id='hv-scrim';app.appendChild(sc);}
- var scrim=document.getElementById('hv-scrim');var cur=null;
- function show(el){if(cur)cur.classList.remove('on');cur=el;el.classList.add('on');scrim.classList.add('on');}
- function closeAll(){if(cur)cur.classList.remove('on');cur=null;scrim.classList.remove('on');}
- scrim.onclick=closeAll;
- function ensure(){var e=document.getElementById('hv-sheet-generic');if(e)return e;e=document.createElement('div');e.id='hv-sheet-generic';e.className='hv-sheet';app.appendChild(e);return e;}
- var META={chat:{c:'#6E5FA0',t:'Therapy Chat Companion',d:'A private space to be heard — type or speak, any hour. Haven listens without judgment and never leaves this room.',go:'Start talking',ic:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6"><path d="M21 12a8 8 0 0 1-8 8H5l-2 2V12a8 8 0 0 1 8-8h1a8 8 0 0 1 8 8Z"/></svg>'},journal:{c:'#7E9A7C',t:'Your journal',d:'One honest sentence is enough. Private and encrypted — only you can read it.',go:'Open journal',ic:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6"><path d="M5 4h11l3 3v13H5z"/></svg>'},meditate:{c:'#E0A98A',t:'Breathe',d:'A few minutes to reset an anxious mind — guided breathing and calm sessions.',go:'Start meditating',ic:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6"><path d="M12 3c3 3 5 5.5 5 9a5 5 0 0 1-10 0c0-3.5 2-6 5-9Z"/></svg>'},therapists:{c:'#8478A6',t:'Find a therapist',d:'Browse licensed therapists near you — by specialty, price, and availability.',go:'Find therapists',ic:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6"><path d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.5-7 10-7 10Z"/></svg>'}};
- function open(tab){var s=META[tab];if(!s)return;var e=ensure();e.innerHTML='<div class="hv-grab"></div><div class="hv-sic" style="background:'+s.c+'">'+s.ic+'</div><h3>'+s.t+'</h3><p class="hv-sd">'+s.d+'</p><button class="hv-go" style="background:'+s.c+'">'+s.go+'</button><button class="hv-dismiss">Not now</button>';e.querySelector('.hv-go').onclick=function(){closeAll();if(window.switchTab)switchTab(tab,null);};e.querySelector('.hv-dismiss').onclick=closeAll;show(e);}
- var n=0;
- cards.forEach(function(c){if(c.dataset.hvSheet)return;var oc=c.getAttribute('onclick')||'';var m=oc.match(/switchTab\(['"]([a-z]+)['"]/);var tab=m?m[1]:null;if(!tab)return;c.dataset.hvSheet='1';c.setAttribute('data-hvtab',tab);c.removeAttribute('onclick');c.style.cursor='pointer';c.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();open(this.getAttribute('data-hvtab'));});n++;});
- return n>0;
-}
-function boot(n){try{if(M())return;}catch(e){}if(n>0)setTimeout(function(){boot(n-1)},300);}
-if(document.readyState==='complete')boot(20);else window.addEventListener('load',function(){boot(20)});
-})();
-</script>
-
-<style id="hv-navfix-css">
-.hv-hidden-tab{display:none !important}
-.app-nav-logo,.app-nav-logo-dot{cursor:pointer}
-</style>
-<script id="hv-navfix">
-(function(){
-function apply(){
- var logo=document.querySelector('.app-nav-logo');var dot=document.querySelector('.app-nav-logo-dot');
- [logo,dot].forEach(function(e){if(e&&!e.dataset.hvPlans){e.dataset.hvPlans='1';e.style.cursor='pointer';e.addEventListener('click',function(){if(window.switchTab)switchTab('plans',null);});}});
- var tabs=document.querySelectorAll('.mobile-tab');var did=false;
- tabs.forEach(function(t){var oc=t.getAttribute('onclick')||'';var m=oc.match(/switchTab\(['"]([a-z]+)['"]/);var tab=m?m[1]:null;if(tab)did=true;if(['therapists','plans','profile'].indexOf(tab)>=0){t.classList.add('hv-hidden-tab');}});
- var gn=document.getElementById('greetName');
- if(gn&&!gn.dataset.hvClean){gn.dataset.hvClean='1';var clean=function(){var raw=gn.textContent||'';var m=raw.replace(/^\s*hi[,\s]+/i,'').match(/[A-Za-z]{2,}/);var nm=m?m[0]:'';if(nm){nm=nm.charAt(0).toUpperCase()+nm.slice(1);if(gn.textContent!==nm)gn.textContent=nm;}};clean();try{new MutationObserver(clean).observe(gn,{childList:true,characterData:true,subtree:true});}catch(e){}}
- return logo&&did&&gn;
-}
-function boot(n){try{if(apply())return;}catch(e){}if(n>0)setTimeout(function(){boot(n-1)},300);}
-if(document.readyState==='complete')boot(24);else window.addEventListener('load',function(){boot(24)});
-})();
-</script>
-
-
-<script id="hv-upsell">
-(function(){
-function findUpsell(){var u=document.querySelector('#tab-home .home-wrap > [onclick*="plans"]');if(u)return u;return [].slice.call(document.querySelectorAll('#tab-home [onclick*="plans"]')).filter(function(e){return /Unlock All Features/i.test(e.textContent||'');})[0];}
-function decide(){var up=findUpsell();if(!up)return false;var paid=localStorage.getItem('havenPlan')==='paid';var ts=Number(localStorage.getItem('havenTrialStart')||0);var trialActive=localStorage.getItem('havenTrialActive')==='true'&&ts>0&&(Date.now()-ts<7*24*60*60*1000);up.style.display=(!paid&&!trialActive)?'':'none';return true;}
-function boot(n){try{if(decide())return;}catch(e){}if(n>0)setTimeout(function(){boot(n-1)},300);}
-if(document.readyState==='complete')boot(24);else window.addEventListener('load',function(){boot(24)});
-window.addEventListener('iap-purchase',function(){setTimeout(decide,200);});
-window.addEventListener('iap-entitlement-changed',function(){setTimeout(decide,200);});
-})();
-</script>
-
 </body>
 </html>
 
@@ -6411,17 +6353,14 @@ window.addEventListener('iap-entitlement-changed',function(){setTimeout(decide,2
                       });
 
                       window.addEventListener('iap-restore', function (e) {
-    var d = e.detail || {};
-    if (d.restored && d.restored.length > 0) {
-      grantPaid();
-      alert('Your subscription has been restored.');
-      location.reload();
-    } else if (d.status === 'error') {
-      alert('Restore failed: ' + (d.message || 'please try again.'));
-    } else {
-      alert('No active subscription was found for this Apple Account.');
-    }
-  });
+                            var d = e.detail || {};
+                            if (d.restored && d.restored.length > 0) {
+                                    grantPaid();
+                                    location.reload();
+                            } else {
+                                    alert('No previous purchases found for this Apple ID.');
+                            }
+                      });
 
                       document.addEventListener('click', function (ev) {
                             var el = ev.target && ev.target.closest && ev.target.closest('a[href*="stripe.com"], [data-stripe], [data-plan]');
@@ -6453,10 +6392,6 @@ window.addEventListener('iap-entitlement-changed',function(){setTimeout(decide,2
     btn.style.background = 'transparent';
     btn.style.border = '1px solid rgba(128,128,128,.45)';
     btn.style.marginTop = '10px';
-    btn.style.color = '#5b4bd6';
-    btn.style.fontWeight = '600';
-    btn.style.padding = '12px';
-    btn.style.borderRadius = '10px';
     btn.onclick = function () { if (window.havenRestorePurchases) window.havenRestorePurchases(); };
     anchor.parentNode.insertBefore(btn, anchor.nextSibling);
   }
@@ -6464,32 +6399,3 @@ window.addEventListener('iap-entitlement-changed',function(){setTimeout(decide,2
   setInterval(addRestoreBtn, 2000);
 })();
 </script>
-
-                <!-- iOS only: route the "Start my 7-day free trial" CTA (startTrial) to Apple IAP instead of Stripe/Google -->
-                <script>
-                  (function () {
-                      'use strict';
-                      var mh = window.webkit && window.webkit.messageHandlers;
-                      if (!(mh && mh['iap-purchase'])) return;
-                      function planFromSelection() {
-                            var card = document.querySelector('.plan-card.active-plan') || document.querySelector('.plan-card.selected');
-                            var t = (card ? card.textContent : '').toLowerCase();
-                            if (t.indexOf('$0') !== -1 && t.indexOf('free') !== -1) return 'free';
-                            return (t.indexOf('family') !== -1 || t.indexOf('29.99') !== -1) ? 'family' : 'personal';
-                      }
-                      function install() {
-                            if (typeof window.startTrial !== 'function' || window.__havenTrialPatched) return;
-                            window.__havenTrialPatched = true;
-                            var orig = window.startTrial;
-                            window.startTrial = function () {
-                                    var plan = planFromSelection();
-                                    if (plan === 'free') return orig.apply(this, arguments);
-                                    if (window.havenStartNativePurchase) window.havenStartNativePurchase(plan);
-                            };
-                      }
-                      install();
-                      var tries = 0;
-                      var iv = setInterval(function () { install(); if (window.__havenTrialPatched || ++tries > 20) clearInterval(iv); }, 500);
-                  })();
-                </script>
-                </script>
