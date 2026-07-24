@@ -6290,6 +6290,127 @@ if('serviceWorker' in navigator){
   <div class="guided-bar"><div class="guided-bar-fill" id="guidedProgress"></div></div>
   <button class="guided-stop" onclick="stopGuidedSession()">End session</button>
 </div>
+
+<link id="hv-fonts" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&family=Hanken+Grotesk:wght@400;500;600&display=swap">
+<style id="hv-home2">
+#tab-home{position:relative;background:radial-gradient(700px 380px at 18% -4%,#F3E8DE,transparent 58%),radial-gradient(560px 440px at 104% 2%,#ECE6F5,transparent 55%),#FCF9F4 !important;font-family:'Hanken Grotesk',sans-serif !important;border-radius:22px}
+.hv-top{display:flex;align-items:center;justify-content:space-between;margin-top:6px}
+.hv-day{font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#A79FAA}
+.hv-pfp{width:42px;height:42px;border-radius:50%;border:none;background:linear-gradient(145deg,#6E5FA0,#463a72);color:#fff;font-family:'Fraunces',serif;font-size:19px;cursor:pointer;position:relative;box-shadow:0 12px 30px -14px rgba(43,34,48,.3)}
+.hv-pfp::after{content:"";position:absolute;width:11px;height:11px;border-radius:50%;background:#7E9A7C;border:2.5px solid #FCF9F4;right:-1px;bottom:-1px}
+.hv-greet{font-family:'Fraunces',serif;font-weight:360;font-size:30px;line-height:1.1;letter-spacing:-.01em;color:#2B2230;margin-top:14px}
+.hv-greet em{font-style:italic;color:#6E5FA0}
+.hv-gsub{font-size:14px;color:#6C6270;margin-top:7px}
+.hv-mood{display:flex;gap:10px;margin-top:20px}
+.hv-m{flex:1;aspect-ratio:1;max-height:110px;border-radius:18px;background:#fff;border:1px solid rgba(43,34,48,.08);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;box-shadow:0 12px 30px -14px rgba(43,34,48,.28);cursor:pointer;transition:.2s}
+.hv-m .face{width:25px;height:25px;stroke:#6C6270;fill:none;stroke-width:1.6}
+.hv-m span{font-size:10.5px;color:#6C6270;font-weight:500}
+.hv-m.sel{background:#6E5FA0;border-color:#6E5FA0}.hv-m.sel .face{stroke:#fff}.hv-m.sel span{color:#fff}
+.hv-primary{margin-top:22px;border-radius:24px;padding:19px 20px;background:linear-gradient(140deg,#7565aa,#4c3f7a);color:#fff;display:flex;align-items:center;gap:15px;position:relative;overflow:hidden;cursor:pointer;box-shadow:0 20px 40px -20px rgba(78,63,122,.9)}
+.hv-pi{width:52px;height:52px;border-radius:16px;background:rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;flex:none}
+.hv-pi svg{width:26px;height:26px;stroke:#fff;fill:none;stroke-width:1.6}
+.hv-pl{font-family:'Fraunces',serif;font-size:19px;line-height:1.15}
+.hv-ps{font-size:12.5px;color:#B7A9E0;margin-top:3px}
+.hv-arrow{margin-left:auto}.hv-arrow svg{width:22px;height:22px;stroke:#fff;fill:none;stroke-width:1.7}
+.hv-row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:11px;margin-top:12px}
+.hv-c{border-radius:20px;padding:15px 12px 14px;display:flex;flex-direction:column;gap:11px;cursor:pointer}
+.hv-ci{width:34px;height:34px;border-radius:12px;display:flex;align-items:center;justify-content:center}
+.hv-ci svg{width:19px;height:19px;stroke:#fff;fill:none;stroke-width:1.7}
+.hv-cl{font-size:13px;font-weight:600;line-height:1.2;color:#2B2230}
+.hv-cs{font-size:10.5px;color:#6C6270;margin-top:2px}
+.hv-c1{background:#E7EEE4}.hv-c1 .hv-ci{background:#7E9A7C}
+.hv-c2{background:#F7E9DF}.hv-c2 .hv-ci{background:#E0A98A}
+.hv-c3{background:#EDE9F0}.hv-c3 .hv-ci{background:#8478A6}
+.hv-intent{margin-top:16px;padding:20px;border-radius:24px;background:linear-gradient(140deg,#2E2536,#403251);color:#fff;position:relative;overflow:hidden}
+.hv-k{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:#B7A9E0;font-weight:600}
+.hv-intent p{font-family:'Fraunces',serif;font-style:italic;font-weight:340;font-size:18px;line-height:1.42;margin-top:11px;position:relative}
+.hv-orb{position:absolute;width:150px;height:150px;border-radius:50%;right:-40px;bottom:-56px;background:radial-gradient(circle at 35% 35%,#B7A9E0,transparent 68%);opacity:.5}
+#hv-scrim{position:fixed;inset:0;background:rgba(30,24,34,.45);display:none;z-index:9998}
+#hv-scrim.on{display:block}
+.hv-sheet{position:fixed;left:50%;transform:translateX(-50%) translateY(103%);bottom:0;width:min(430px,100%);background:#FCF9F4;border-radius:30px 30px 0 0;padding:14px 24px 30px;transition:transform .42s cubic-bezier(.2,.8,.2,1);z-index:9999;box-shadow:0 -20px 50px -20px rgba(43,34,48,.4);max-height:86vh;overflow-y:auto}
+.hv-sheet.on{transform:translateX(-50%) translateY(0)}
+.hv-grab{width:40px;height:5px;border-radius:3px;background:#A79FAA;opacity:.4;margin:0 auto 18px}
+.hv-sic{width:58px;height:58px;border-radius:18px;display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.hv-sic svg{width:28px;height:28px}
+.hv-sheet h3{font-family:'Fraunces',serif;font-weight:400;font-size:23px;color:#2B2230}
+.hv-sd{font-size:14px;color:#6C6270;line-height:1.55;margin-top:8px}
+.hv-go{margin-top:22px;width:100%;border:none;border-radius:18px;padding:16px;color:#fff;font-family:inherit;font-size:15px;font-weight:600;cursor:pointer}
+.hv-dismiss{margin-top:10px;width:100%;background:none;border:none;color:#6C6270;font-family:inherit;font-size:14px;font-weight:500;padding:12px;cursor:pointer}
+.hv-pill{display:inline-flex;align-items:center;gap:6px;margin-top:9px;font-size:11.5px;font-weight:600;color:#6E5FA0;background:#EFEAF7;padding:5px 11px;border-radius:20px}
+.hv-plan{border:1px solid rgba(43,34,48,.08);border-radius:20px;padding:16px 17px;margin-top:12px;cursor:pointer;background:#fff}
+.hv-plan.feat{border:2px solid #6E5FA0}
+.hv-plan .ph{display:flex;align-items:baseline;justify-content:space-between}
+.hv-plan .pn{font-family:'Fraunces',serif;font-size:19px}
+.hv-plan .pp{font-size:15px;font-weight:600}
+.hv-plan .pp small{font-size:11px;color:#6C6270;font-weight:500}
+.hv-badge{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:#6E5FA0;background:#EFEAF7;padding:3px 9px;border-radius:10px;margin-left:8px}
+</style>
+<script id="hv-home-js">
+(function(){
+function T(){
+ var root=document.getElementById('tab-home');if(!root||root.dataset.hvProto)return;
+ var wrap=root.querySelector('.home-wrap')||root;if(!wrap)return;
+ root.dataset.hvProto='1';
+ try{
+  root.style.position='relative';
+  var gn=document.getElementById('greetName');var raw=((gn&&gn.textContent)||localStorage.getItem('havenName')||'').toString();
+  var mm=raw.replace(/^\s*hi[,\s]+/i,'').match(/[A-Za-z]{2,}/);var name=mm?mm[0]:'there';name=name.charAt(0).toUpperCase()+name.slice(1);
+  var h=new Date().getHours();var part=h<5?'Late night':h<12?'Good morning':h<17?'Good afternoon':h<22?'Good evening':'Winding down';
+  var days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  var face={Low:'<circle cx="12" cy="12" r="9"/><path d="M8 16c1-1.4 2.4-1.6 4-1.6s3 .2 4 1.6"/><path d="M9 9h.01M15 9h.01"/>',Okay:'<circle cx="12" cy="12" r="9"/><path d="M8.5 15h7"/><path d="M9 9h.01M15 9h.01"/>',Good:'<circle cx="12" cy="12" r="9"/><path d="M8 14c1 1.2 2.4 1.6 4 1.6s3-.4 4-1.6"/><path d="M9 9h.01M15 9h.01"/>',Great:'<circle cx="12" cy="12" r="9"/><path d="M7.5 13.5c1.2 2 2.8 2.8 4.5 2.8s3.3-.8 4.5-2.8"/><path d="M9 9h.01M15 9h.01"/>'};
+  function mo(l,sel){return '<div class="hv-m'+(sel?' sel':'')+'"><svg class="face" viewBox="0 0 24 24">'+face[l]+'</svg><span>'+l+'</span></div>';}
+  root.innerHTML='<div class="hv-top"><span class="hv-day">'+days[new Date().getDay()]+'</span><button class="hv-pfp" data-sheet="profile">'+name.charAt(0)+'</button></div><div class="hv-greet">'+part+',<br><span id="greetName">'+name+'</span>. <em>Breathe.</em></div><div class="hv-gsub">How are you arriving today?</div><div class="hv-mood" id="hvMood">'+mo('Low')+mo('Okay')+mo('Good',1)+mo('Great')+'</div><div class="hv-primary" data-sheet="chat"><div class="hv-pi"><svg viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-8 8H5l-2 2V12a8 8 0 0 1 8-8h1a8 8 0 0 1 8 8Z"/><path d="M9 12h.01M13 12h.01"/></svg></div><div><div class="hv-pl">Therapy Chat Companion</div><div class="hv-ps">Chat or voice · always here</div></div><span class="hv-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div><div class="hv-row3"><div class="hv-c hv-c1" data-sheet="journal"><div class="hv-ci"><svg viewBox="0 0 24 24"><path d="M5 4h11l3 3v13H5z"/><path d="M9 10h6M9 14h4"/></svg></div><div><div class="hv-cl">Journal</div><div class="hv-cs">One line</div></div></div><div class="hv-c hv-c2" data-sheet="breathe"><div class="hv-ci"><svg viewBox="0 0 24 24"><path d="M12 3c3 3 5 5.5 5 9a5 5 0 0 1-10 0c0-3.5 2-6 5-9Z"/></svg></div><div><div class="hv-cl">Breathe</div><div class="hv-cs">4 min</div></div></div><div class="hv-c hv-c3" data-sheet="therapist"><div class="hv-ci"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.5-7 10-7 10Z"/></svg></div><div><div class="hv-cl">Therapists</div><div class="hv-cs">Near you</div></div></div></div><div class="hv-intent"><div class="hv-orb"></div><div class="hv-k">Tonight’s intention</div><p>“You don’t have to carry it all at once.”</p></div>';
+  document.getElementById('hvMood').addEventListener('click',function(e){var t=e.target.closest('.hv-m');if(!t)return;this.querySelectorAll('.hv-m').forEach(function(x){x.classList.remove('sel')});t.classList.add('sel');});
+  var app=document.getElementById('app')||document.body;
+  if(!document.getElementById('hv-scrim')){var sc=document.createElement('div');sc.id='hv-scrim';app.appendChild(sc);}
+  var scrim=document.getElementById('hv-scrim');var cur=null;
+  function show(el){if(cur)cur.classList.remove('on');cur=el;el.classList.add('on');scrim.classList.add('on');}
+  function closeAll(){if(cur)cur.classList.remove('on');cur=null;scrim.classList.remove('on');}
+  function ensure(id){var e=document.getElementById(id);if(e)return e;e=document.createElement('div');e.id=id;e.className='hv-sheet';app.appendChild(e);return e;}
+  var S={chat:{c:'#6E5FA0',t:'Therapy Chat Companion',d:'A private space to be heard — type or speak, any hour. Haven listens without judgment and never leaves this room.',go:'Start talking',tab:'chat',ic:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6"><path d="M21 12a8 8 0 0 1-8 8H5l-2 2V12a8 8 0 0 1 8-8h1a8 8 0 0 1 8 8Z"/></svg>'},journal:{c:'#7E9A7C',t:'Your journal',d:'One honest sentence is enough. Private and encrypted — only you can read it.',go:'Open journal',tab:'journal',ic:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6"><path d="M5 4h11l3 3v13H5z"/></svg>'},breathe:{c:'#E0A98A',t:'Breathe',d:'A few minutes to reset an anxious mind. Guided breathing and calm sessions.',go:'Start meditating',tab:'meditate',ic:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6"><path d="M12 3c3 3 5 5.5 5 9a5 5 0 0 1-10 0c0-3.5 2-6 5-9Z"/></svg>'},therapist:{c:'#8478A6',t:'Find a therapist',d:'Browse licensed therapists near you — by specialty, price, and availability.',go:'Find therapists',tab:'therapists',ic:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6"><path d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.5-7 10-7 10Z"/></svg>'}};
+  function openF(k){var s=S[k];var e=ensure('hv-sheet-generic');e.innerHTML='<div class="hv-grab"></div><div class="hv-sic" style="background:'+s.c+'">'+s.ic+'</div><h3>'+s.t+'</h3><p class="hv-sd">'+s.d+'</p><button class="hv-go" style="background:'+s.c+'">'+s.go+'</button><button class="hv-dismiss">Not now</button>';e.querySelector('.hv-go').onclick=function(){closeAll();if(window.switchTab)switchTab(s.tab,null);};e.querySelector('.hv-dismiss').onclick=closeAll;show(e);}
+  function openP(){var e=ensure('hv-sheet-profile');e.innerHTML='<div class="hv-grab"></div><div style="display:flex;align-items:center;gap:14px"><div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(145deg,#6E5FA0,#463a72);color:#fff;font-family:Fraunces,serif;font-size:24px;display:flex;align-items:center;justify-content:center">'+name.charAt(0)+'</div><div><div style="font-family:Fraunces,serif;font-size:21px">'+name+'</div><div style="font-size:13px;color:#6C6270">Free plan</div><span class="hv-pill">trial active</span></div></div><button class="hv-go" style="background:linear-gradient(140deg,#7565aa,#4c3f7a);margin-top:18px" id="hvUpg">Upgrade to Unlimited</button><button class="hv-dismiss">Close</button>';e.querySelector('#hvUpg').onclick=openPl;e.querySelector('.hv-dismiss').onclick=closeAll;show(e);}
+  function openPl(){var e=ensure('hv-sheet-plans');e.innerHTML='<div class="hv-grab"></div><h3>Choose your plan</h3><p class="hv-sd">Try free for 7 days. Unlimited everything. Cancel anytime.</p><div class="hv-plan feat"><div class="ph"><span class="pn">Personal<span class="hv-badge">Popular</span></span><span class="pp">$12.99<small>/mo</small></span></div></div><div class="hv-plan"><div class="ph"><span class="pn">Family</span><span class="pp">$29.99<small>/mo</small></span></div></div><button class="hv-go" style="background:#6E5FA0;margin-top:16px" id="hvToPlans">See plans</button><button class="hv-dismiss">Maybe later</button>';e.querySelector('#hvToPlans').onclick=function(){closeAll();if(window.switchTab)switchTab('plans',null);};e.querySelector('.hv-dismiss').onclick=closeAll;show(e);}
+  root.querySelectorAll('[data-sheet]').forEach(function(el){el.addEventListener('click',function(){var k=this.getAttribute('data-sheet');if(k==='profile')openP();else openF(k);});});
+  scrim.addEventListener('click',closeAll);
+ }catch(e){}
+}
+function boot(n){T();var r=document.getElementById('tab-home');if((!r||!r.dataset.hvProto)&&n>0)setTimeout(function(){boot(n-1)},250);}
+if(document.readyState==='complete')boot(24);else window.addEventListener('load',function(){boot(24)});
+})();
+</script>
+
+<style id="hv-navfix-css">
+.hv-hidden-tab{display:none !important}
+.app-nav-logo,.app-nav-logo-dot{cursor:pointer}
+</style>
+<script id="hv-navfix">
+(function(){
+function apply(){
+ var logo=document.querySelector('.app-nav-logo');var dot=document.querySelector('.app-nav-logo-dot');
+ [logo,dot].forEach(function(e){if(e&&!e.dataset.hvPlans){e.dataset.hvPlans='1';e.style.cursor='pointer';e.addEventListener('click',function(){if(window.switchTab)switchTab('plans',null);});}});
+ var tabs=document.querySelectorAll('.mobile-tab');var did=false;
+ tabs.forEach(function(t){var oc=t.getAttribute('onclick')||'';var m=oc.match(/switchTab\(['"]([a-z]+)['"]/);var tab=m?m[1]:null;if(tab)did=true;if(['therapists','plans','profile'].indexOf(tab)>=0){t.classList.add('hv-hidden-tab');}});
+ var gn=document.getElementById('greetName');
+ if(gn&&!gn.dataset.hvClean){gn.dataset.hvClean='1';var clean=function(){var raw=gn.textContent||'';var m=raw.replace(/^\s*hi[,\s]+/i,'').match(/[A-Za-z]{2,}/);var nm=m?m[0]:'';if(nm){nm=nm.charAt(0).toUpperCase()+nm.slice(1);if(gn.textContent!==nm)gn.textContent=nm;}};clean();try{new MutationObserver(clean).observe(gn,{childList:true,characterData:true,subtree:true});}catch(e){}}
+ return logo&&did&&gn;
+}
+function boot(n){try{if(apply())return;}catch(e){}if(n>0)setTimeout(function(){boot(n-1)},300);}
+if(document.readyState==='complete')boot(24);else window.addEventListener('load',function(){boot(24)});
+})();
+</script>
+
+<script id="hv-upsell">
+(function(){
+function findUpsell(){var u=document.querySelector('#tab-home .home-wrap > [onclick*="plans"]');if(u)return u;return [].slice.call(document.querySelectorAll('#tab-home [onclick*="plans"]')).filter(function(e){return /Unlock All Features/i.test(e.textContent||'');})[0];}
+function decide(){var up=findUpsell();if(!up)return false;var paid=localStorage.getItem('havenPlan')==='paid';var ts=Number(localStorage.getItem('havenTrialStart')||0);var trialActive=localStorage.getItem('havenTrialActive')==='true'&&ts>0&&(Date.now()-ts<7*24*60*60*1000);up.style.display=(!paid&&!trialActive)?'':'none';return true;}
+function boot(n){try{if(decide())return;}catch(e){}if(n>0)setTimeout(function(){boot(n-1)},300);}
+if(document.readyState==='complete')boot(24);else window.addEventListener('load',function(){boot(24)});
+window.addEventListener('iap-purchase',function(){setTimeout(decide,200);});
+window.addEventListener('iap-entitlement-changed',function(){setTimeout(decide,200);});
+})();
+</script>
+
 </body>
 </html>
 
