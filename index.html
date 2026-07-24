@@ -6280,6 +6280,42 @@ if('serviceWorker' in navigator){
 .mobile-tab.active .mobile-tab-label{color:#6E5FA0 !important;font-weight:600}
 .app-nav-tabs .nav-tab.active{color:#6E5FA0 !important;background:#EFEAF7 !important}
 </style>
+<style id="hv-sheets-css">
+#hv-scrim{position:fixed;inset:0;background:rgba(30,24,34,.45);opacity:0;pointer-events:none;transition:.35s;z-index:9998;backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)}
+#hv-scrim.on{opacity:1;pointer-events:auto}
+.hv-sheet{position:fixed;left:50%;transform:translateX(-50%) translateY(103%);bottom:0;width:min(430px,100%);background:#FCF9F4;border-radius:30px 30px 0 0;padding:14px 24px 32px;transition:transform .42s cubic-bezier(.2,.8,.2,1);z-index:9999;box-shadow:0 -20px 50px -20px rgba(43,34,48,.4);max-height:86vh;overflow-y:auto}
+.hv-sheet.on{transform:translateX(-50%) translateY(0)}
+.hv-grab{width:40px;height:5px;border-radius:3px;background:#A79FAA;opacity:.4;margin:0 auto 18px}
+.hv-sic{width:58px;height:58px;border-radius:18px;display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.hv-sic svg{width:28px;height:28px}
+.hv-sheet h3{font-family:'Fraunces',serif;font-weight:400;font-size:23px;color:#2B2230}
+.hv-sd{font-size:14px;color:#6C6270;line-height:1.55;margin-top:8px}
+.hv-go{margin-top:22px;width:100%;border:none;border-radius:18px;padding:16px;color:#fff;font-family:'Hanken Grotesk',sans-serif;font-size:15px;font-weight:600;cursor:pointer}
+.hv-dismiss{margin-top:10px;width:100%;background:none;border:none;color:#6C6270;font-family:'Hanken Grotesk',sans-serif;font-size:14px;font-weight:500;padding:12px;cursor:pointer}
+</style>
+<script id="hv-sheets">
+(function(){
+function M(){
+ var root=document.getElementById('tab-home');if(!root)return false;
+ var cards=root.querySelectorAll('.home-card');if(!cards.length)return false;
+ var app=document.getElementById('app')||document.body;
+ if(!document.getElementById('hv-scrim')){var sc=document.createElement('div');sc.id='hv-scrim';app.appendChild(sc);}
+ var scrim=document.getElementById('hv-scrim');var cur=null;
+ function show(el){if(cur)cur.classList.remove('on');cur=el;el.classList.add('on');scrim.classList.add('on');}
+ function closeAll(){if(cur)cur.classList.remove('on');cur=null;scrim.classList.remove('on');}
+ scrim.onclick=closeAll;
+ function ensure(){var e=document.getElementById('hv-sheet-generic');if(e)return e;e=document.createElement('div');e.id='hv-sheet-generic';e.className='hv-sheet';app.appendChild(e);return e;}
+ var META={chat:{c:'#6E5FA0',t:'Therapy Chat Companion',d:'A private space to be heard — type or speak, any hour. Haven listens without judgment and never leaves this room.',go:'Start talking',ic:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6"><path d="M21 12a8 8 0 0 1-8 8H5l-2 2V12a8 8 0 0 1 8-8h1a8 8 0 0 1 8 8Z"/></svg>'},journal:{c:'#7E9A7C',t:'Your journal',d:'One honest sentence is enough. Private and encrypted — only you can read it.',go:'Open journal',ic:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6"><path d="M5 4h11l3 3v13H5z"/></svg>'},meditate:{c:'#E0A98A',t:'Breathe',d:'A few minutes to reset an anxious mind — guided breathing and calm sessions.',go:'Start meditating',ic:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6"><path d="M12 3c3 3 5 5.5 5 9a5 5 0 0 1-10 0c0-3.5 2-6 5-9Z"/></svg>'},therapists:{c:'#8478A6',t:'Find a therapist',d:'Browse licensed therapists near you — by specialty, price, and availability.',go:'Find therapists',ic:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6"><path d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.5-7 10-7 10Z"/></svg>'}};
+ function open(tab){var s=META[tab];if(!s)return;var e=ensure();e.innerHTML='<div class="hv-grab"></div><div class="hv-sic" style="background:'+s.c+'">'+s.ic+'</div><h3>'+s.t+'</h3><p class="hv-sd">'+s.d+'</p><button class="hv-go" style="background:'+s.c+'">'+s.go+'</button><button class="hv-dismiss">Not now</button>';e.querySelector('.hv-go').onclick=function(){closeAll();if(window.switchTab)switchTab(tab,null);};e.querySelector('.hv-dismiss').onclick=closeAll;show(e);}
+ var n=0;
+ cards.forEach(function(c){if(c.dataset.hvSheet)return;var oc=c.getAttribute('onclick')||'';var m=oc.match(/switchTab\(['"]([a-z]+)['"]/);var tab=m?m[1]:null;if(!tab)return;c.dataset.hvSheet='1';c.setAttribute('data-hvtab',tab);c.removeAttribute('onclick');c.style.cursor='pointer';c.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();open(this.getAttribute('data-hvtab'));});n++;});
+ return n>0;
+}
+function boot(n){try{if(M())return;}catch(e){}if(n>0)setTimeout(function(){boot(n-1)},300);}
+if(document.readyState==='complete')boot(20);else window.addEventListener('load',function(){boot(20)});
+})();
+</script>
+
 </body>
 </html>
 
