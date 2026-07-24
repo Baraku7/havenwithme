@@ -6336,6 +6336,18 @@ if(document.readyState==='complete')boot(24);else window.addEventListener('load'
 })();
 </script>
 
+
+<script id="hv-upsell">
+(function(){
+function findUpsell(){var u=document.querySelector('#tab-home .home-wrap > [onclick*="plans"]');if(u)return u;return [].slice.call(document.querySelectorAll('#tab-home [onclick*="plans"]')).filter(function(e){return /Unlock All Features/i.test(e.textContent||'');})[0];}
+function decide(){var up=findUpsell();if(!up)return false;var paid=localStorage.getItem('havenPlan')==='paid';var ts=Number(localStorage.getItem('havenTrialStart')||0);var trialActive=localStorage.getItem('havenTrialActive')==='true'&&ts>0&&(Date.now()-ts<7*24*60*60*1000);up.style.display=(!paid&&!trialActive)?'':'none';return true;}
+function boot(n){try{if(decide())return;}catch(e){}if(n>0)setTimeout(function(){boot(n-1)},300);}
+if(document.readyState==='complete')boot(24);else window.addEventListener('load',function(){boot(24)});
+window.addEventListener('iap-purchase',function(){setTimeout(decide,200);});
+window.addEventListener('iap-entitlement-changed',function(){setTimeout(decide,200);});
+})();
+</script>
+
 </body>
 </html>
 
