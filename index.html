@@ -6238,6 +6238,40 @@ if('serviceWorker' in navigator){
 .hv-orb{position:absolute;width:140px;height:140px;border-radius:50%;right:-38px;bottom:-50px;background:radial-gradient(circle at 35% 35%,#B7A9E0,transparent 68%);opacity:.5}
 </style>
 <script id="hv-home-js">(function(){function T(){var root=document.getElementById('tab-home');if(!root||root.dataset.hvDone)return;var wrap=root.querySelector('.home-wrap');if(!wrap)return;var g=wrap.querySelector('.home-greeting');if(!g)return;root.dataset.hvDone='1';try{var gn=document.getElementById('greetName');var raw=((gn&&gn.textContent)||localStorage.getItem('havenName')||'').toString();var mm=raw.replace(/^\s*hi[,\s]+/i,'').match(/[A-Za-z]{2,}/);var nm=mm?mm[0]:'there';nm=nm.charAt(0).toUpperCase()+nm.slice(1);var h=new Date().getHours();var part=h<5?'Late night':h<12?'Good morning':h<17?'Good afternoon':h<22?'Good evening':'Winding down';g.innerHTML='<div class="hv-greet">'+part+',<br><span id="greetName">'+nm+'</span>. <em>Breathe.</em></div><div class="hv-gsub">How are you arriving today?</div>';var labels=[['Talk it out','Chat or voice'],['Journal','One line today'],['Breathe','4 min reset'],['Therapists','Near you']];wrap.querySelectorAll('.home-card').forEach(function(c,i){if(!labels[i])return;var t=c.querySelector('.home-card-title'),su=c.querySelector('.home-card-sub');if(t)t.textContent=labels[i][0];if(su)su.textContent=labels[i][1];});var up=wrap.querySelector('[onclick*="plans"]');var it=document.createElement('div');it.className='hv-intention';var qs=['\u201cYou don\u2019t have to carry it all at once.\u201d','\u201cWhatever you\u2019re feeling is allowed to be here.\u201d','\u201cRest is not something you earn. It\u2019s something you need.\u201d'];it.innerHTML='<div class="hv-orb"></div><div class="hv-k">Tonight\u2019s intention</div><p>'+qs[Math.floor(Math.random()*qs.length)]+'</p>';if(up)wrap.insertBefore(it,up);else wrap.appendChild(it);}catch(e){}}function boot(n){T();var r=document.getElementById('tab-home');if((!r||!r.dataset.hvDone)&&n>0)setTimeout(function(){boot(n-1)},250);}if(document.readyState==='complete')boot(24);else window.addEventListener('load',function(){boot(24)});})();</script>
+<style id="hv-tabs">
+#tab-chat,#tab-journal,#tab-meditate{background:radial-gradient(700px 380px at 18% -4%,#F3E8DE,transparent 58%),radial-gradient(560px 440px at 104% 2%,#ECE6F5,transparent 55%),#FCF9F4 !important;font-family:'Hanken Grotesk',sans-serif !important;border-radius:22px}
+#tab-chat .chat-top{border-bottom:1px solid rgba(43,34,48,.08) !important}
+#tab-chat .chat-top-avatar{background:linear-gradient(145deg,#6E5FA0,#4a3d78) !important}
+#tab-chat .chat-top-online{background:#7E9A7C !important}
+#tab-chat .chat-top-name{color:#2B2230 !important;font-weight:600}
+#tab-chat .chat-top-status{color:#7E9A7C !important}
+#tab-chat .chat-top-voice{background:#EFEAF7 !important;color:#6E5FA0 !important;border:none !important}
+#tab-chat .bubble.ai{background:#fff !important;border:1px solid rgba(43,34,48,.08) !important;color:#2B2230 !important;border-radius:20px 20px 20px 7px !important;box-shadow:0 12px 30px -14px rgba(43,34,48,.22) !important}
+#tab-chat .bubble.user,#tab-chat .bubble.me,#tab-chat .bubble.you{background:#6E5FA0 !important;color:#fff !important;border-radius:20px 20px 7px 20px !important}
+#tab-chat .qr{background:#EFEAF7 !important;color:#6E5FA0 !important;border:none !important;border-radius:14px !important;font-weight:500}
+#tab-chat .chat-input-row{background:#fff !important;border:1px solid rgba(43,34,48,.08) !important;border-radius:22px !important;box-shadow:0 12px 30px -14px rgba(43,34,48,.22) !important}
+#tab-chat .send-btn{background:#6E5FA0 !important;border:none !important}
+#tab-journal .journal-h{font-family:'Fraunces',serif !important;font-weight:360 !important;font-size:26px !important;color:#2B2230 !important}
+#tab-journal .journal-sub{color:#6C6270 !important}
+#tab-journal .journal-composer{background:linear-gradient(135deg,#E7EEE4,#DBE7D6) !important;border:none !important;border-radius:20px !important}
+#tab-journal .journal-date{color:#5c7359 !important;font-weight:600}
+#tab-journal .journal-ta{background:rgba(255,255,255,.65) !important;border:1px solid rgba(43,34,48,.06) !important;border-radius:14px !important;color:#2B2230 !important}
+#tab-journal .journal-save-btn{background:#7E9A7C !important;border:none !important;border-radius:14px !important;color:#fff !important}
+#tab-journal .journal-entry{background:#fff !important;border:1px solid rgba(43,34,48,.08) !important;border-radius:18px !important;box-shadow:0 12px 30px -14px rgba(43,34,48,.22) !important}
+#tab-journal .entry-meta{color:#A79FAA !important;font-weight:600;letter-spacing:.04em;text-transform:uppercase;font-size:10.5px}
+#tab-journal .entry-text{font-family:'Fraunces',serif !important;color:#413849 !important;line-height:1.45}
+#tab-meditate .session-card{background:#fff !important;border:1px solid rgba(43,34,48,.08) !important;border-radius:16px !important;box-shadow:0 12px 30px -14px rgba(43,34,48,.22) !important}
+#tab-meditate .session-card.active-sess{background:linear-gradient(160deg,#34294a,#241d33) !important;border:none !important;color:#fff !important}
+#tab-meditate .breath-glow{background:radial-gradient(circle at 40% 38%,rgba(183,169,224,.9),transparent 70%) !important}
+#tab-meditate .breath-ring-outer{border-color:rgba(183,169,224,.4) !important}
+#tab-meditate .breath-ring-inner{border-color:rgba(183,169,224,.7) !important}
+#tab-meditate .session-name{color:#2B2230 !important;font-weight:600}
+#tab-meditate .session-card.active-sess .session-name{color:#fff !important}
+#tab-meditate .session-tag.premium{background:#F7E9DF !important;color:#B0662f !important}
+#tab-meditate .sounds-card,#tab-meditate .streak-card{background:#fff !important;border:1px solid rgba(43,34,48,.08) !important;border-radius:18px !important;box-shadow:0 12px 30px -14px rgba(43,34,48,.18) !important}
+#tab-meditate .sound-btn{background:#6E5FA0 !important;color:#fff !important;border:none !important}
+#tab-meditate .streak-day.today{background:#6E5FA0 !important;color:#fff !important}
+</style>
 </body>
 </html>
 
