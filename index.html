@@ -6316,6 +6316,26 @@ if(document.readyState==='complete')boot(20);else window.addEventListener('load'
 })();
 </script>
 
+<style id="hv-navfix-css">
+.hv-hidden-tab{display:none !important}
+.app-nav-logo,.app-nav-logo-dot{cursor:pointer}
+</style>
+<script id="hv-navfix">
+(function(){
+function apply(){
+ var logo=document.querySelector('.app-nav-logo');var dot=document.querySelector('.app-nav-logo-dot');
+ [logo,dot].forEach(function(e){if(e&&!e.dataset.hvPlans){e.dataset.hvPlans='1';e.style.cursor='pointer';e.addEventListener('click',function(){if(window.switchTab)switchTab('plans',null);});}});
+ var tabs=document.querySelectorAll('.mobile-tab');var did=false;
+ tabs.forEach(function(t){var oc=t.getAttribute('onclick')||'';var m=oc.match(/switchTab\(['"]([a-z]+)['"]/);var tab=m?m[1]:null;if(tab)did=true;if(['therapists','plans','profile'].indexOf(tab)>=0){t.classList.add('hv-hidden-tab');}});
+ var gn=document.getElementById('greetName');
+ if(gn&&!gn.dataset.hvClean){gn.dataset.hvClean='1';var clean=function(){var raw=gn.textContent||'';var m=raw.replace(/^\s*hi[,\s]+/i,'').match(/[A-Za-z]{2,}/);var nm=m?m[0]:'';if(nm){nm=nm.charAt(0).toUpperCase()+nm.slice(1);if(gn.textContent!==nm)gn.textContent=nm;}};clean();try{new MutationObserver(clean).observe(gn,{childList:true,characterData:true,subtree:true});}catch(e){}}
+ return logo&&did&&gn;
+}
+function boot(n){try{if(apply())return;}catch(e){}if(n>0)setTimeout(function(){boot(n-1)},300);}
+if(document.readyState==='complete')boot(24);else window.addEventListener('load',function(){boot(24)});
+})();
+</script>
+
 </body>
 </html>
 
