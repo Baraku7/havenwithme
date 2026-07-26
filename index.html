@@ -6591,6 +6591,49 @@ if(document.readyState==='complete')start();else window.addEventListener('load',
 })();
 </script>
 
+
+<style id="hv-legal-css">
+#tab-plans .hv-legal{
+  max-width:520px;
+  margin:26px auto calc(96px + env(safe-area-inset-bottom,0px));
+  padding:0 20px;
+  text-align:center;
+  font-family:'Inter',-apple-system,system-ui,sans-serif;
+}
+#tab-plans .hv-legal p{
+  font-size:12px;
+  line-height:1.6;
+  color:var(--slate,#6B6B8A);
+  margin:0 0 10px;
+}
+#tab-plans .hv-legal a{
+  color:var(--haven,#5B4FE8);
+  text-decoration:underline;
+  font-weight:500;
+  padding:6px 4px;
+  display:inline-block;
+}
+</style>
+<script id="hv-legal">
+(function(){
+function add(){
+  var plans=document.getElementById('tab-plans');
+  if(!plans) return false;
+  if(plans.querySelector('.hv-legal')) return true;
+  var d=document.createElement('div');
+  d.className='hv-legal';
+  d.innerHTML='<p>Payment is charged to your Apple Account at confirmation of purchase. Subscriptions renew automatically unless auto-renew is turned off at least 24 hours before the end of the current period. Manage or cancel anytime in your Apple Account settings.</p>'
+    +'<p><a href="/terms">Terms of Use</a> &nbsp;·&nbsp; <a href="/privacy">Privacy Policy</a></p>';
+  plans.appendChild(d);
+  return true;
+}
+function boot(n){try{if(add())return;}catch(e){}if(n>0)setTimeout(function(){boot(n-1)},300);}
+if(document.readyState==='complete')boot(30);else window.addEventListener('load',function(){boot(30)});
+// the plans panel can be re-rendered on tab switch — re-add if it disappears
+document.addEventListener('click',function(){setTimeout(function(){try{add();}catch(e){}},250);},true);
+})();
+</script>
+
 </body>
 </html>
 
