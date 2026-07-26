@@ -6505,6 +6505,92 @@ try{
 #tab-home.active .hv-intent p{margin-top:9px}
 </style>
 
+
+<style id="hv-tint-css">
+/* Color-coordinate Home + its slide-up sheets with the rest of the app by
+   mapping the home palette onto the app's existing design tokens. */
+#tab-home{
+  background:
+    radial-gradient(700px 380px at 18% -4%, var(--haven4), transparent 58%),
+    radial-gradient(560px 440px at 104% 2%, var(--teal2), transparent 55%),
+    var(--snow) !important;
+  font-family:'Inter',-apple-system,system-ui,sans-serif !important;
+}
+#tab-home .hv-day{color:var(--mist)}
+#tab-home .hv-brand{color:var(--ink)}
+#tab-home .hv-brand-dot{background:var(--haven)}
+#tab-home .hv-pfp{background:linear-gradient(145deg,var(--haven2),var(--haven));box-shadow:0 12px 30px -14px rgba(91,79,232,.45)}
+#tab-home .hv-pfp::after{background:var(--teal);border-color:var(--snow)}
+#tab-home .hv-greet{color:var(--ink)}
+#tab-home .hv-greet em{color:var(--haven)}
+#tab-home .hv-gsub{color:var(--slate)}
+
+#tab-home .hv-m{background:var(--white);border-color:var(--fog)}
+#tab-home .hv-m .face{stroke:var(--slate)}
+#tab-home .hv-m span{color:var(--slate)}
+#tab-home .hv-m.sel{background:var(--haven);border-color:var(--haven)}
+#tab-home .hv-m.sel .face{stroke:#fff}
+#tab-home .hv-m.sel span{color:#fff}
+
+#tab-home .hv-primary{background:linear-gradient(140deg,var(--haven2),var(--haven));box-shadow:0 20px 40px -20px rgba(91,79,232,.55)}
+#tab-home .hv-ps{color:var(--haven3)}
+
+#tab-home .hv-c1{background:var(--teal2)} #tab-home .hv-c1 .hv-ci{background:var(--teal)}
+#tab-home .hv-c2{background:var(--gold2)} #tab-home .hv-c2 .hv-ci{background:var(--gold)}
+#tab-home .hv-c3{background:var(--rose2)} #tab-home .hv-c3 .hv-ci{background:var(--rose)}
+#tab-home .hv-cl{color:var(--ink)}
+#tab-home .hv-cs{color:var(--slate)}
+
+#tab-home .hv-intent{background:linear-gradient(140deg,var(--ink2),var(--ink3))}
+#tab-home .hv-k{color:var(--haven3)}
+#tab-home .hv-orb{background:radial-gradient(circle at 35% 35%,var(--haven3),transparent 68%)}
+
+/* slide-up sheets */
+.hv-sheet{background:var(--white)}
+.hv-sheet h3{color:var(--ink)}
+.hv-sheet .hv-sd{color:var(--slate)}
+.hv-sheet .hv-grab{background:var(--mist)}
+.hv-sheet .hv-dismiss{color:var(--slate)}
+.hv-sheet .hv-pill{color:var(--haven);background:var(--haven4)}
+.hv-sheet .hv-plan{background:var(--white);border-color:var(--fog)}
+.hv-sheet .hv-plan.feat{border-color:var(--haven)}
+.hv-sheet .hv-plan .pn{color:var(--ink)}
+.hv-sheet .hv-plan .pp{color:var(--ink)}
+.hv-sheet .hv-plan .pp small{color:var(--slate)}
+.hv-sheet .hv-badge{color:var(--haven);background:var(--haven4)}
+</style>
+<script id="hv-tint">
+(function(){
+// The sheet icons/buttons get their colour from inline styles written by hv-home-js,
+// so remap those hexes onto the app tokens whenever a sheet renders.
+var MAP={'#6E5FA0':'#5B4FE8','#7E9A7C':'#2EC4B6','#E0A98A':'#F4A261','#8478A6':'#E84F7B','#463a72':'#4438C4','#7565aa':'#7B6FF0','#4c3f7a':'#5B4FE8'};
+function recolor(){
+  var sheets=document.querySelectorAll('.hv-sheet');
+  for(var i=0;i<sheets.length;i++){
+    var els=sheets[i].querySelectorAll('[style]');
+    for(var j=0;j<els.length;j++){
+      var s=els[j].getAttribute('style');
+      if(!s)continue;
+      var out=s;
+      for(var k in MAP){
+        if(!Object.prototype.hasOwnProperty.call(MAP,k))continue;
+        out=out.replace(new RegExp(k,'gi'),MAP[k]);
+      }
+      if(out!==s)els[j].setAttribute('style',out);
+    }
+  }
+}
+function start(){
+  recolor();
+  try{
+    new MutationObserver(function(){recolor();}).observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['style','class']});
+  }catch(e){}
+  document.addEventListener('click',function(){setTimeout(recolor,60);setTimeout(recolor,300);},true);
+}
+if(document.readyState==='complete')start();else window.addEventListener('load',start);
+})();
+</script>
+
 </body>
 </html>
 
