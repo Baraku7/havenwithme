@@ -6634,6 +6634,48 @@ document.addEventListener('click',function(){setTimeout(function(){try{add();}ca
 })();
 </script>
 
+
+<script id="hv-code">
+/* Access code — hardened 27 July 2026.
+   The previous code was a plaintext string in this file, so anyone reading the page
+   source could unlock premium for free. Only a SHA-256 hash is stored now, so the
+   code cannot be read out of the source. The old "havenvip" code no longer works.
+   The mechanism is kept so promotional codes can still be issued when needed.
+   NOTE: this is still client-side. It raises the bar considerably but is not a
+   substitute for verifying entitlement on the server. */
+(function(){
+  var CODE_HASH='6e6ae93c6afcd6df3d8ff3cfbba2b46b67da907c7ac726fb526ed74503e6a921';
+  var ENABLED=true; // set to false to switch promotional codes off entirely
+
+  function sha256(str){
+    var buf=new TextEncoder().encode(str);
+    return crypto.subtle.digest('SHA-256',buf).then(function(d){
+      return [].map.call(new Uint8Array(d),function(b){return b.toString(16).padStart(2,'0');}).join('');
+    });
+  }
+  function unlock(){
+    try{
+      localStorage.setItem('havenPlan','paid');
+      localStorage.setItem('havenPlanSource','code');
+    }catch(e){}
+    alert('✨ Full access unlocked. Thanks for trying Haven.');
+    location.reload();
+  }
+  window.promptAccessCode=function(){
+    if(!ENABLED){ alert('Access codes are not available right now.'); return; }
+    var entered=null;
+    try{ entered=prompt('Enter your access code'); }catch(e){ return; }
+    if(!entered) return;
+    var norm=String(entered).trim().toLowerCase();
+    if(!crypto||!crypto.subtle){ alert('That code isn’t valid.'); return; }
+    sha256(norm).then(function(h){
+      if(h===CODE_HASH){ unlock(); }
+      else { alert('That code isn’t valid.'); }
+    }).catch(function(){ alert('That code isn’t valid.'); });
+  };
+})();
+</script>
+
 </body>
 </html>
 
