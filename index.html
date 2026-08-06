@@ -6676,6 +6676,89 @@ document.addEventListener('click',function(){setTimeout(function(){try{add();}ca
 })();
 </script>
 
+
+<script id="hv-nativeauth">
+(function(){
+  function inNativeApp(){
+    try { return !!(window.webkit && window.webkit.messageHandlers &&
+                    window.webkit.messageHandlers['auth-apple']); }
+    catch(e){ return false; }
+  }
+  function post(channel, payload){
+    try { window.webkit.messageHandlers[channel].postMessage(payload || {}); return true; }
+    catch(e){ return false; }
+  }
+  function applySession(d){
+    if(!d || !d.userId) return;
+    try{
+      var email = d.email || (d.userId + '@privaterelay.appleid.com');
+      var name  = d.name || (email.split('@')[0]);
+      localStorage.setItem('havenSession', 'haven_' + Date.now());
+      localStorage.setItem('havenEmail', email);
+      localStorage.setItem('havenName', name);
+      localStorage.setItem('havenLoginMethod', d.provider || 'apple');
+      localStorage.setItem('havenKeepSignedIn', 'true');
+      if(d.provider === 'apple') localStorage.setItem('havenAppleId', d.userId);
+      else localStorage.setItem('havenGoogleId', d.userId);
+      if(!localStorage.getItem('havenJoinDate')){
+        localStorage.setItem('havenJoinDate', new Date().toISOString());
+      }
+      try{
+        var list = JSON.parse(localStorage.getItem('havenSignups') || '[]');
+        if(!list.some(function(u){ return u && u.email === email; })){
+          list.push({ name: name, email: email, date: new Date().toISOString(), method: d.provider });
+          localStorage.setItem('havenSignups', JSON.stringify(list));
+        }
+      }catch(e){}
+    }catch(e){}
+    location.reload();
+  }
+  window.addEventListener('native-auth', function(ev){
+    applySession(ev && ev.detail ? ev.detail : null);
+  });
+  window.havenNativeAuth = applySession;
+  function swap(){
+    if(!inNativeApp()) return true;
+    var appleHost = document.getElementById('appleid-signin');
+    if(appleHost && !appleHost.dataset.hvNative){
+      appleHost.dataset.hvNative = '1';
+      appleHost.innerHTML = '';
+      var appleBtn = document.createElement('button');
+      appleBtn.type = 'button';
+      appleBtn.textContent = 'Sign in with Apple';
+      appleBtn.setAttribute('style',
+        'width:100%;padding:14px;border:none;border-radius:12px;background:#000;color:#fff;'+
+        'font-size:16px;font-weight:600;cursor:pointer;font-family:inherit');
+      appleBtn.addEventListener('click', function(e){
+        e.preventDefault(); e.stopPropagation();
+        post('auth-apple');
+      });
+      appleHost.appendChild(appleBtn);
+    }
+    var googleBtns = [].slice.call(document.querySelectorAll('*')).filter(function(el){
+      return el.children.length === 0 && /continue with google/i.test(el.textContent || '');
+    });
+    googleBtns.forEach(function(node){
+      var host = node.closest('button,div[role=button],div');
+      if(!host || host.dataset.hvNative) return;
+      host.dataset.hvNative = '1';
+      host.addEventListener('click', function(e){
+        e.preventDefault(); e.stopPropagation();
+        post('auth-google');
+      }, true);
+    });
+    return !!appleHost;
+  }
+  function boot(n){
+    try { if(swap()) return; } catch(e){}
+    if(n > 0) setTimeout(function(){ boot(n-1); }, 400);
+  }
+  if(document.readyState === 'complete') boot(30);
+  else window.addEventListener('load', function(){ boot(30); });
+  document.addEventListener('click', function(){ setTimeout(function(){ try{ swap(); }catch(e){} }, 350); }, true);
+})();
+</script>
+
 </body>
 </html>
 
