@@ -6701,18 +6701,9 @@ document.addEventListener('click',function(){setTimeout(function(){try{add();}ca
     catch(e){ return false; }
   }
 
-  function dbg(tag, extra){
-    try {
-      var info = extra || {};
-      info.tag = tag;
-      info.t = Date.now();
-      post('hv-debug', JSON.stringify(info));
-    } catch(e){}
-  }
 
   function applySession(d){
     if(!d || !d.userId) return;
-    dbg('applySession', { provider: d.provider, hasEmail: !!d.email });
     try{
       var email = d.email || (d.userId + '@privaterelay.appleid.com');
       var name  = d.name || (email.split('@')[0]);
@@ -6737,11 +6728,9 @@ document.addEventListener('click',function(){setTimeout(function(){try{add();}ca
         }
       }catch(e){}
     }catch(e){
-      dbg('applySession-error', { message: String(e) });
     }
     try {
       if (typeof window.checkAutoSignIn === 'function') {
-        dbg('applySession-calling-checkAutoSignIn');
         window.checkAutoSignIn();
         // Force a repaint -- the DOM can update correctly while WKWebView's
         // on-screen render stays stale after a native sheet (Face ID) covered
@@ -6750,24 +6739,19 @@ document.addEventListener('click',function(){setTimeout(function(){try{add();}ca
           document.body.offsetHeight;
           window.dispatchEvent(new Event('resize'));
         });
-        dbg('applySession-repaint-nudge');
         return;
       }
-      dbg('applySession-no-checkAutoSignIn');
     } catch(e){
-      dbg('checkAutoSignIn-error', { message: String(e) });
     }
     try { location.reload(); } catch(e){}
   }
 
   window.addEventListener('native-auth', function(ev){
-    dbg('native-auth-event-received');
     applySession(ev && ev.detail ? ev.detail : null);
   });
   window.havenNativeAuth = applySession;
 
   var native = inNativeApp();
-  dbg('boot', { inNativeApp: native, readyState: document.readyState });
   if(!native) return;   // web browser: leave everything alone, forever
 
   function renderAppleButton(host){
@@ -6782,11 +6766,9 @@ document.addEventListener('click',function(){setTimeout(function(){try{add();}ca
       'font-size:16px;font-weight:600;cursor:pointer;font-family:inherit');
     btn.addEventListener('click', function(e){
       e.preventDefault(); e.stopPropagation();
-      dbg('apple-button-clicked');
       post('auth-apple');
     });
     host.appendChild(btn);
-    dbg('renderAppleButton');
   }
 
   function watchApple(){
@@ -6814,11 +6796,9 @@ document.addEventListener('click',function(){setTimeout(function(){try{add();}ca
       'font-size:16px;font-weight:600;cursor:pointer;font-family:inherit');
     btn.addEventListener('click', function(e){
       e.preventDefault(); e.stopPropagation();
-      dbg('google-button-clicked');
       post('auth-google');
     });
     host.appendChild(btn);
-    dbg('renderGoogleButton');
   }
 
   function watchGoogle(){
@@ -6842,15 +6822,8 @@ document.addEventListener('click',function(){setTimeout(function(){try{add();}ca
       var report = a + '|' + g;
       if(report !== lastSweepReport){
         lastSweepReport = report;
-        dbg('sweep', {
-          appleHostFound: a,
-          googleHostFound: g,
-          activePage: (document.querySelector('.page.active') || {}).id || null,
-          havenSession: !!localStorage.getItem('havenSession')
-        });
       }
     } catch(e){
-      dbg('sweep-error', { message: String(e) });
     }
   }
 
