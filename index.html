@@ -6761,13 +6761,17 @@ document.addEventListener('click',function(){setTimeout(function(){try{add();}ca
 
   function watchApple(){
     var host = document.getElementById('appleid-signin');
-    if(!host || host._hvWatching) return !!host;
-    host._hvWatching = true;
-    renderAppleButton(host);
-    // Apple's SDK can still overwrite this later -- put it back if it does.
-    new MutationObserver(function(){
-      if(!host.querySelector('[data-hv-native-btn="apple"]')) renderAppleButton(host);
-    }).observe(host, { childList: true, subtree: true });
+    if(!host) return false;
+    // Re-assert every time this runs, not just once -- Apple's SDK, or the
+    // page's own re-render when the sign-in card is shown again (e.g. after
+    // sign-out), can wipe this container at any point in the page's life.
+    if(!host.querySelector('[data-hv-native-btn="apple"]')) renderAppleButton(host);
+    if(!host._hvObserving){
+      host._hvObserving = true;
+      new MutationObserver(function(){
+        if(!host.querySelector('[data-hv-native-btn="apple"]')) renderAppleButton(host);
+      }).observe(host, { childList: true, subtree: true });
+    }
     return true;
   }
 
@@ -6790,18 +6794,18 @@ document.addEventListener('click',function(){setTimeout(function(){try{add();}ca
 
   function watchGoogle(){
     var host = document.getElementById('googleBtn');
-    if(!host || host._hvWatching) return !!host;
-    host._hvWatching = true;
-    renderGoogleButton(host);
-    // Google renders a cross-origin iframe into this container asynchronously --
-    // clicks on that iframe never reach our JS at all, so we must replace it
-    // outright (like Apple's button) and keep restoring ours if it comes back.
-    new MutationObserver(function(){
-      if(!host.querySelector('[data-hv-native-btn="google"]')) renderGoogleButton(host);
-    }).observe(host, { childList: true, subtree: true });
+    if(!host) return false;
+    if(!host.querySelector('[data-hv-native-btn="google"]')) renderGoogleButton(host);
+    if(!host._hvObserving){
+      host._hvObserving = true;
+      new MutationObserver(function(){
+        if(!host.querySelector('[data-hv-native-btn="google"]')) renderGoogleButton(host);
+      }).observe(host, { childList: true, subtree: true });
+    }
     return true;
   }
-function sweep(){
+
+  function sweep(){
     try { watchApple(); watchGoogle(); } catch(e){}
   }
 
@@ -6812,8 +6816,21 @@ function sweep(){
   if(document.readyState === 'complete') boot(30);
   else window.addEventListener('load', function(){ boot(30); });
 
-  // The onboarding/sign-in sheets are created on demand -- sweep after clicks too.
+  // Sign-in cards can be (re)built well after the load window above -- e.g.
+  // the sign-in sheet reopening after sign-out. Sweep on every click (fast,
+  // covers most cases) and also keep a page-wide observer running for the
+  // rest of this page's life as a catch-all, so this no longer depends on a
+  // fixed time window after load.
   document.addEventListener('click', function(){ setTimeout(sweep, 350); }, true);
+  var hvBodyObserverStarted = false;
+  function startBodyObserver(){
+    if(hvBodyObserverStarted || !document.body) return;
+    hvBodyObserverStarted = true;
+    new MutationObserver(function(){ sweep(); }).observe(document.body, { childList: true, subtree: true });
+  }
+  if(document.body) startBodyObserver();
+  else document.addEventListener('DOMContentLoaded', startBodyObserver);
+
 })();
 </script>
 
