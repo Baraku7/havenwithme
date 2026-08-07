@@ -6742,6 +6742,14 @@ document.addEventListener('click',function(){setTimeout(function(){try{add();}ca
       if (typeof window.checkAutoSignIn === 'function') {
         dbg('applySession-calling-checkAutoSignIn');
         window.checkAutoSignIn();
+        // Force a repaint -- the DOM can update correctly while WKWebView's
+        // on-screen render stays stale after a native sheet (Face ID) covered
+        // the page. Nudge layout so the change is actually visible.
+        requestAnimationFrame(function(){
+          document.body.offsetHeight;
+          window.dispatchEvent(new Event('resize'));
+        });
+        dbg('applySession-repaint-nudge');
         return;
       }
       dbg('applySession-no-checkAutoSignIn');
