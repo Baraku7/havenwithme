@@ -6771,22 +6771,37 @@ document.addEventListener('click',function(){setTimeout(function(){try{add();}ca
     return true;
   }
 
-  function watchGoogle(){
-    var nodes = [].slice.call(document.querySelectorAll('*')).filter(function(el){
-      return el.children.length === 0 && /continue with google/i.test(el.textContent || '');
+  function renderGoogleButton(host){
+    host.innerHTML = '';
+    host.style.cursor = 'pointer';
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.setAttribute('data-hv-native-btn', 'google');
+    btn.textContent = '  Continue with Google';
+    btn.setAttribute('style',
+      'width:100%;padding:14px;border:1px solid #ddd;border-radius:12px;background:#fff;color:#1f1f1f;'+
+      'font-size:16px;font-weight:600;cursor:pointer;font-family:inherit');
+    btn.addEventListener('click', function(e){
+      e.preventDefault(); e.stopPropagation();
+      post('auth-google');
     });
-    nodes.forEach(function(node){
-      var host = node.closest('button,div[role=button],div');
-      if(!host || host._hvWatching) return;
-      host._hvWatching = true;
-      host.addEventListener('click', function(e){
-        e.preventDefault(); e.stopPropagation();
-        post('auth-google');
-      }, true);
-    });
+    host.appendChild(btn);
   }
 
-  function sweep(){
+  function watchGoogle(){
+    var host = document.getElementById('googleBtn');
+    if(!host || host._hvWatching) return !!host;
+    host._hvWatching = true;
+    renderGoogleButton(host);
+    // Google renders a cross-origin iframe into this container asynchronously --
+    // clicks on that iframe never reach our JS at all, so we must replace it
+    // outright (like Apple's button) and keep restoring ours if it comes back.
+    new MutationObserver(function(){
+      if(!host.querySelector('[data-hv-native-btn="google"]')) renderGoogleButton(host);
+    }).observe(host, { childList: true, subtree: true });
+    return true;
+  }
+function sweep(){
     try { watchApple(); watchGoogle(); } catch(e){}
   }
 
