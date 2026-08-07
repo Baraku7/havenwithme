@@ -6722,6 +6722,7 @@ document.addEventListener('click',function(){setTimeout(function(){try{add();}ca
       localStorage.setItem('havenName', name);
       localStorage.setItem('havenLoginMethod', d.provider || 'apple');
       localStorage.setItem('havenKeepSignedIn', 'true');
+            localStorage.removeItem('havenSignedOut');
       if(d.provider === 'apple') localStorage.setItem('havenAppleId', d.userId);
       else localStorage.setItem('havenGoogleId', d.userId);
       if(!localStorage.getItem('havenJoinDate')){
