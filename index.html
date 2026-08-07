@@ -6678,14 +6678,17 @@ document.addEventListener('click',function(){setTimeout(function(){try{add();}ca
 
 
 <script id="hv-nativeauth">
-/* Native sign-in bridge -- v2, 6 Aug 2026.
-   v1 patched Apple's/Google's buttons once on load. Apple's official JS SDK
-   (appleid.auth.js) renders asynchronously and can finish AFTER our patch,
-   silently overwriting our button with its own broken-in-webview widget.
-   v2 watches the container with a MutationObserver and re-applies the
-   native button forever, so it self-heals no matter when Apple's/Google's
-   SDK scripts fire. On the open web this still does nothing at all --
-   Safari/Chrome users keep the original flow untouched. */
+/* Native sign-in bridge -- v4, 6 Aug 2026.
+   v1 patched Apple's/Google's buttons once on load; broken once their SDKs
+   re-rendered after us.
+   v2 replaced Google's button outright (it's a cross-origin iframe our JS
+   can never intercept clicks on) and stopped using location.reload() (which
+   WKWebView silently blocks once a page has touched a "restricted" API).
+   v3 made the patch self-healing forever via a body-wide MutationObserver,
+   instead of only within a fixed window after load.
+   v4 adds a temporary debug channel (hv-debug -> Xcode console) because the
+   sign-in-then-sign-out-then-sign-in-again flow is still failing and we need
+   to see what the page actually looks like at that point, not guess. */
 (function(){
   function inNativeApp(){
     try { return !!(window.webkit && window.webkit.messageHandlers &&
@@ -6698,8 +6701,18 @@ document.addEventListener('click',function(){setTimeout(function(){try{add();}ca
     catch(e){ return false; }
   }
 
+  function dbg(tag, extra){
+    try {
+      var info = extra || {};
+      info.tag = tag;
+      info.t = Date.now();
+      post('hv-debug', JSON.stringify(info));
+    } catch(e){}
+  }
+
   function applySession(d){
     if(!d || !d.userId) return;
+    dbg('applySession', { provider: d.provider, hasEmail: !!d.email });
     try{
       var email = d.email || (d.userId + '@privaterelay.appleid.com');
       var name  = d.name || (email.split('@')[0]);
@@ -6722,25 +6735,31 @@ document.addEventListener('click',function(){setTimeout(function(){try{add();}ca
           localStorage.setItem('havenSignups', JSON.stringify(list));
         }
       }catch(e){}
-    }catch(e){}
-    // IMPORTANT: do NOT location.reload() here. Inside the native app's WKWebView,
-// any page that has used a "restricted" web API (WebAuthn, getUserMedia for voice
-// chat, or Apple's own JS SDK) is permanently blocked by WebKit's app-bound-domains
-// policy from navigating again -- including a reload. The reload silently no-ops,
-// so the session was saved but the UI never updated. Call the same in-place routing
-// the normal sign-in flow already uses instead.
+    }catch(e){
+      dbg('applySession-error', { message: String(e) });
+    }
     try {
-      if (typeof window.checkAutoSignIn === 'function') { window.checkAutoSignIn(); return; }
-    } catch(e){}
+      if (typeof window.checkAutoSignIn === 'function') {
+        dbg('applySession-calling-checkAutoSignIn');
+        window.checkAutoSignIn();
+        return;
+      }
+      dbg('applySession-no-checkAutoSignIn');
+    } catch(e){
+      dbg('checkAutoSignIn-error', { message: String(e) });
+    }
     try { location.reload(); } catch(e){}
   }
 
   window.addEventListener('native-auth', function(ev){
+    dbg('native-auth-event-received');
     applySession(ev && ev.detail ? ev.detail : null);
   });
   window.havenNativeAuth = applySession;
 
-  if(!inNativeApp()) return;   // web browser: leave everything alone, forever
+  var native = inNativeApp();
+  dbg('boot', { inNativeApp: native, readyState: document.readyState });
+  if(!native) return;   // web browser: leave everything alone, forever
 
   function renderAppleButton(host){
     host.innerHTML = '';
@@ -6754,17 +6773,16 @@ document.addEventListener('click',function(){setTimeout(function(){try{add();}ca
       'font-size:16px;font-weight:600;cursor:pointer;font-family:inherit');
     btn.addEventListener('click', function(e){
       e.preventDefault(); e.stopPropagation();
+      dbg('apple-button-clicked');
       post('auth-apple');
     });
     host.appendChild(btn);
+    dbg('renderAppleButton');
   }
 
   function watchApple(){
     var host = document.getElementById('appleid-signin');
     if(!host) return false;
-    // Re-assert every time this runs, not just once -- Apple's SDK, or the
-    // page's own re-render when the sign-in card is shown again (e.g. after
-    // sign-out), can wipe this container at any point in the page's life.
     if(!host.querySelector('[data-hv-native-btn="apple"]')) renderAppleButton(host);
     if(!host._hvObserving){
       host._hvObserving = true;
@@ -6787,9 +6805,11 @@ document.addEventListener('click',function(){setTimeout(function(){try{add();}ca
       'font-size:16px;font-weight:600;cursor:pointer;font-family:inherit');
     btn.addEventListener('click', function(e){
       e.preventDefault(); e.stopPropagation();
+      dbg('google-button-clicked');
       post('auth-google');
     });
     host.appendChild(btn);
+    dbg('renderGoogleButton');
   }
 
   function watchGoogle(){
@@ -6805,8 +6825,24 @@ document.addEventListener('click',function(){setTimeout(function(){try{add();}ca
     return true;
   }
 
+  var lastSweepReport = '';
   function sweep(){
-    try { watchApple(); watchGoogle(); } catch(e){}
+    try {
+      var a = watchApple();
+      var g = watchGoogle();
+      var report = a + '|' + g;
+      if(report !== lastSweepReport){
+        lastSweepReport = report;
+        dbg('sweep', {
+          appleHostFound: a,
+          googleHostFound: g,
+          activePage: (document.querySelector('.page.active') || {}).id || null,
+          havenSession: !!localStorage.getItem('havenSession')
+        });
+      }
+    } catch(e){
+      dbg('sweep-error', { message: String(e) });
+    }
   }
 
   function boot(n){
@@ -6816,11 +6852,6 @@ document.addEventListener('click',function(){setTimeout(function(){try{add();}ca
   if(document.readyState === 'complete') boot(30);
   else window.addEventListener('load', function(){ boot(30); });
 
-  // Sign-in cards can be (re)built well after the load window above -- e.g.
-  // the sign-in sheet reopening after sign-out. Sweep on every click (fast,
-  // covers most cases) and also keep a page-wide observer running for the
-  // rest of this page's life as a catch-all, so this no longer depends on a
-  // fixed time window after load.
   document.addEventListener('click', function(){ setTimeout(sweep, 350); }, true);
   var hvBodyObserverStarted = false;
   function startBodyObserver(){
@@ -6830,7 +6861,6 @@ document.addEventListener('click',function(){setTimeout(function(){try{add();}ca
   }
   if(document.body) startBodyObserver();
   else document.addEventListener('DOMContentLoaded', startBodyObserver);
-
 })();
 </script>
 
