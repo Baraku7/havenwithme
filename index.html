@@ -6723,7 +6723,16 @@ document.addEventListener('click',function(){setTimeout(function(){try{add();}ca
         }
       }catch(e){}
     }catch(e){}
-    location.reload();
+    // IMPORTANT: do NOT location.reload() here. Inside the native app's WKWebView,
+// any page that has used a "restricted" web API (WebAuthn, getUserMedia for voice
+// chat, or Apple's own JS SDK) is permanently blocked by WebKit's app-bound-domains
+// policy from navigating again -- including a reload. The reload silently no-ops,
+// so the session was saved but the UI never updated. Call the same in-place routing
+// the normal sign-in flow already uses instead.
+    try {
+      if (typeof window.checkAutoSignIn === 'function') { window.checkAutoSignIn(); return; }
+    } catch(e){}
+    try { location.reload(); } catch(e){}
   }
 
   window.addEventListener('native-auth', function(ev){
