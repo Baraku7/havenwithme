@@ -635,12 +635,6 @@ body{font-family:'Inter',sans-serif;background:var(--snow);color:var(--ink);over
 }
 .send-btn:hover{transform:scale(1.05);box-shadow:0 8px 20px rgba(91,79,232,0.4);}
 .send-btn svg{width:16px;height:16px;fill:var(--white);}
-.mic-btn{width:38px;height:38px;border-radius:50%;background:#EFEAFB;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s;}
-.mic-btn:hover{transform:scale(1.05);}
-.mic-btn svg{width:18px;height:18px;stroke:var(--haven);}
-.mic-btn.listening{background:linear-gradient(135deg,#e05a5a,#c73f3f);animation:micPulse 1.2s infinite;}
-.mic-btn.listening svg{stroke:#fff;}
-@keyframes micPulse{0%{box-shadow:0 0 0 0 rgba(224,90,90,.5);}70%{box-shadow:0 0 0 10px rgba(224,90,90,0);}100%{box-shadow:0 0 0 0 rgba(224,90,90,0);}}
 
 /* ════════════════════════════════
    JOURNAL TAB
@@ -2073,7 +2067,7 @@ body[data-page="app"] .mobile-nav{display:flex;}
         <div class="chat-input">
           <div class="chat-input-row">
             <textarea class="chat-textarea" id="chatInput" placeholder="Share what's on your mind..." rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
-            <button class="mic-btn" id="micBtn" onclick="startMic()" aria-label="Voice input"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 14a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v5a3 3 0 0 0 3 3z" stroke-width="1.8"/><path d="M19 11a7 7 0 0 1-14 0M12 18v3" stroke-width="1.8" stroke-linecap="round"/></svg></button><button class="send-btn" onclick="sendMessage()">
+            <button class="send-btn" onclick="sendMessage()">
               <svg viewBox="0 0 24 24"><path d="M2 21L23 12 2 3v7l15 2-15 2z"/></svg>
             </button>
           </div>
@@ -3463,46 +3457,9 @@ async function speakReply(text){
   }
 }
 
-function startMic(){
-  var ov=document.getElementById('voiceOverlay');
-  ov.classList.add('active');
-  var vt=document.getElementById('voiceTranscript');
-  if(vt) vt.textContent='Speak now — Haven is listening';
-  var mb=document.getElementById('micBtn');
-  if(mb) mb.classList.add('listening');
-  try{
-    window.webkit.messageHandlers['voice-start'].postMessage({});
-  }catch(e){
-    if(vt) vt.textContent='Voice input is not available on this device.';
-  }
-}
 function stopMic(){
   document.getElementById('voiceOverlay').classList.remove('active');
-  var mb=document.getElementById('micBtn');
-  if(mb) mb.classList.remove('listening');
-  try{
-    window.webkit.messageHandlers['voice-stop'].postMessage({});
-  }catch(e){}
 }
-window.addEventListener('voice-transcript', function(e){
-  var d=e.detail||{};
-  var t=d.text||'';
-  var vt=document.getElementById('voiceTranscript');
-  if(vt) vt.textContent = t || 'Listening...';
-  if(d.final){
-    stopMic();
-    if(t){
-      var input=document.getElementById('chatInput');
-      if(input){ input.value=t; sendMessage(); }
-    }
-  }
-});
-window.addEventListener('voice-error', function(e){
-  stopMic();
-  var msg=(e.detail&&e.detail.message)||'Voice input is unavailable right now.';
-  var vt=document.getElementById('voiceTranscript');
-  if(vt) vt.textContent=msg;
-});
 
 // ── MEDITATION ──
 let breathRunning=false,breathPhase=0;
