@@ -4240,6 +4240,10 @@ function togglePref(pref, btn){
 
 function deleteData(){
   if(confirm('Are you sure? This will permanently delete all your Haven data and cannot be undone.')){
+    var uid = havenUserId();
+    if(uid){
+      fetch(HAVEN_BILLING_API + '/entitlement?userId=' + encodeURIComponent(uid), { method: 'DELETE' }).catch(function(){});
+    }
     localStorage.clear();
     showPage('landing');
   }
