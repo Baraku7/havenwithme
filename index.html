@@ -2516,11 +2516,11 @@ body[data-page="app"] .mobile-nav{display:flex;}
         <div class="profile-hero">
           <div class="profile-hero-glow"></div>
           <div class="profile-avatar-wrap">
-            <div class="profile-avatar" id="profileAvatar" onclick="document.getElementById('avatarInput').click()">
+            <div class="profile-avatar" id="profileAvatar" onclick="openAvatarPicker()">
               <img id="profileAvatarImg" src="" alt=""/>
               <span id="profileAvatarLetter">?</span>
             </div>
-            <div class="profile-avatar-edit" onclick="document.getElementById('avatarInput').click()">✏️</div>
+            <div class="profile-avatar-edit" onclick="openAvatarPicker()">✏️</div>
           </div>
           <input type="file" id="avatarInput" accept="image/*" style="display:none" onchange="uploadAvatar(event)"/>
           <div class="profile-name" id="profileDisplayName">Your Name</div>
@@ -4264,6 +4264,26 @@ function uploadAvatar(event){
   };
   reader.readAsDataURL(file);
 }
+function openAvatarPicker(){
+  try{
+    window.webkit.messageHandlers['avatar-photo'].postMessage({});
+  }catch(e){
+    document.getElementById('avatarInput').click();
+  }
+}
+window.addEventListener('avatar-photo-selected', function(e){
+  var url = e.detail && e.detail.dataUrl;
+  if(!url) return;
+  localStorage.setItem('havenPhoto', url);
+  var img = document.getElementById('profileAvatarImg');
+  var letter = document.getElementById('profileAvatarLetter');
+  if(img){ img.src = url; img.style.display = 'block'; }
+  if(letter){ letter.style.display = 'none'; }
+});
+window.addEventListener('avatar-photo-error', function(e){
+  var msg = (e.detail && e.detail.message) || 'Could not update your photo.';
+  alert(msg);
+});
 
 // ── LOAD PROFILE ──
 function loadProfile(){
@@ -6367,7 +6387,7 @@ function T(){
   function ensure(id){var e=document.getElementById(id);if(e)return e;e=document.createElement('div');e.id=id;e.className='hv-sheet';app.appendChild(e);return e;}
   var S={chat:{c:'#6E5FA0',t:'Therapy Chat Companion',d:'A private space to be heard — type or speak, any hour. Haven listens without judgment and never leaves this room.',go:'Start talking',tab:'chat',ic:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6"><path d="M21 12a8 8 0 0 1-8 8H5l-2 2V12a8 8 0 0 1 8-8h1a8 8 0 0 1 8 8Z"/></svg>'},journal:{c:'#7E9A7C',t:'Your journal',d:'One honest sentence is enough. Private and encrypted — only you can read it.',go:'Open journal',tab:'journal',ic:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6"><path d="M5 4h11l3 3v13H5z"/></svg>'},breathe:{c:'#E0A98A',t:'Breathe',d:'A few minutes to reset an anxious mind. Guided breathing and calm sessions.',go:'Start meditating',tab:'meditate',ic:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6"><path d="M12 3c3 3 5 5.5 5 9a5 5 0 0 1-10 0c0-3.5 2-6 5-9Z"/></svg>'},therapist:{c:'#8478A6',t:'Find a therapist',d:'Browse licensed therapists near you — by specialty, price, and availability.',go:'Find therapists',tab:'therapists',ic:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6"><path d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.5-7 10-7 10Z"/></svg>'}};
   function openF(k){var s=S[k];var e=ensure('hv-sheet-generic');e.innerHTML='<div class="hv-grab"></div><div class="hv-sic" style="background:'+s.c+'">'+s.ic+'</div><h3>'+s.t+'</h3><p class="hv-sd">'+s.d+'</p><button class="hv-go" style="background:'+s.c+'">'+s.go+'</button><button class="hv-dismiss">Not now</button>';e.querySelector('.hv-go').onclick=function(){closeAll();if(window.switchTab)switchTab(s.tab,null);};e.querySelector('.hv-dismiss').onclick=closeAll;show(e);}
-  function openP(){var e=ensure('hv-sheet-profile');var ph=localStorage.getItem('havenPhoto');e.innerHTML='<div class="hv-grab"></div><div style="display:flex;align-items:center;gap:14px"><div id="hvAvaWrap" style="position:relative;width:56px;height:56px;flex-shrink:0;cursor:pointer;">'+(ph?'<img src="'+ph+'" style="width:56px;height:56px;border-radius:50%;object-fit:cover;">':'<div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(145deg,#6E5FA0,#463a72);color:#fff;font-family:Fraunces,serif;font-size:24px;display:flex;align-items:center;justify-content:center;">'+name.charAt(0)+'</div>')+'<div style="position:absolute;bottom:-2px;right:-2px;width:20px;height:20px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;box-shadow:0 1px 4px rgba(0,0,0,.25);">✏️</div></div><div><div style="font-family:Fraunces,serif;font-size:21px">'+name+'</div><div style="font-size:13px;color:#6C6270">Free plan</div><span class="hv-pill">trial active</span></div></div><button class="hv-go" style="background:linear-gradient(140deg,#7565aa,#4c3f7a);margin-top:18px" id="hvUpg">Upgrade to Unlimited</button><button class="hv-dismiss">Close</button>';e.querySelector('#hvUpg').onclick=openPl;e.querySelector('.hv-dismiss').onclick=closeAll;e.querySelector('#hvAvaWrap').onclick=function(){document.getElementById('avatarInput').click();};show(e);}
+  function openP(){var e=ensure('hv-sheet-profile');var ph=localStorage.getItem('havenPhoto');e.innerHTML='<div class="hv-grab"></div><div style="display:flex;align-items:center;gap:14px"><div id="hvAvaWrap" style="position:relative;width:56px;height:56px;flex-shrink:0;cursor:pointer;">'+(ph?'<img src="'+ph+'" style="width:56px;height:56px;border-radius:50%;object-fit:cover;">':'<div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(145deg,#6E5FA0,#463a72);color:#fff;font-family:Fraunces,serif;font-size:24px;display:flex;align-items:center;justify-content:center;">'+name.charAt(0)+'</div>')+'<div style="position:absolute;bottom:-2px;right:-2px;width:20px;height:20px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;box-shadow:0 1px 4px rgba(0,0,0,.25);">✏️</div></div><div><div style="font-family:Fraunces,serif;font-size:21px">'+name+'</div><div style="font-size:13px;color:#6C6270">Free plan</div><span class="hv-pill">trial active</span></div></div><button class="hv-go" style="background:linear-gradient(140deg,#7565aa,#4c3f7a);margin-top:18px" id="hvUpg">Upgrade to Unlimited</button><button class="hv-dismiss">Close</button>';e.querySelector('#hvUpg').onclick=openPl;e.querySelector('.hv-dismiss').onclick=closeAll;e.querySelector('#hvAvaWrap').onclick=openAvatarPicker;show(e);}
   function openPl(){var e=ensure('hv-sheet-plans');e.innerHTML='<div class="hv-grab"></div><h3>Choose your plan</h3><p class="hv-sd">Try free for 7 days. Unlimited everything. Cancel anytime.</p><div class="hv-plan feat"><div class="ph"><span class="pn">Personal<span class="hv-badge">Popular</span></span><span class="pp">$12.99<small>/mo</small></span></div></div><div class="hv-plan"><div class="ph"><span class="pn">Family</span><span class="pp">$29.99<small>/mo</small></span></div></div><button class="hv-go" style="background:#6E5FA0;margin-top:16px" id="hvToPlans">See plans</button><button class="hv-dismiss">Maybe later</button>';e.querySelector('#hvToPlans').onclick=function(){closeAll();if(window.switchTab)switchTab('plans',null);};e.querySelector('.hv-dismiss').onclick=closeAll;show(e);}
   root.querySelectorAll('[data-sheet]').forEach(function(el){el.addEventListener('click',function(){var k=this.getAttribute('data-sheet');if(k==='profile')openP();else openF(k);});});
   scrim.addEventListener('click',closeAll);
