@@ -6823,6 +6823,54 @@ document.addEventListener('click',function(){setTimeout(function(){try{add();}ca
 })();
 </script>
 
+<!-- Haven first-party analytics — privacy-first. No third parties, no PII, no message content.
+     Paste this block just before the closing </body> tag in index.html. -->
+<script>
+(function () {
+  var ENDPOINT = "https://haven-analytics.baraku7.workers.dev/collect";
+  try {
+    var KEY = "haven_anon_id";
+    var id = localStorage.getItem(KEY);
+    if (!id) {
+      id = (window.crypto && crypto.randomUUID)
+        ? crypto.randomUUID()
+        : (Date.now().toString(36) + Math.random().toString(36).slice(2));
+      localStorage.setItem(KEY, id);
+    }
+    var installed = (window.matchMedia && matchMedia('(display-mode: standalone)').matches)
+                    || window.navigator.standalone === true;
+    function track(event, props) {
+      try {
+        var body = JSON.stringify({
+          id: id, event: event, ts: Date.now(),
+          platform: installed ? 'installed' : 'browser', props: props || {}
+        });
+        if (navigator.sendBeacon) navigator.sendBeacon(ENDPOINT, body);
+        else fetch(ENDPOINT, { method: 'POST', body: body, keepalive: true,
+          headers: { 'Content-Type': 'application/json' } });
+      } catch (e) {}
+    }
+    window.havenTrack = track; // call havenTrack('any_event') anywhere you like
+
+    track('app_open'); // fires once per load
+
+    // Auto-tracks your main tabs without you editing any buttons:
+    document.addEventListener('click', function (e) {
+      try {
+        var t = e.target.closest && e.target.closest('button, a, [onclick]');
+        if (!t) return;
+        if (t.closest('#mt1')) track('open_chat');
+        else if (t.closest('#mt3')) track('open_meditate');
+        var txt = (t.textContent || '').toLowerCase();
+        if (/sleep well|deep focus|morning calm|stress relief/.test(txt)) {
+          track('start_meditation', { type: txt.replace(/\s+/g, ' ').trim().slice(0, 30) });
+        }
+      } catch (e) {}
+    }, true);
+  } catch (e) {}
+})();
+</script>
+
 </body>
 </html>
 
